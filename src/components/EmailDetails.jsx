@@ -36,13 +36,12 @@ export function EmailDetails() {
       <p className="email-from">from: {email.from}</p>
       <p className="email-to">to: {email.to}</p>
       <p className="email-sent-at">sent at: {email.sentAt}</p>
-
       <br></br>
       <p className="email-body">{email.body}</p>
       <br></br>
       <hr></hr>
+      <button onClick={onBack}>Back</button>{" "}
       <Link to={`/email/:e103`}>Next Email</Link>
-      <button onClick={onBack}>Back</button>
     </section>
   );
 }

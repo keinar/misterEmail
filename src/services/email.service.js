@@ -25,7 +25,7 @@ function getDefaultFilter(){
     return{
         status: '', // inbox/sent/star/trash
         txt: '', // no need to support complex text search
-        isRead: false, // false/true/null (optional property, if missing: show all)
+        isRead: null, // false/true/null (optional property, if missing: show all)
     }
 }
 
@@ -37,7 +37,7 @@ async function query(filterBy) {
 
         if (filterBy.txt) {
             filteredEmails = filteredEmails.filter(email => 
-                email.subject.toLowerCase().includes(filterBy.subject.toLowerCase())
+                email.subject.toLowerCase().includes(filterBy.txt.toLowerCase())
             );
         }
 
@@ -46,8 +46,7 @@ async function query(filterBy) {
              
         //     );
         // }
-
-        if (filterBy.isRead !== undefined) {
+        if (filterBy.isRead === true) {
             filteredEmails = filteredEmails.filter(email => 
                 email.isRead === filterBy.isRead
             );
@@ -77,7 +76,7 @@ function save(emailToSave) {
 }
 
 function createEmail(id = '', subject = '', body = '', isRead = false,  isStarred = false,
-sentAt = 1551133930594,
+sentAt = Date.now(),
 removedAt = null, //for later use
 from= '',
 to= '') {
@@ -94,6 +93,17 @@ to= '') {
     }
 }
 
+function getFormattedDateTime() {
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const day = now.getDate().toString().padStart(2, '0');
+    const monthIndex = now.getMonth();
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const month = monthNames[monthIndex];
+    return `${day} ${month} ${hours}:${minutes}`;
+  }
+
     
 function _createEmails() {
     let emails = utilService.loadFromStorage(STORAGE_KEY)
@@ -104,7 +114,7 @@ function _createEmails() {
             body: 'Would love to catch up sometimes',
             isRead: false,
             isStarred: false,
-            sentAt : 1551133930594,
+            sentAt : getFormattedDateTime(),
             removedAt : null, //for later use
             from: 'momo@momo.com',
             to: 'user@appsus.com' },
@@ -112,9 +122,9 @@ function _createEmails() {
             { id: 'e103',
             subject: 'How are you?',
             body: 'Would love to catch up sometimes',
-            isRead: false,
+            isRead: true,
             isStarred: false,
-            sentAt : 1551133930594,
+            sentAt : getFormattedDateTime(),
             removedAt : null, //for later use
             from: 'momo@momo.com',
             to: 'user@appsus.com' },
@@ -124,7 +134,7 @@ function _createEmails() {
             body: 'Would love to catch up sometimes',
             isRead: false,
             isStarred: false,
-            sentAt : 1551133930594,
+            sentAt : getFormattedDateTime(),
             removedAt : null, //for later use
             from: 'momo@momo.com',
             to: 'user@appsus.com' },

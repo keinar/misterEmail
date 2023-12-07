@@ -3,8 +3,12 @@ import { EmailFilter } from "../components/EmailFilter";
 import { EmailList } from "../components/EmailList";
 import { emailService } from "../services/email.service";
 import { SideNav } from "../components/SideNav";
+import { Outlet } from "react-router-dom";
+import { EmailDetails } from "../components/EmailDetails";
+import { useLocation } from "react-router-dom";
 
 export function EmailIndex() {
+  const location = useLocation();
   const [emails, setEmails] = useState(null);
   const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter());
 
@@ -26,15 +30,23 @@ export function EmailIndex() {
   }
 
   if (!emails) return <div>Loading...</div>;
-
+  const isEmailDetailPage = location.pathname.includes("/email/");
+  const currentNav = location.pathname.includes("/email/sent")
+    ? "sent"
+    : location.pathname.includes("/email/drafts")
+    ? "drafts"
+    : location.pathname.includes("/email/bin")
+    ? "bin"
+    : "inbox";
   return (
     <section className="email-index">
-      <SideNav />
-      <section>
-        <EmailFilter filterBy={{ filterBy }} onSetFilter={onSetFilter} />
+      <SideNav currentNav={currentNav} />
+      <section className="inbox-container">
+        <EmailFilter filterBy={filterBy} onSetFilter={onSetFilter} />
         <br></br>
-        <EmailList emails={emails} />
+        {isEmailDetailPage ? <Outlet /> : <EmailList emails={emails} />}
       </section>
+      {!isEmailDetailPage && <Outlet />}
     </section>
   );
 }

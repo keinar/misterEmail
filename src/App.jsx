@@ -2,7 +2,7 @@ import { Route, HashRouter as Router, Routes } from "react-router-dom";
 import { Home } from "./pages/Home";
 import { AppHeader } from "./components/AppHeader";
 import { About } from "./pages/About";
-import { EmailDetails } from "./pages/EmailDetails";
+import { EmailDetails } from "./components/EmailDetails";
 import { EmailIndex } from "./pages/EmailIndex";
 export function App() {
   return (
@@ -13,8 +13,10 @@ export function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
-            <Route path="/email" element={<EmailIndex />} />
-            <Route path="/email/:emailId" element={<EmailDetails />} />
+
+            <Route path="/email" element={<EmailIndex />}>
+              <Route path=":emailId" element={<EmailDetails />} />
+            </Route>
           </Routes>
         </main>
 

@@ -4,8 +4,7 @@ export function EmailFilter({ filterBy, onSetFilter }) {
   const [filterByToEdit, setFilterByToEdit] = useState(filterBy);
 
   function handleChange(ev) {
-    let { name: field, value, type } = ev.target;
-    if (type === "number") value = +value;
+    const { name: field, value } = ev.target;
     setFilterByToEdit((prevFilter) => ({ ...prevFilter, [field]: value }));
   }
 
@@ -13,7 +12,9 @@ export function EmailFilter({ filterBy, onSetFilter }) {
     onSetFilter(filterByToEdit);
   }, [filterByToEdit]);
 
-  const { subject } = filterByToEdit;
+  const { txt } = filterByToEdit;
+
+  // console.log(filterByToEdit);
 
   return (
     <form className="email-filter">
@@ -22,8 +23,8 @@ export function EmailFilter({ filterBy, onSetFilter }) {
       <input
         onChange={handleChange}
         id="search"
-        value={subject}
-        name="search"
+        value={txt}
+        name="txt"
         type="text"
         placeholder="Search"
       />
