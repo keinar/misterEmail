@@ -1,3 +1,18 @@
 .email-raw{
     border: 1px solid black
 }
+
+.email-details h1{
+    font-size: 24px;
+    padding: 10px 0;
+}
+
+.email-sent-at ,.email-to ,.email-from{
+    color: rgb(107, 107, 107);
+}
+.email-body{
+    font-size: 18px;
+}
+.table-body{
+    background-color: #ececec;
+}

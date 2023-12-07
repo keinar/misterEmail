@@ -25,21 +25,23 @@ export function EmailDetails() {
   // }
 
   function onBack() {
-    navigate("/email-inbox");
+    navigate("/email");
   }
   if (!email) return <div>loading...</div>;
 
-  console.log(email);
   return (
     <section className="email-details">
       {/* full details of a specific email */}
-      <h1>Subject: {email.subject}</h1>
-      <p>from: {email.from}</p>
-      <p>to: {email.to}</p>
-      <p>Body: {email.body}</p>
+      <h1>{email.subject}</h1>
+      <p className="email-from">from: {email.from}</p>
+      <p className="email-to">to: {email.to}</p>
+      <p className="email-sent-at">sent at: {email.sentAt}</p>
 
-      <p>sent at: {email.sentAt}</p>
-      <Link to={`/email-inbox/:e103`}>Next Email</Link>
+      <br></br>
+      <p className="email-body">{email.body}</p>
+      <br></br>
+      <hr></hr>
+      <Link to={`/email/:e103`}>Next Email</Link>
       <button onClick={onBack}>Back</button>
     </section>
   );

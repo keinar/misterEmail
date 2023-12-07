@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { EmailFilter } from "../components/EmailFilter";
 import { EmailList } from "../components/EmailList";
 import { emailService } from "../services/email.service";
+import { SideNav } from "../components/SideNav";
 
-export function EmailInbox() {
+export function EmailIndex() {
   const [emails, setEmails] = useState(null);
   const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter());
 
@@ -27,10 +28,13 @@ export function EmailInbox() {
   if (!emails) return <div>Loading...</div>;
 
   return (
-    <>
-      <h1>Email Inbox</h1>
-      <EmailFilter filterBy={{ filterBy }} onSetFilter={onSetFilter} />
-      <EmailList emails={emails} />
-    </>
+    <section className="email-index">
+      <SideNav />
+      <section>
+        <EmailFilter filterBy={{ filterBy }} onSetFilter={onSetFilter} />
+        <br></br>
+        <EmailList emails={emails} />
+      </section>
+    </section>
   );
 }

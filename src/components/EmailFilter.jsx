@@ -15,11 +15,9 @@ export function EmailFilter({ filterBy, onSetFilter }) {
 
   const { subject } = filterByToEdit;
 
-  console.log(filterByToEdit);
-
   return (
     <form className="email-filter">
-      <label htmlFor="search">Search</label>
+      <label htmlFor="search"></label>
 
       <input
         onChange={handleChange}
@@ -27,6 +25,7 @@ export function EmailFilter({ filterBy, onSetFilter }) {
         value={subject}
         name="search"
         type="text"
+        placeholder="Search"
       />
     </form>
   );

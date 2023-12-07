@@ -1,0 +1,17 @@
+.side-nav{
+    position: fixed;
+    left: 0;
+    top: 65px;
+    padding: 20px 0;
+    text-align: center;
+    border: 1px solid black;
+}
+
+.side-nav ul{
+  padding: 25px;
+}
+
+.side-nav ul:hover{
+   background-color: beige;
+   cursor: pointer;
+  }
