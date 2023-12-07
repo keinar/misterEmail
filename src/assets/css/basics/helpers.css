@@ -1,0 +1,182 @@
+/* Font Sizes */
+
+/* List */
+.clean-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.clean-list>li {
+    margin: 0;
+    padding: 0;
+}
+
+/* Positioning */
+.flex {
+    display: flex;
+}
+
+.flex>*.full-grow {
+    flex: 1;
+}
+
+
+.flex.column {
+    flex-direction: column;
+}
+
+.flex.justify-center {
+    justify-content: center;
+}
+
+.flex.align-center {
+    align-items: center;
+}
+
+.flex.wrap {
+    flex-wrap: wrap;
+}
+
+.flex.space-between {
+    justify-content: space-between;
+}
+
+.flex.space-around {
+    justify-content: space-around;
+}
+
+.flex.auto-center {
+    justify-content: center;
+    align-items: center;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.center-block {
+    display: block;
+    margin: 0 auto;
+}
+
+/* Buttons */
+.simple-button {
+    background: transparent;
+    color: black;
+    font-size: inherit;
+    font-family: inherit;
+    border: 0;
+    opacity: 0.6;
+    transition: 0.3s all;
+    padding: 0;
+    cursor: pointer;
+
+
+}
+
+.simple-button:disabled {
+    cursor: initial;
+    opacity: 0.2;
+}
+
+
+
+.simple-button:hover:not(:disabled) {
+    opacity: 1;
+}
+
+
+.medium-button {
+    font-size: 1.5rem;
+}
+
+/* Transitions */
+.fast-trans {
+    transition: 0.25s all;
+}
+
+.normal-trans {
+    transition: 0.4s all;
+}
+
+.slow-trans {
+    transition: 0.7s all;
+}
+
+/* Spacing */
+.p5 {
+    padding: 5px;
+}
+
+.p10 {
+    padding: 10px;
+}
+
+.p20 {
+    padding: 20px;
+}
+
+.m5 {
+    margin: 5px;
+}
+
+.m10 {
+    margin: 10px;
+}
+
+.m20 {
+    margin: 20px;
+}
+
+/* Normalize Background */
+.normBackground {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+/* Dividing */
+.bottom-divider {
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid lightgray;
+}
+
+/* Others */
+.blurred {
+    filter: blur(4px);
+}
+
+.simple-form {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin: 15px auto;
+
+    &>*:not(:last-child) {
+        margin-bottom: 10px;
+    }
+
+
+}
+
+.simple-form :is(input:not([type="checkbox"]), button) {
+    padding: 5px 8px;
+    width: 100%;
+}
+
+.form-errors {
+    text-align: center;
+    margin-top: 24px;
+    color: red;
+    font-size: 15px;
+}
