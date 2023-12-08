@@ -5,6 +5,13 @@
   text-align: center;
   border: 1px solid black;
   margin: 0 20px 0 0;
+  transition: 1s;
+}
+
+.email-compose{
+  background-color: #eaf1fb;
+  border-radius: 15px;
+  padding: 15px;
 }
 
 .side-nav ul{
@@ -33,11 +40,21 @@
 }
 
 .side-nav ul.active {
-  background-color: #e0e0e0
+  background-color: #eaf1fb
 }
 
 @media screen and (max-width: 600px) {
   .side-nav {
-    display: none;
-  }
+    position: absolute;
+    left: -300px;
+    top: 0;
+    width: 90%;
+    height: 100%;
+}
+
+svg.lucide.lucide-x {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
 }

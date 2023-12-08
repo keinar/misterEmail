@@ -20,10 +20,6 @@ export function EmailDetails() {
     }
   }
 
-  // function getEmailById(email){
-  //   return emailService.getById(email)
-  // }
-
   function onBack() {
     navigate("/email");
   }
@@ -31,7 +27,6 @@ export function EmailDetails() {
 
   return (
     <section className="email-details">
-      {/* full details of a specific email */}
       <h1>{email.subject}</h1>
       <p className="email-from">from: {email.from}</p>
       <p className="email-to">to: {email.to}</p>

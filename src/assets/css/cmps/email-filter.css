@@ -1,5 +1,25 @@
 .email-filter #search{
-    border-radius: 5px;
-    padding: 5px;
+    border-radius: 25px;
+    padding: 8px;
     background-color: #eaf1fb;
+    width: 250px;
+}
+
+@media screen and (max-width: 600px) {
+    form.email-filter {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+.email-filter #search {
+    padding: 8px 20px 8px 10px;
+    background-color: #eaf1fb;
+    border-radius: 50px;
+    text-align: left;
+    width: 80%;
+}
+
+svg.lucide.lucide-align-justify {
+    margin-right: 25px;
+}
 }

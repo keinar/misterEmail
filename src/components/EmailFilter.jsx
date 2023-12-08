@@ -1,6 +1,12 @@
+import { AlignJustify } from "lucide-react";
 import { useEffect, useState } from "react";
 
-export function EmailFilter({ filterBy, onSetFilter }) {
+export function EmailFilter({
+  filterBy,
+  onSetFilter,
+  setShowNavBar,
+  isMobile,
+}) {
   const [filterByToEdit, setFilterByToEdit] = useState(filterBy);
 
   function handleChange(ev) {
@@ -12,14 +18,17 @@ export function EmailFilter({ filterBy, onSetFilter }) {
     onSetFilter(filterByToEdit);
   }, [filterByToEdit]);
 
-  const { txt } = filterByToEdit;
+  function onShowNavbar() {
+    setShowNavBar((prevShowNavBar) => (prevShowNavBar === 0 ? -400 : 0));
+  }
 
-  // console.log(filterByToEdit);
+  const { txt } = filterByToEdit;
 
   return (
     <form className="email-filter">
       <label htmlFor="search"></label>
 
+      {isMobile && <AlignJustify onClick={onShowNavbar} />}
       <input
         onChange={handleChange}
         id="search"

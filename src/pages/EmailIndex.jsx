@@ -4,13 +4,15 @@ import { EmailList } from "../components/EmailList";
 import { emailService } from "../services/email.service";
 import { SideNav } from "../components/SideNav";
 import { Outlet } from "react-router-dom";
-import { EmailDetails } from "../components/EmailDetails";
 import { useLocation } from "react-router-dom";
+import { useDeviceDetect } from "../components/useDeviceDetect.js";
 
 export function EmailIndex() {
   const location = useLocation();
   const [emails, setEmails] = useState(null);
   const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter());
+  const [showNavBar, setShowNavBar] = useState(-400);
+  const { isMobile } = useDeviceDetect();
 
   useEffect(() => {
     loadEmails();
@@ -40,9 +42,19 @@ export function EmailIndex() {
     : "inbox";
   return (
     <section className="email-index">
-      <SideNav currentNav={currentNav} />
+      <SideNav
+        currentNav={currentNav}
+        showNavBar={showNavBar}
+        setShowNavBar={setShowNavBar}
+        isMobile={isMobile}
+      />
       <section className="inbox-container">
-        <EmailFilter filterBy={filterBy} onSetFilter={onSetFilter} />
+        <EmailFilter
+          filterBy={filterBy}
+          onSetFilter={onSetFilter}
+          setShowNavBar={setShowNavBar}
+          isMobile={isMobile}
+        />
         <br></br>
         {isEmailDetailPage ? <Outlet /> : <EmailList emails={emails} />}
       </section>
