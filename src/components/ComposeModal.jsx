@@ -31,17 +31,17 @@ export function ComposeModal({ onComposeModalChange }) {
             id="from"
             name="from"
             value={userEmail}
-            onChange={(e) => setUserEmail(e.target.value)}
+            readOnly
           />
         </fieldset>
 
         <fieldset className="to">
-          <label htmlFor="to ">To:</label>
+          <label htmlFor="to">To:</label>
           <input type="email" id="to" name="to" />
         </fieldset>
         <fieldset className="subject">
-          <label htmlFor="subject ">Subject:</label>
-          <input type="text" id="subject" name="to" />
+          <label htmlFor="subject">Subject:</label>
+          <input type="text" id="subject" name="subject" />
         </fieldset>
         <fieldset className="message">
           <textarea
