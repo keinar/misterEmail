@@ -7,18 +7,19 @@ export const emailService = {
     remove,
     getById,
     createEmail,
-    getDefaultFilter
+    getDefaultFilter,
+    getDemoUser,
+    saveToStarred,
+    removeFromStarred
 }
 
-const STORAGE_KEY = 'emails'
-
-    // const loggedinUser = {
-    //     email: 'user@appsus.com',
-    //     fullname: 'Mahatma Appsus'
-    //    }
+const EMAIL_KEY = 'emails'
+const USER_KEY = 'loggedInUser'
+const STARRED_KEY = 'starred-emails'
        
 
 _createEmails()
+_createDemoUser()
 
 
 function getDefaultFilter(){
@@ -30,7 +31,7 @@ function getDefaultFilter(){
 }
 
 async function query(filterBy) {
-    const emails = await storageService.query(STORAGE_KEY)
+    const emails = await storageService.query(EMAIL_KEY)
     if (filterBy) {
         
         let filteredEmails = emails;
@@ -59,20 +60,28 @@ async function query(filterBy) {
 }
 
 function getById(id) {
-    return storageService.get(STORAGE_KEY, id)
+    return storageService.get(EMAIL_KEY, id)
 }
 
 function remove(id) {
-    return storageService.remove(STORAGE_KEY, id)
+    return storageService.remove(EMAIL_KEY, id)
 }
 
 function save(emailToSave) {
     if (emailToSave.id) {
-        return storageService.put(STORAGE_KEY, emailToSave)
+        return storageService.put(EMAIL_KEY, emailToSave)
     } else {
         emailToSave.isOn = false
-        return storageService.post(STORAGE_KEY, emailToSave)
+        return storageService.post(EMAIL_KEY, emailToSave)
     }
+}
+
+function saveToStarred(emailToSave){
+        return storageService.post(STARRED_KEY, emailToSave)
+}
+
+function removeFromStarred(id){
+    return storageService.remove(STARRED_KEY, id)
 }
 
 function createEmail(id = '', subject = '', body = '', isRead = false,  isStarred = false,
@@ -104,12 +113,30 @@ function getFormattedDateTime() {
     return `${day} ${month} ${hours}:${minutes}`;
   }
 
+  function _createDemoUser(){
+    let user = utilService.loadFromStorage(USER_KEY)
+    if(!user || !user.length){
+        user = [
+            {
+            email: 'user@appsus.com',
+            fullname: 'Mahatma Appsus'
+            }
+        ]
+        utilService.saveToStorage(USER_KEY, user)
+    }
+  }
+
+  async function getDemoUser(){
+    const user = await storageService.query(USER_KEY)
+    return user
+  }
+
     
 function _createEmails() {
-    let emails = utilService.loadFromStorage(STORAGE_KEY)
+    let emails = utilService.loadFromStorage(EMAIL_KEY)
     if (!emails || !emails.length) {
         emails = [
-            { id: 'e101',
+            { id: utilService.makeId(5),
             subject: 'Miss you!',
             body: 'Would love to catch up sometimes',
             isRead: false,
@@ -119,7 +146,7 @@ function _createEmails() {
             from: 'momo@momo.com',
             to: 'user@appsus.com' },
             
-            { id: 'e103',
+            { id: utilService.makeId(5),
             subject: 'How are you?',
             body: 'Would love to catch up sometimes',
             isRead: true,
@@ -129,7 +156,7 @@ function _createEmails() {
             from: 'momo@momo.com',
             to: 'user@appsus.com' },
 
-            { id: 'e105',
+            { id: utilService.makeId(5),
             subject: 'Please you help me',
             body: 'Would love to catch up sometimes',
             isRead: false,
@@ -139,7 +166,7 @@ function _createEmails() {
             from: 'momo@momo.com',
             to: 'user@appsus.com' },
         ]
-        utilService.saveToStorage(STORAGE_KEY, emails)
+        utilService.saveToStorage(EMAIL_KEY, emails)
     }
 }
 

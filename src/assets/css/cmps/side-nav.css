@@ -9,7 +9,7 @@
 }
 
 .email-compose{
-  background-color: #eaf1fb;
+  background-color: #dae9ff;
   border-radius: 15px;
   padding: 15px;
 }
@@ -19,7 +19,7 @@
 }
 
 .side-nav ul:hover{
-   background-color: beige;
+   background-color: #dae9ff;
    cursor: pointer;
   }
 

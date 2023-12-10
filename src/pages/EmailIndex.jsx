@@ -6,6 +6,7 @@ import { SideNav } from "../components/SideNav";
 import { Outlet } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useDeviceDetect } from "../components/useDeviceDetect.js";
+import { ComposeModal } from "../components/ComposeModal.jsx";
 
 export function EmailIndex() {
   const location = useLocation();
@@ -13,6 +14,7 @@ export function EmailIndex() {
   const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter());
   const [showNavBar, setShowNavBar] = useState(-400);
   const { isMobile } = useDeviceDetect();
+  const [composeModal, setComposeModal] = useState(false);
 
   useEffect(() => {
     loadEmails();
@@ -40,6 +42,11 @@ export function EmailIndex() {
     : location.pathname.includes("/email/bin")
     ? "bin"
     : "inbox";
+
+  function handleComposeModalChange(newValue) {
+    setComposeModal(newValue);
+  }
+
   return (
     <section className="email-index">
       <SideNav
@@ -47,6 +54,8 @@ export function EmailIndex() {
         showNavBar={showNavBar}
         setShowNavBar={setShowNavBar}
         isMobile={isMobile}
+        emails={emails}
+        onComposeModalChange={handleComposeModalChange}
       />
       <section className="inbox-container">
         <EmailFilter
@@ -59,6 +68,9 @@ export function EmailIndex() {
         {isEmailDetailPage ? <Outlet /> : <EmailList emails={emails} />}
       </section>
       {!isEmailDetailPage && <Outlet />}
+      {composeModal && (
+        <ComposeModal onComposeModalChange={handleComposeModalChange} />
+      )}
     </section>
   );
 }

@@ -1,0 +1,79 @@
+.compose-modal{
+    width: 500px;
+    height: 400px;
+    position: fixed;
+    background-color: white;
+    bottom: 62px;
+    right: 50px;
+    border: 1px solid black;
+    border-radius: 10px 10px 0 0;
+    transition: 2s
+}
+
+.compose-modal header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: rgb(242,246,252);
+    border-radius: 10px 10px 0 0;
+}
+.compose-modal header h1{
+    font-weight: 600;
+}
+
+.compose-modal form{
+    display: flex;
+    flex-direction: column;
+}
+
+.compose-modal form input {
+    border: none;
+    padding-left: 10px;
+}
+
+input:focus {
+    outline: none;
+  }
+
+  .compose-modal form label {
+    padding-left: 10px;
+}
+
+.compose-modal .from, .compose-modal .to, .compose-modal .subject {
+    border-bottom: 1px solid #dadada;
+}
+
+.compose-modal fieldset{
+    border: none;
+}
+
+.compose-modal textarea#message {
+    border: none;
+    padding-left: 10px;
+}
+
+.compose-modal textarea:focus {
+    outline: none;
+  }
+
+  .compose-modal input[type="submit"] {
+    font-size: 18px;
+    border-radius: 25px;
+    padding: 3px 15px;
+    background-color: #0B57D0;
+    color: white;
+    position: absolute;
+    bottom: 10px;
+}
+
+
+@media screen and (max-width: 600px) {
+    .compose-modal{
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
