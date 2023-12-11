@@ -17,7 +17,6 @@ export const emailService = {
 
 const EMAIL_KEY = 'emails'
 const USER_KEY = 'loggedInUser'
-const STARRED_KEY = 'starred-emails'
        
 
 _createEmails()
@@ -44,11 +43,6 @@ async function query(filterBy) {
             );
         }
 
-        // if (filterBy.status) {
-        //     filteredEmails = filteredEmails.filter(email => 
-             
-        //     );
-        // }
         if (filterBy.isRead === true) {
             filteredEmails = filteredEmails.filter(email => 
                 email.isRead === filterBy.isRead
@@ -79,21 +73,27 @@ function save(emailToSave) {
     }
 }
 
-async function saveToStarred(emailId) {
-    return storageService.get(EMAIL_KEY, emailId)
-        .then(email => {
-            email.isStarred = true;
-            return storageService.put(EMAIL_KEY, email);
-        });
-}
+async function saveToStarred(emailToUpdate) {
+    try {
+      const email = await storageService.get(EMAIL_KEY, emailToUpdate.id);
+      email.isStarred = true;
+      return await storageService.put(EMAIL_KEY, email);
+    } catch (error) {
+      console.error('Failed to save to starred:', error);
+      throw error; 
+    }
+  }
 
-async function removeFromStarred(emailId) {
-    return storageService.get(EMAIL_KEY, emailId)
-        .then(email => {
-            email.isStarred = false;
-            return storageService.put(EMAIL_KEY, email);
-        });
-}
+  async function removeFromStarred(emailId) {
+    try {
+      const email = await storageService.get(EMAIL_KEY, emailId);
+      email.isStarred = false;
+      return await storageService.put(EMAIL_KEY, email);
+    } catch (error) {
+      console.error('Failed to remove from starred:', error);
+      throw error; 
+    }
+  }
 
 async function getStarredEmails() {
     const emails = await storageService.query(EMAIL_KEY);

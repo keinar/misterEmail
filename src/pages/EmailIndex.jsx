@@ -14,11 +14,11 @@ export function EmailIndex() {
   const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter());
   const [showNavBar, setShowNavBar] = useState(-400);
   const { isMobile } = useDeviceDetect();
-  const [composeModal, setComposeModal] = useState(false);
+  const [isComposeOpen, setIsComposeOpen] = useState(false);
 
   useEffect(() => {
     loadEmails();
-  }, [filterBy]);
+  }, [filterBy, emails]);
 
   async function loadEmails() {
     try {
@@ -44,7 +44,7 @@ export function EmailIndex() {
     : "inbox";
 
   function handleComposeModalChange(newValue) {
-    setComposeModal(newValue);
+    setIsComposeOpen(newValue);
   }
 
   return (
@@ -67,12 +67,8 @@ export function EmailIndex() {
         <br></br>
         {isEmailDetailPage ? <Outlet /> : <EmailList emails={emails} />}
       </section>
-      {!isEmailDetailPage && <Outlet />}
-      {composeModal && (
-        <ComposeModal
-          onComposeModalChange={handleComposeModalChange}
-          loadEmails={loadEmails}
-        />
+      {isComposeOpen && (
+        <ComposeModal onComposeModalChange={handleComposeModalChange} />
       )}
     </section>
   );

@@ -6,46 +6,52 @@ import { emailService } from "../services/email.service";
 export function EmailPreview({ email }) {
   const [isOpened, setIsOpened] = useState(false);
   const [isStarred, setIsStarred] = useState(email.isStarred);
-  const [isRead, setIsRead] = useState(email.isRead);
 
   useEffect(() => {
     setIsOpened(email.isRead);
-  }, [email.isRead]);
+    setIsStarred(email.isStarred);
+  }, [email.isRead, email.isStarred]);
 
   async function handleOpenState() {
-    setIsOpened(true);
-    const updatedEmail = { ...email, isRead: true };
-    await emailService.save(updatedEmail);
+    try {
+      setIsOpened(true);
+      const updatedEmail = { ...email, isRead: true };
+      await emailService.save(updatedEmail);
+    } catch (error) {
+      console.error("Failed to open email:", error);
+    }
   }
 
-  function fillStar() {
-    setIsStarred((prevIsStarred) => {
+  async function toggleStar() {
+    try {
+      const prevIsStarred = isStarred;
+      setIsStarred(!prevIsStarred); // Optimistically set the state
+
       if (prevIsStarred) {
-        emailService.removeFromStarred(email.id);
+        await emailService.removeFromStarred(email.id);
       } else {
         const updatedEmail = { ...email, isStarred: true };
-        emailService.saveToStarred(updatedEmail);
+        await emailService.saveToStarred(updatedEmail);
       }
-      return !prevIsStarred;
-    });
+    } catch (error) {
+      setIsStarred(isStarred); // Revert the state on error
+      console.error("Failed to toggle star:", error);
+    }
   }
 
   const fontWeight = !isOpened ? 700 : 500;
-  const backgroundColor = !isOpened && "white";
-  const star = !isStarred ? "white" : "yellow";
+  const backgroundColor = !isOpened ? "white" : undefined;
+  const star = !isStarred ? "none" : "yellow";
   return (
     <>
-      <td
-        className="subject"
-        onClick={handleOpenState}
-        style={{ backgroundColor: backgroundColor }}
-      >
-        <Star size={20} onClick={fillStar} fill={star} />
+      <td className="subject" style={{ backgroundColor: backgroundColor }}>
+        <Star size={20} onClick={toggleStar} fill={star} />
 
         <Link
           to={`/email/${email.id}`}
           className={email.id}
           style={{ fontWeight: fontWeight }}
+          onClick={handleOpenState}
         >
           {email.subject}
         </Link>

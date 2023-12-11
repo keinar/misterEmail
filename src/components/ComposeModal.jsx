@@ -3,7 +3,7 @@ import { emailService } from "../services/email.service";
 import { useEffect, useState } from "react";
 import { utilService } from "../services/util.service";
 
-export function ComposeModal({ onComposeModalChange, loadEmails }) {
+export function ComposeModal({ onComposeModalChange }) {
   const [userEmail, setUserEmail] = useState("");
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
@@ -42,10 +42,10 @@ export function ComposeModal({ onComposeModalChange, loadEmails }) {
         to
       );
       // Clear the form fields after submission
+      alert("Your message sent successfully");
       setTo("");
       setSubject("");
       setMessage("");
-      loadEmails();
     } catch (err) {
       console.log("Error", err);
     }
