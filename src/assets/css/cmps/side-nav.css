@@ -10,8 +10,12 @@
 
 .email-compose{
   background-color: #dae9ff;
-  border-radius: 15px;
-  padding: 15px;
+  border-radius: 25px;
+  padding: 10px 15px;
+  border:none;
+}
+.email-compose:hover{
+box-shadow:  1px 3px 0 rgba(60,64,67,0.302), 0 4px 8px 3px rgba(60,64,67,0.149)
 }
 
 .side-nav ul{
@@ -27,6 +31,7 @@
     padding: 25px;
     display: flex;
     align-items: center;
+    font-size: .875rem;
 }
 
 .side-nav button {
@@ -40,7 +45,15 @@
 }
 
 .side-nav ul.active {
-  background-color: #eaf1fb
+  background-color: #eaf1fb;
+  font-weight: 700;
+}
+
+.side-nav ul span{
+  font-weight: 700;
+  font-size: .75rem;
+  padding-left: 20px;
+
 }
 
 @media screen and (max-width: 600px) {

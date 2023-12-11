@@ -69,7 +69,10 @@ export function EmailIndex() {
       </section>
       {!isEmailDetailPage && <Outlet />}
       {composeModal && (
-        <ComposeModal onComposeModalChange={handleComposeModalChange} />
+        <ComposeModal
+          onComposeModalChange={handleComposeModalChange}
+          loadEmails={loadEmails}
+        />
       )}
     </section>
   );

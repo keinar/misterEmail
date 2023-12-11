@@ -10,7 +10,8 @@ export const emailService = {
     getDefaultFilter,
     getDemoUser,
     saveToStarred,
-    removeFromStarred
+    removeFromStarred,
+    getFormattedDateTime
 }
 
 const EMAIL_KEY = 'emails'
@@ -71,7 +72,8 @@ function save(emailToSave) {
     if (emailToSave.id) {
         return storageService.put(EMAIL_KEY, emailToSave)
     } else {
-        emailToSave.isOn = false
+        emailToSave.id = utilService.makeId(5);
+        emailToSave.isOn = false // Make sure all properties are set before saving
         return storageService.post(EMAIL_KEY, emailToSave)
     }
 }
@@ -84,22 +86,19 @@ function removeFromStarred(id){
     return storageService.remove(STARRED_KEY, id)
 }
 
-function createEmail(id = '', subject = '', body = '', isRead = false,  isStarred = false,
-sentAt = Date.now(),
-removedAt = null, //for later use
-from= '',
-to= '') {
-    return {
-        id,
+async function createEmail(subject, body, isRead, isStarred, from, to) {
+    const email = {
+        id: utilService.makeId(5),
         subject,
         body,
         isRead,
         isStarred,
-        sentAt,
-        removedAt,
+        sentAt: getFormattedDateTime(),
+        removedAt: null, // for later use
         from,
         to
-    }
+    };
+    return storageService.post(EMAIL_KEY, email)
 }
 
 function getFormattedDateTime() {
@@ -118,8 +117,8 @@ function getFormattedDateTime() {
     if(!user || !user.length){
         user = [
             {
-            email: 'user@appsus.com',
-            fullname: 'Mahatma Appsus'
+            email: 'info@digital-solution.co.il',
+            fullname: 'Keinar Elkayam'
             }
         ]
         utilService.saveToStorage(USER_KEY, user)

@@ -1,8 +1,13 @@
-.email-filter #search{
+.email-filter #search {
     border-radius: 25px;
-    padding: 8px;
+    padding: 9px 34px 9px;
     background-color: #eaf1fb;
     width: 250px;
+    border: none;
+    background-image: url(/misterEmail/src/assets/imgs/search.svg);
+    background-position: 10px;
+    background-repeat: no-repeat;
+    background-size: 16px;
 }
 
 @media screen and (max-width: 600px) {
@@ -12,11 +17,11 @@
         justify-content: center;
     }
 .email-filter #search {
-    padding: 8px 20px 8px 10px;
     background-color: #eaf1fb;
     border-radius: 50px;
     text-align: left;
     width: 80%;
+    padding: 8px 8px 8px 30px;
 }
 
 svg.lucide.lucide-align-justify {
