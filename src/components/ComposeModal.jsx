@@ -25,6 +25,14 @@ export function ComposeModal({ onComposeModalChange, loadEmails }) {
   async function handleSubmit(e) {
     try {
       e.preventDefault();
+      if (!message) {
+        const userConfirmed = confirm(
+          "Are you sure that you want to send an empty messsage?"
+        );
+        if (!userConfirmed) {
+          return;
+        }
+      }
       const emailData = await emailService.createEmail(
         subject,
         message,
@@ -69,6 +77,7 @@ export function ComposeModal({ onComposeModalChange, loadEmails }) {
             name="to"
             value={to}
             onChange={(e) => setTo(e.target.value)}
+            required
           />
         </fieldset>
         <fieldset className="subject">
@@ -79,6 +88,7 @@ export function ComposeModal({ onComposeModalChange, loadEmails }) {
             name="subject"
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
+            required
           />
         </fieldset>
         <fieldset className="message">
