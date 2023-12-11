@@ -5,11 +5,17 @@
 }
 
 .app-header section.container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 0.18fr 0.06fr;
     padding: 10px;
+    align-items: center;
 
+}
+
+@media screen and (max-width: 600px) {
+    .app-header section.container {
+    grid-template-columns: 1fr 0.7fr 0.2fr;
+    }
 }
 
 .app-header h1.logo {

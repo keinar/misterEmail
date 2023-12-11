@@ -58,9 +58,10 @@ input:focus {
   }
 
   .compose-modal input[type="submit"] {
-    font-size: 18px;
+    font-size: 16px;
+    font-weight: 600;
     border-radius: 25px;
-    padding: 3px 15px;
+    padding: 4px 20px;
     background-color: #0B57D0;
     color: white;
     position: absolute;

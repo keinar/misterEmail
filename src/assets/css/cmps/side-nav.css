@@ -28,10 +28,11 @@ box-shadow:  1px 3px 0 rgba(60,64,67,0.302), 0 4px 8px 3px rgba(60,64,67,0.149)
   }
 
   .side-nav ul {
-    padding: 25px;
-    display: flex;
-    align-items: center;
+    padding: 15px;
+    display: grid;
+    grid-template-columns: 0fr 0.4fr 1fr;
     font-size: .875rem;
+    align-items: center;
 }
 
 .side-nav button {
@@ -69,5 +70,17 @@ svg.lucide.lucide-x {
   position: absolute;
   top: 20px;
   right: 20px;
+}
+
+.side-nav ul{
+  padding: 15px 25px;
+    display: grid;
+    grid-template-columns: 0fr 0fr 0fr;
+    font-size: .875rem;
+    align-items: center;
+}
+
+.side-nav button{
+  margin-left: 25px;
 }
 }

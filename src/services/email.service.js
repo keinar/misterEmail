@@ -9,6 +9,7 @@ export const emailService = {
     createEmail,
     getDefaultFilter,
     getDemoUser,
+    getStarredEmails,
     saveToStarred,
     removeFromStarred,
     getFormattedDateTime
@@ -78,12 +79,25 @@ function save(emailToSave) {
     }
 }
 
-function saveToStarred(emailToSave){
-        return storageService.post(STARRED_KEY, emailToSave)
+async function saveToStarred(emailId) {
+    return storageService.get(EMAIL_KEY, emailId)
+        .then(email => {
+            email.isStarred = true;
+            return storageService.put(EMAIL_KEY, email);
+        });
 }
 
-function removeFromStarred(id){
-    return storageService.remove(STARRED_KEY, id)
+async function removeFromStarred(emailId) {
+    return storageService.get(EMAIL_KEY, emailId)
+        .then(email => {
+            email.isStarred = false;
+            return storageService.put(EMAIL_KEY, email);
+        });
+}
+
+async function getStarredEmails() {
+    const emails = await storageService.query(EMAIL_KEY);
+    return emails.filter(email => email.isStarred);
 }
 
 async function createEmail(subject, body, isRead, isStarred, from, to) {
@@ -148,7 +162,7 @@ function _createEmails() {
             { id: utilService.makeId(5),
             subject: 'How are you?',
             body: 'Would love to catch up sometimes',
-            isRead: true,
+            isRead: false,
             isStarred: false,
             sentAt : getFormattedDateTime(),
             removedAt : null, //for later use

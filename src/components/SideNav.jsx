@@ -1,4 +1,12 @@
-import { File, Inbox, MailPlus, SendHorizontal, Trash2, X } from "lucide-react";
+import {
+  File,
+  Inbox,
+  MailPlus,
+  SendHorizontal,
+  Star,
+  Trash2,
+  X,
+} from "lucide-react";
 
 export function SideNav({
   currentNav,
@@ -30,6 +38,15 @@ export function SideNav({
         />
         Inbox <span>{emails.length}</span>
       </ul>
+
+      <ul className={`starred ${currentNav === "starred" ? "active" : ""}`}>
+        <Star
+          size={20}
+          stroke={currentNav === "starred" ? "black" : "#484A49"}
+        />
+        Starred
+      </ul>
+
       <ul className={`sent ${currentNav === "sent" ? "active" : ""}`}>
         <SendHorizontal
           size={20}

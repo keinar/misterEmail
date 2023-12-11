@@ -4,18 +4,18 @@ import { Mail, MailOpen, Star } from "lucide-react";
 import { emailService } from "../services/email.service";
 
 export function EmailPreview({ email }) {
-  const [isOpened, setIsOpened] = useState(
-    () => localStorage.getItem(`${email.id}`) === "true"
-  );
-  const [isStarred, setIsStarred] = useState(false);
+  const [isOpened, setIsOpened] = useState(false);
+  const [isStarred, setIsStarred] = useState(email.isStarred);
+  const [isRead, setIsRead] = useState(email.isRead);
 
   useEffect(() => {
-    localStorage.setItem(`${email.id}`, JSON.stringify(isOpened));
-  }, [isOpened, isStarred]);
+    setIsOpened(email.isRead);
+  }, [email.isRead]);
 
-  function handleOpenState() {
+  async function handleOpenState() {
     setIsOpened(true);
-    localStorage.setItem(`${email.id}`, "true");
+    const updatedEmail = { ...email, isRead: true };
+    await emailService.save(updatedEmail);
   }
 
   function fillStar() {
@@ -23,7 +23,8 @@ export function EmailPreview({ email }) {
       if (prevIsStarred) {
         emailService.removeFromStarred(email.id);
       } else {
-        emailService.saveToStarred(email);
+        const updatedEmail = { ...email, isStarred: true };
+        emailService.saveToStarred(updatedEmail);
       }
       return !prevIsStarred;
     });
