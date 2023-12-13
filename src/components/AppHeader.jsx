@@ -4,8 +4,9 @@ import userLogo from "../assets/imgs/userLogo.jpg";
 import { emailService } from "../services/email.service";
 import { useEffect, useState } from "react";
 import { EmailFilter } from "./EmailFilter";
+import { AlignJustify } from "lucide-react";
 
-export function AppHeader({ filterBy, onSetFilter }) {
+export function AppHeader({ filterBy, onSetFilter, toggleMenu }) {
   const [userName, setUserName] = useState(null);
 
   useEffect(() => {
@@ -27,6 +28,10 @@ export function AppHeader({ filterBy, onSetFilter }) {
   return (
     <header className="app-header">
       <section className="container">
+        <div className="mobileMenu" onClick={toggleMenu} hidden>
+          <AlignJustify />
+        </div>
+
         <div className="app-logo">
           <NavLink to="/">
             <img src={logo} alt="Mister Email" className="logoME" />

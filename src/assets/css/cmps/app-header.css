@@ -1,6 +1,5 @@
 .app-header {
     background: #F6F8FC;
-    color: white;
 
 }
 
@@ -49,6 +48,12 @@
 
     .app-header .app-logo{
         display: none;
+    }
+
+    .app-header .mobileMenu{
+        display: block;
+        margin: auto;
+        padding-left: 20px;
     }
     
 }

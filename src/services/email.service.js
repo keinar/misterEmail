@@ -37,9 +37,15 @@ async function query(filterBy) {
         
         let filteredEmails = emails;
 
+
         if (filterBy.txt) {
             filteredEmails = filteredEmails.filter(email => 
-                email.subject.toLowerCase().includes(filterBy.txt.toLowerCase())
+                { 
+                    const subject = email.subject
+                    const body = email.body
+                    const jointString = [subject, body].join(" ")
+                    return jointString.toLowerCase().includes(filterBy.txt.toLowerCase())
+                }
             );
         }
 

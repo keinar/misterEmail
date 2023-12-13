@@ -1,9 +1,8 @@
-import { Send, X } from "lucide-react";
+import { SendHorizonal, X } from "lucide-react";
 import { emailService } from "../services/email.service";
 import { useEffect, useState } from "react";
-import { utilService } from "../services/util.service";
 
-export function ComposeModal({ onComposeModalChange }) {
+export function EmailComposeModal({ onComposeModalChange }) {
   const [userEmail, setUserEmail] = useState("");
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
@@ -103,7 +102,9 @@ export function ComposeModal({ onComposeModalChange }) {
         </fieldset>
 
         <fieldset className="submit">
-          <input type="submit" name="send" value="Send" />
+          <button type="submit" name="send" className="send-button">
+            <SendHorizonal size={20} />
+          </button>
         </fieldset>
       </form>
     </section>

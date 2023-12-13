@@ -1,11 +1,7 @@
 import { MailPlus } from "lucide-react";
 import { EmailPreview } from "./EmailPreview";
 
-export function EmailList({ emails, onComposeModalChange }) {
-  function openComposeModal() {
-    onComposeModalChange(true);
-  }
-
+export function EmailList({ emails }) {
   return (
     <>
       <table className="email-list">
@@ -20,11 +16,6 @@ export function EmailList({ emails, onComposeModalChange }) {
           </tbody>
         ))}
       </table>
-
-      <button className="mobile-compose-btn" onClick={openComposeModal} hidden>
-        <MailPlus size={20} />
-        Compose
-      </button>
     </>
   );
 }

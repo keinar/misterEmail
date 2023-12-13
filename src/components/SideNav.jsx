@@ -12,16 +12,11 @@ import { emailService } from "../services/email.service";
 
 export function SideNav({
   currentNav,
-  showNavBar,
-  setShowNavBar,
-  isMobile,
   emails,
   onComposeModalChange,
+  isMenuVisible,
+  toggleMenu,
 }) {
-  function handleClose() {
-    setShowNavBar(-400);
-  }
-
   function openComposeModal() {
     onComposeModalChange(true);
   }
@@ -45,10 +40,13 @@ export function SideNav({
     WCuserName += userName[0].fullname;
   }
 
-  return (
-    <nav className="side-nav" style={{ left: `${showNavBar}px` }}>
-      {isMobile && <X onClick={handleClose} />}
+  const navStyles = {
+    left: isMenuVisible ? "0" : "-300px",
+  };
 
+  return (
+    <nav className="side-nav" style={navStyles}>
+      {isMenuVisible && <X onClick={toggleMenu} />}
       <button className="email-compose" onClick={openComposeModal}>
         <MailPlus size={20} /> Compose
       </button>
@@ -59,7 +57,6 @@ export function SideNav({
         />
         Inbox <span>{emails.length}</span>
       </ul>
-
       <ul className={`starred ${currentNav === "starred" ? "active" : ""}`}>
         <Star
           size={20}
@@ -67,7 +64,6 @@ export function SideNav({
         />
         Starred
       </ul>
-
       <ul className={`sent ${currentNav === "sent" ? "active" : ""}`}>
         <SendHorizontal
           size={20}
