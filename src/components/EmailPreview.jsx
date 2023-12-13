@@ -40,7 +40,7 @@ export function EmailPreview({ email }) {
   }
 
   const fontWeight = !isOpened ? 700 : 500;
-  const backgroundColor = !isOpened ? "white" : undefined;
+  const backgroundColor = isOpened ? "#F2F6FC" : undefined;
   const star = !isStarred ? "none" : "yellow";
   return (
     <tr className="subject" style={{ backgroundColor: backgroundColor }}>
