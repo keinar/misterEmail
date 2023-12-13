@@ -4,6 +4,10 @@ import { EmailPreview } from "./EmailPreview";
 export function EmailList({ emails }) {
   async function onRemoveEmail(emailId) {
     try {
+      const userConfirmed = confirm("Are you sure to remove this email?");
+      if (!userConfirmed) {
+        return;
+      }
       await emailService.remove(emailId);
     } catch (err) {
       console.error("error: ", err);

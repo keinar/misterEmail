@@ -5,9 +5,9 @@
 
 .app-header section.container {
     display: flex;
-    padding: 8px;
     align-items: center;
     justify-content: space-around;
+    padding-bottom: 10px;
 }
 
 .app-header .user-settings{
@@ -20,19 +20,15 @@
 }
 
 .app-header .app-logo{
+    padding-inline: 30px;
     min-width: 238px;
-    padding-right: 30px;
-    padding-left: 30px;
-    flex: 1 0 auto;
-    box-sizing: border-box;
 }
 
 .app-header .search-filter{
     display: flex;
-    align-items: center;
-    flex: 1 1 100%;
-    padding-right: 30px;
+    flex: 1;
     height: 48px;
+    padding-inline: 10px;
 }
 
 .user-logo{
@@ -51,9 +47,8 @@
     }
 
     .app-header .mobileMenu{
-        display: block;
-        margin: auto;
-        padding-left: 20px;
+        display: flex;
+        margin: 10px;
     }
     
 }
