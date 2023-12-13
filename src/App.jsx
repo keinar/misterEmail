@@ -37,9 +37,48 @@ export function App() {
                   toggleMenu={toggleMenu}
                 />
               }
-            >
-              <Route path="/email/:emailId" element={<EmailDetails />} />
-            </Route>
+            />
+            <Route
+              path="/starred"
+              element={
+                <EmailIndex
+                  filterBy="starred"
+                  isMenuVisible={isMenuVisible}
+                  toggleMenu={toggleMenu}
+                />
+              }
+            />
+            <Route
+              path="/sent"
+              element={
+                <EmailIndex
+                  filterBy="sent"
+                  isMenuVisible={isMenuVisible}
+                  toggleMenu={toggleMenu}
+                />
+              }
+            />
+            <Route
+              path="/drafts"
+              element={
+                <EmailIndex
+                  filterBy="drafts"
+                  isMenuVisible={isMenuVisible}
+                  toggleMenu={toggleMenu}
+                />
+              }
+            />
+            <Route
+              path="/bin"
+              element={
+                <EmailIndex
+                  filterBy="bin"
+                  isMenuVisible={isMenuVisible}
+                  toggleMenu={toggleMenu}
+                />
+              }
+            />
+            <Route path="/email/:emailId" element={<EmailDetails />} />
           </Routes>
         </main>
 

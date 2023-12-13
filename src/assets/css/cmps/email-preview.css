@@ -11,10 +11,11 @@ table.email-list{
 tr.subject {
     display: grid;
     border-bottom: #d6d6d6 2px solid;
-    grid-template-columns: 0fr 6fr 1fr 24px;
+    grid-template-columns: auto 1fr 100px auto;
     align-items: center;
     padding-left: 10px;
     padding-right: 10px;
+    gap: 5px;
 }
 
 .subject td{
@@ -33,7 +34,10 @@ tr.subject {
 @media screen and (max-width: 600px) {
     td.subject {
         width: auto;
-        grid-template-columns: 0fr 1fr 0.5fr 0fr;
+    }
+
+    tr.subject{
+        grid-template-columns: auto 1fr 80px auto;
     }
 
     table.email-list {
