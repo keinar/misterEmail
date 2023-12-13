@@ -1,40 +1,34 @@
 import { useEffect, useState } from "react";
-import { EmailFilter } from "../components/EmailFilter";
 import { EmailList } from "../components/EmailList";
 import { emailService } from "../services/email.service";
 import { SideNav } from "../components/SideNav";
 import { Outlet } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { useDeviceDetect } from "../components/useDeviceDetect.js";
 import { ComposeModal } from "../components/ComposeModal.jsx";
+import { RightNav } from "../components/RightNav.jsx";
 
-export function EmailIndex() {
+export function EmailIndex({ filterBy }) {
   const location = useLocation();
   const [emails, setEmails] = useState(null);
-  const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter());
   const [showNavBar, setShowNavBar] = useState(-400);
-  const { isMobile } = useDeviceDetect();
   const [isComposeOpen, setIsComposeOpen] = useState(false);
 
   useEffect(() => {
     loadEmails();
-  }, [filterBy, emails]);
+  }, [filterBy]);
 
   async function loadEmails() {
     try {
-      const emails = await emailService.query(filterBy);
-      setEmails(emails);
+      const loadedEmails = await emailService.query(filterBy);
+      setEmails(loadedEmails);
     } catch (err) {
       console.error("error: ", err);
     }
   }
 
-  function onSetFilter(filterBy) {
-    setFilterBy((prevFilter) => ({ ...prevFilter, ...filterBy }));
-  }
-
   if (!emails) return <div>Loading...</div>;
-  const isEmailDetailPage = location.pathname.includes("/email/");
+  const isEmailDetailsPage = location.pathname.includes("/email/");
+
   const currentNav = location.pathname.includes("/email/sent")
     ? "sent"
     : location.pathname.includes("/email/drafts")
@@ -53,20 +47,23 @@ export function EmailIndex() {
         currentNav={currentNav}
         showNavBar={showNavBar}
         setShowNavBar={setShowNavBar}
-        isMobile={isMobile}
         emails={emails}
         onComposeModalChange={handleComposeModalChange}
       />
+
       <section className="inbox-container">
-        <EmailFilter
-          filterBy={filterBy}
-          onSetFilter={onSetFilter}
-          setShowNavBar={setShowNavBar}
-          isMobile={isMobile}
-        />
-        <br></br>
-        {isEmailDetailPage ? <Outlet /> : <EmailList emails={emails} />}
+        {isEmailDetailsPage ? (
+          <Outlet />
+        ) : (
+          <EmailList
+            emails={emails}
+            onComposeModalChange={handleComposeModalChange}
+          />
+        )}
       </section>
+
+      <RightNav />
+
       {isComposeOpen && (
         <ComposeModal onComposeModalChange={handleComposeModalChange} />
       )}

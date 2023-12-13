@@ -1,9 +1,17 @@
 .container {
-    max-width: 1100px;
     margin: 0 auto;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding: 20px;
+}
+
+section.inbox-container {
+    width: 100%;
+    background-color: white;
+    border-radius: 16px;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+section.inbox-container thead tr{
+    height: 48px;
 }
 
 /* GRIDS */
@@ -12,3 +20,4 @@
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     grid-gap: 10px;
 }
+

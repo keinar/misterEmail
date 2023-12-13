@@ -1,20 +1,33 @@
 .subject a{
-    font-size: 18px;
+    font-size: 14px;
     padding: 10px;
 }
 
-td.subject {
+table.email-list{
+    width: 100%;
+
+}
+
+tr.subject {
     display: grid;
-    padding: 0 10px;
     border-bottom: #d6d6d6 2px solid;
-    width: 800px;
-    grid-template-columns: 0fr 6fr 1fr 0.3fr;
+    grid-template-columns: 0fr 6fr 1fr 24px;
     align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.subject td{
+    padding: 5px 0px;
 }
 
 .email-sent-time{
     font-size: 14px;
     color: rgb(87, 87, 87);
+}
+
+.loading{
+    padding-left: 20px;
 }
 
 @media screen and (max-width: 600px) {
@@ -34,4 +47,28 @@ td.subject {
     .email-sent-time{
         font-size: 12px;
     }
+
+    .mobile-compose-btn{
+        position: absolute;
+        bottom: 20px;
+        left: 10px;
+        display: block;
+        background-color: #C2E7FF;
+        border-radius: 16px;
+        padding: 0 24px 0 15px;
+        height: 56px;
+        border:none;
+        align-items: center;
+        text-align: center;
+        display: flex;
+        margin-left: 10px;
+        font-size: 14px;
+        margin-bottom: 20px;    
+    }
+    .mobile-compose-btn svg{
+        margin-right: 10px;
+    }
+    .mobile-compose-btn:hover{
+        box-shadow:  1px 3px 0 rgba(60,64,67,0.302), 0 4px 8px 3px rgba(60,64,67,0.149);
+        }
 }

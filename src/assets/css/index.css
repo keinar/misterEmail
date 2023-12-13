@@ -5,7 +5,6 @@
 @import "basics/animations.css";
 
 /* Pages */
-@import "./pages/home.css";
 @import "./pages/email-index.css";
 
 /* Components */
@@ -14,7 +13,8 @@
 @import "./cmps/email-filter.css";
 @import "./cmps/email-preview.css";
 @import "./cmps/side-nav.css";
-@import "./cmps/compose-modal.css"
+@import "./cmps/compose-modal.css";
+@import "./cmps/right-nav.css";
 
 
 

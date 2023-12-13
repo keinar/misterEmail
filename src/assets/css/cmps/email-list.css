@@ -5,6 +5,11 @@
     padding: 10px 0;
 }
 
+section.email-details {
+    width: 100%;
+    padding: 20px;
+}
+
 .email-sent-at ,.email-to ,.email-from{
     color: rgb(107, 107, 107);
 }

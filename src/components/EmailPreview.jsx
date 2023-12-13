@@ -43,10 +43,11 @@ export function EmailPreview({ email }) {
   const backgroundColor = !isOpened ? "white" : undefined;
   const star = !isStarred ? "none" : "yellow";
   return (
-    <>
-      <td className="subject" style={{ backgroundColor: backgroundColor }}>
+    <tr className="subject" style={{ backgroundColor: backgroundColor }}>
+      <td>
         <Star size={20} onClick={toggleStar} fill={star} />
-
+      </td>
+      <td>
         <Link
           to={`/email/${email.id}`}
           className={email.id}
@@ -55,9 +56,19 @@ export function EmailPreview({ email }) {
         >
           {email.subject}
         </Link>
-        <span className="email-sent-time">{email.sentAt}</span>
-        {!isOpened ? <Mail size={20} /> : <MailOpen size={20} />}
+
+        <Link
+          to={`/email/${email.id}`}
+          className={email.id}
+          onClick={handleOpenState}
+        >
+          {email.body}
+        </Link>
       </td>
-    </>
+      <td>
+        <span className="email-sent-time">{email.sentAt}</span>
+      </td>
+      <td>{!isOpened ? <Mail size={20} /> : <MailOpen size={20} />}</td>
+    </tr>
   );
 }

@@ -1,21 +1,24 @@
 import { Route, HashRouter as Router, Routes } from "react-router-dom";
-import { Home } from "./pages/Home";
 import { AppHeader } from "./components/AppHeader";
-import { About } from "./pages/About";
 import { EmailDetails } from "./components/EmailDetails";
 import { EmailIndex } from "./pages/EmailIndex";
+import { useState } from "react";
+import { emailService } from "./services/email.service";
 export function App() {
+  const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter());
+
+  const onSetFilter = (newFilter) => {
+    setFilterBy(newFilter);
+  };
+
   return (
     <Router>
       <section className="main-app">
-        <AppHeader />
+        <AppHeader filterBy={filterBy} onSetFilter={onSetFilter} />
         <main className="container">
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-
-            <Route path="/email" element={<EmailIndex />}>
-              <Route path=":emailId" element={<EmailDetails />} />
+            <Route path="/" element={<EmailIndex filterBy={filterBy} />}>
+              <Route path="/email/:emailId" element={<EmailDetails />} />
             </Route>
           </Routes>
         </main>

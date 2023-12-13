@@ -1,44 +1,49 @@
 .side-nav {
-  background-color: white;
-  width: 200px;
-  padding: 20px 0;
+  background-color: #f6f8fc;
+  width: 238px;
+  height: 680px;
   text-align: center;
-  border: 1px solid black;
-  margin: 0 20px 0 0;
   transition: 1s;
+  max-width: 256px!important;
+  min-width: 256px!important;
+  padding-right: 20px;
 }
 
 .email-compose{
-  background-color: #dae9ff;
-  border-radius: 25px;
-  padding: 10px 15px;
-  border:none;
-}
-.email-compose:hover{
-box-shadow:  1px 3px 0 rgba(60,64,67,0.302), 0 4px 8px 3px rgba(60,64,67,0.149)
+ background-color: #C2E7FF;
+ border-radius: 16px;
+ padding: 0 24px 0 15px;
+ height: 56px;
+ border:none;
+ align-items: center;
+ text-align: center;
+ display: flex;
+ margin-left: 10px;
+ font-size: 14px;
+ margin-bottom: 20px;
 }
 
-.side-nav ul{
-  padding: 25px;
+.email-compose:hover{
+box-shadow:  1px 3px 0 rgba(60,64,67,0.302), 0 4px 8px 3px rgba(60,64,67,0.149);
 }
+
+
 
 .side-nav ul:hover{
    background-color: #dae9ff;
    cursor: pointer;
+   border-radius: 0 25px 25px 0px;
   }
 
   .side-nav ul {
-    padding: 15px;
+    padding: 6px;
+    padding-left: 25px;
     display: grid;
-    grid-template-columns: 0fr 0.4fr 1fr;
+    grid-template-columns: 0.3fr 0.4fr 1fr;
     font-size: .875rem;
+    text-align: left;
     align-items: center;
-}
-
-.side-nav button {
-  text-align: center;
-  display: flex;
-  margin: auto;
+    margin: 0;
 }
 
 .side-nav ul svg , .side-nav button svg{
@@ -46,14 +51,16 @@ box-shadow:  1px 3px 0 rgba(60,64,67,0.302), 0 4px 8px 3px rgba(60,64,67,0.149)
 }
 
 .side-nav ul.active {
-  background-color: #eaf1fb;
+  background-color: #D3E3FD;
   font-weight: 700;
+  border-radius: 0px 25px 25px 0px;
 }
 
 .side-nav ul span{
   font-weight: 700;
   font-size: .75rem;
-  padding-left: 20px;
+  text-align: right;
+  padding-right: 5px;
 
 }
 

@@ -7,6 +7,8 @@ import {
   Trash2,
   X,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { emailService } from "../services/email.service";
 
 export function SideNav({
   currentNav,
@@ -22,6 +24,25 @@ export function SideNav({
 
   function openComposeModal() {
     onComposeModalChange(true);
+  }
+
+  const [userName, setUserName] = useState(null);
+
+  useEffect(() => {
+    async function getUserName() {
+      try {
+        setUserName(await emailService.getDemoUser());
+      } catch (error) {
+        console.error("Failed to fetch user name:", error);
+      }
+    }
+
+    getUserName();
+  }, []);
+
+  let WCuserName = "Welcome ";
+  if (userName && userName[0].fullname) {
+    WCuserName += userName[0].fullname;
   }
 
   return (

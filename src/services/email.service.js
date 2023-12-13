@@ -161,7 +161,7 @@ function _createEmails() {
             
             { id: utilService.makeId(5),
             subject: 'How are you?',
-            body: 'Would love to catch up sometimes',
+            body: 'Your Wednesday morning update',
             isRead: false,
             isStarred: false,
             sentAt : getFormattedDateTime(),
@@ -171,7 +171,7 @@ function _createEmails() {
 
             { id: utilService.makeId(5),
             subject: 'Please you help me',
-            body: 'Would love to catch up sometimes',
+            body: `We've saved a copy of Mister Email`,
             isRead: false,
             isStarred: false,
             sentAt : getFormattedDateTime(),

@@ -21,9 +21,9 @@ export function EmailDetails() {
   }
 
   function onBack() {
-    navigate("/email");
+    navigate("/");
   }
-  if (!email) return <div>loading...</div>;
+  if (!email) return <div className="loading">loading...</div>;
 
   return (
     <section className="email-details">

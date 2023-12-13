@@ -1,12 +1,11 @@
 import { NavLink } from "react-router-dom";
-import logo from "../assets/imgs/logoMe.png";
-import { useDeviceDetect } from "./useDeviceDetect";
+import logo from "../assets/imgs/logo_gmail.png";
 import userLogo from "../assets/imgs/userLogo.jpg";
 import { emailService } from "../services/email.service";
 import { useEffect, useState } from "react";
+import { EmailFilter } from "./EmailFilter";
 
-export function AppHeader() {
-  const { isMobile } = useDeviceDetect();
+export function AppHeader({ filterBy, onSetFilter }) {
   const [userName, setUserName] = useState(null);
 
   useEffect(() => {
@@ -28,25 +27,24 @@ export function AppHeader() {
   return (
     <header className="app-header">
       <section className="container">
-        <NavLink to="/">
-          <img
-            src={logo}
-            alt="Mister Email"
-            width={isMobile ? 60 : 80}
-            className="logoME"
-          />
-        </NavLink>
+        <div className="app-logo">
+          <NavLink to="/">
+            <img src={logo} alt="Mister Email" className="logoME" />
+          </NavLink>
+        </div>
 
-        <nav>
-          <NavLink to="/about">About</NavLink>
-          <NavLink to="/email">Email</NavLink>
-        </nav>
-        <img
-          src={userLogo}
-          alt="User Logo"
-          className="user-logo"
-          title={WCuserName}
-        />
+        <div className="search-filter">
+          <EmailFilter filterBy={filterBy} onSetFilter={onSetFilter} />
+        </div>
+
+        <div className="user-settings">
+          <img
+            src={userLogo}
+            alt="User Logo"
+            className="user-logo"
+            title={WCuserName}
+          />
+        </div>
       </section>
     </header>
   );
