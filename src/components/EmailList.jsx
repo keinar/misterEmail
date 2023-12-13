@@ -1,7 +1,15 @@
-import { MailPlus } from "lucide-react";
+import { emailService } from "../services/email.service";
 import { EmailPreview } from "./EmailPreview";
 
 export function EmailList({ emails }) {
+  async function onRemoveEmail(emailId) {
+    try {
+      await emailService.remove(emailId);
+    } catch (err) {
+      console.error("error: ", err);
+    }
+  }
+
   return (
     <>
       <table className="email-list">
@@ -10,11 +18,16 @@ export function EmailList({ emails }) {
             <th></th>
           </tr>
         </thead>
-        {emails.map((email) => (
-          <tbody key={email.id} className="email-raw">
-            <EmailPreview email={email} />
-          </tbody>
-        ))}
+        <tbody>
+          {emails.map((email) => (
+            <EmailPreview
+              key={email.id}
+              email={email}
+              className="email-raw"
+              onRemoveEmail={onRemoveEmail}
+            />
+          ))}
+        </tbody>
       </table>
     </>
   );

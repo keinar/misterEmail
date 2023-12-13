@@ -16,7 +16,9 @@ export function EmailFilter({ filterBy, onSetFilter }) {
 
   return (
     <form className="email-filter">
-      <label htmlFor="search"></label>
+      <label htmlFor="search" hidden>
+        Search
+      </label>
 
       <input
         onChange={handleChange}

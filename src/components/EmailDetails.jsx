@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { emailService } from "../services/email.service";
+import { Trash2 } from "lucide-react";
 
 export function EmailDetails() {
   const [email, setEmail] = useState(null);
@@ -10,6 +11,15 @@ export function EmailDetails() {
   useEffect(() => {
     loadEmail();
   }, [params.emailId]);
+
+  async function onRemoveEmail() {
+    try {
+      await emailService.remove(params.emailId);
+      navigate("/");
+    } catch (err) {
+      console.error("error: ", err);
+    }
+  }
 
   async function loadEmail() {
     try {
@@ -37,6 +47,7 @@ export function EmailDetails() {
       <hr></hr>
       <button onClick={onBack}>Back</button>{" "}
       <Link to={`/email/:e103`}>Next Email</Link>
+      <Trash2 size={20} onClick={onRemoveEmail} />
     </section>
   );
 }

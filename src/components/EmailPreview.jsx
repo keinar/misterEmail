@@ -1,11 +1,20 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { Mail, MailOpen, Star } from "lucide-react";
+import { Link, useParams } from "react-router-dom";
+import { Mail, MailOpen, Star, Trash2 } from "lucide-react";
 import { emailService } from "../services/email.service";
 
-export function EmailPreview({ email }) {
+export function EmailPreview({ email, onRemoveEmail }) {
   const [isOpened, setIsOpened] = useState(false);
   const [isStarred, setIsStarred] = useState(email.isStarred);
+  const [onHover, setOnHover] = useState(false);
+
+  const handleMouseEnter = () => {
+    setOnHover(true);
+  };
+
+  const handleMouseLeave = () => {
+    setOnHover(false);
+  };
 
   useEffect(() => {
     setIsOpened(email.isRead);
@@ -42,8 +51,14 @@ export function EmailPreview({ email }) {
   const fontWeight = !isOpened ? 700 : 500;
   const backgroundColor = isOpened ? "#F2F6FC" : undefined;
   const star = !isStarred ? "none" : "yellow";
+
   return (
-    <tr className="subject" style={{ backgroundColor: backgroundColor }}>
+    <tr
+      className="subject"
+      style={{ backgroundColor: backgroundColor }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       <td>
         <Star size={20} onClick={toggleStar} fill={star} />
       </td>
@@ -68,7 +83,13 @@ export function EmailPreview({ email }) {
       <td>
         <span className="email-sent-time">{email.sentAt}</span>
       </td>
-      <td>{!isOpened ? <Mail size={20} /> : <MailOpen size={20} />}</td>
+      {onHover ? (
+        <td>
+          <Trash2 size={20} onClick={() => onRemoveEmail(email.id)} />
+        </td>
+      ) : (
+        <td>{!isOpened ? <Mail size={20} /> : <MailOpen size={20} />}</td>
+      )}
     </tr>
   );
 }
