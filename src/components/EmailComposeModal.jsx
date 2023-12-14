@@ -1,15 +1,17 @@
 import { SendHorizonal, X } from "lucide-react";
 import { emailService } from "../services/email.service";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export function EmailComposeModal({ onComposeModalChange }) {
+export function EmailComposeModal({ currentNav }) {
   const [userEmail, setUserEmail] = useState("");
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
-  function openComposeModal() {
-    onComposeModalChange(false);
+  function handleOpenCompose() {
+    navigate(`/${currentNav}/`);
   }
 
   useEffect(() => {
@@ -54,7 +56,7 @@ export function EmailComposeModal({ onComposeModalChange }) {
     <section className="compose-modal">
       <header>
         <h1>New Message</h1>
-        <X size={16} onClick={openComposeModal} className="close" />
+        <X size={16} className="close" onClick={handleOpenCompose} />
       </header>
       <form onSubmit={handleSubmit}>
         <fieldset className="from">

@@ -10,14 +10,15 @@ import {
 import { useEffect, useState } from "react";
 import { emailService } from "../services/email.service";
 import { NavItem } from "./ItemNav";
+import { useNavigate } from "react-router-dom";
 
-export function SideNav({
-  currentNav,
-  emails,
-  onComposeModalChange,
-  isMenuVisible,
-  toggleMenu,
-}) {
+export function SideNav({ currentNav, emails, isMenuVisible, toggleMenu }) {
+  const navigate = useNavigate();
+
+  function handleOpenCompose() {
+    navigate(`/${currentNav}?compose=new`);
+  }
+
   const navItems = [
     {
       to: "/",
@@ -68,10 +69,6 @@ export function SideNav({
     },
   ];
 
-  function openComposeModal() {
-    onComposeModalChange(true);
-  }
-
   const [userName, setUserName] = useState(null);
 
   useEffect(() => {
@@ -98,7 +95,8 @@ export function SideNav({
   return (
     <nav className="side-nav" style={navStyles}>
       {isMenuVisible && <X onClick={toggleMenu} />}
-      <button className="email-compose" onClick={openComposeModal}>
+
+      <button className="email-compose" onClick={handleOpenCompose}>
         <MailPlus size={20} /> Compose
       </button>
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { EmailList } from "../components/EmailList";
 import { emailService } from "../services/email.service";
 import { SideNav } from "../components/SideNav";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useParams, useSearchParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { EmailComposeModal } from "../components/EmailComposeModal.jsx";
 import { RightNav } from "../components/RightNav.jsx";
@@ -10,11 +10,12 @@ import { RightNav } from "../components/RightNav.jsx";
 export function EmailIndex({ filterBy, isMenuVisible, toggleMenu }) {
   const location = useLocation();
   const [emails, setEmails] = useState(null);
-  const [isComposeOpen, setIsComposeOpen] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const params = useParams();
 
   useEffect(() => {
     loadEmails();
-  }, [filterBy, emails]);
+  }, [filterBy]);
 
   async function loadEmails() {
     try {
@@ -26,38 +27,23 @@ export function EmailIndex({ filterBy, isMenuVisible, toggleMenu }) {
   }
 
   if (!emails) return <div>Loading...</div>;
-  const isEmailDetailsPage = location.pathname.includes("/email/");
-
-  const currentNav = location.pathname.includes("/sent")
-    ? "sent"
-    : location.pathname.includes("/drafts")
-    ? "drafts"
-    : location.pathname.includes("/bin")
-    ? "bin"
-    : location.pathname.includes("/starred")
-    ? "starred"
-    : "inbox";
-
-  function handleComposeModalChange(newValue) {
-    setIsComposeOpen(newValue);
-  }
 
   return (
     <section className="email-index">
       <SideNav
-        currentNav={currentNav}
+        currentNav={params.folder}
         emails={emails}
-        onComposeModalChange={handleComposeModalChange}
         isMenuVisible={isMenuVisible}
         toggleMenu={toggleMenu}
       />
       <section className="inbox-container">
         {/* render here pages - email list / starred / drafts / sent etc.  */}
-        {isEmailDetailsPage ? <Outlet /> : <EmailList emails={emails} />}
+        {params.emailId ? <Outlet /> : <EmailList emails={emails} />}
       </section>
       <RightNav />
-      {isComposeOpen && (
-        <EmailComposeModal onComposeModalChange={handleComposeModalChange} />
+
+      {searchParams.get("compose") && (
+        <EmailComposeModal currentNav={params.folder} />
       )}
     </section>
   );

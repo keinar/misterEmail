@@ -30,7 +30,7 @@ export function App() {
         <main className="container">
           <Routes>
             <Route
-              path="/"
+              path="/:folder"
               element={
                 <EmailIndex
                   filterBy={filterBy}
@@ -39,49 +39,9 @@ export function App() {
                 />
               }
             >
-              <Route path="/email/:emailId" element={<EmailDetails />} />
-              <Route path="/email/compose" element={<EmailComposeModal />} />
+              <Route path="/:folder/:emailId" element={<EmailDetails />} />
+              {/* <Route path="/:folder/compose" element={<EmailComposeModal />} /> */}
             </Route>
-            <Route
-              path="/starred"
-              element={
-                <EmailIndex
-                  filterBy="starred"
-                  isMenuVisible={isMenuVisible}
-                  toggleMenu={toggleMenu}
-                />
-              }
-            />
-            <Route
-              path="/sent"
-              element={
-                <EmailIndex
-                  filterBy="sent"
-                  isMenuVisible={isMenuVisible}
-                  toggleMenu={toggleMenu}
-                />
-              }
-            />
-            <Route
-              path="/drafts"
-              element={
-                <EmailIndex
-                  filterBy="drafts"
-                  isMenuVisible={isMenuVisible}
-                  toggleMenu={toggleMenu}
-                />
-              }
-            />
-            <Route
-              path="/bin"
-              element={
-                <EmailIndex
-                  filterBy="bin"
-                  isMenuVisible={isMenuVisible}
-                  toggleMenu={toggleMenu}
-                />
-              }
-            />
           </Routes>
         </main>
 

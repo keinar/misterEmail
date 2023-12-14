@@ -1,4 +1,5 @@
 import { emailService } from "../services/email.service";
+import { EmailFilters } from "./EmailFilters";
 import { EmailPreview } from "./EmailPreview";
 
 export function EmailList({ emails }) {
@@ -17,11 +18,7 @@ export function EmailList({ emails }) {
   return (
     <>
       <table className="email-list">
-        <thead>
-          <tr>
-            <th></th>
-          </tr>
-        </thead>
+        <EmailFilters />
         <tbody>
           {emails.map((email) => (
             <EmailPreview

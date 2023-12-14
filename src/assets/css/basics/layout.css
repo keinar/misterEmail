@@ -21,3 +21,7 @@ section.inbox-container thead tr{
     grid-gap: 10px;
 }
 
+td svg, section svg{
+    cursor: pointer;
+}
+
