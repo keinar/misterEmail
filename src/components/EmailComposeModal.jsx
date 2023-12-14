@@ -3,7 +3,7 @@ import { emailService } from "../services/email.service";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export function EmailComposeModal({ currentNav }) {
+export function EmailComposeModal({ currentNav, handleSubmit }) {
   const [userEmail, setUserEmail] = useState("");
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
@@ -23,34 +23,10 @@ export function EmailComposeModal({ currentNav }) {
     fetchUserEmail();
   }, []);
 
-  async function handleSubmit(e) {
-    try {
-      e.preventDefault();
-      if (!message) {
-        const userConfirmed = confirm(
-          "Are you sure that you want to send an empty messsage?"
-        );
-        if (!userConfirmed) {
-          return;
-        }
-      }
-      const emailData = await emailService.createEmail(
-        subject,
-        message,
-        false, // isRead
-        false, // isStarred
-        userEmail,
-        to
-      );
-      // Clear the form fields after submission
-      alert("Your message sent successfully");
-      setTo("");
-      setSubject("");
-      setMessage("");
-    } catch (err) {
-      console.log("Error", err);
-    }
-  }
+  const submit = (e) => {
+    e.preventDefault();
+    handleSubmit(subject, message, to);
+  };
 
   return (
     <section className="compose-modal">
@@ -58,7 +34,7 @@ export function EmailComposeModal({ currentNav }) {
         <h1>New Message</h1>
         <X size={16} className="close" onClick={handleOpenCompose} />
       </header>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={submit}>
         <fieldset className="from">
           <label htmlFor="from">From:</label>
           <input

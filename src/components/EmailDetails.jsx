@@ -15,7 +15,7 @@ export function EmailDetails() {
   async function onRemoveEmail() {
     try {
       await emailService.remove(params.emailId);
-      navigate("/");
+      navigate(`/${params.folder}/`);
     } catch (err) {
       console.error("Can't navigate back: ", err);
     }
@@ -31,7 +31,7 @@ export function EmailDetails() {
   }
 
   function onBack() {
-    navigate(-1);
+    navigate(`/${params.folder}/`);
   }
   if (!email) return <div className="loading">loading...</div>;
 

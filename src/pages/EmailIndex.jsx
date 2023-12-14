@@ -2,16 +2,43 @@ import { useEffect, useState } from "react";
 import { EmailList } from "../components/EmailList";
 import { emailService } from "../services/email.service";
 import { SideNav } from "../components/SideNav";
-import { Link, Outlet, useParams, useSearchParams } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { Outlet, useParams, useSearchParams } from "react-router-dom";
 import { EmailComposeModal } from "../components/EmailComposeModal.jsx";
 import { RightNav } from "../components/RightNav.jsx";
 
 export function EmailIndex({ filterBy, isMenuVisible, toggleMenu }) {
-  const location = useLocation();
   const [emails, setEmails] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const params = useParams();
+
+  const handleSubmit = async (subject, message, to) => {
+    try {
+      e.preventDefault();
+      if (!message) {
+        const userConfirmed = confirm(
+          "Are you sure that you want to send an empty messsage?"
+        );
+        if (!userConfirmed) {
+          return;
+        }
+      }
+      const emailData = await emailService.createEmail(
+        subject,
+        message,
+        false, // isRead
+        false, // isStarred
+        userEmail,
+        to
+      );
+      // Clear the form fields after submission
+      alert("Your message sent successfully");
+      setTo("");
+      setSubject("");
+      setMessage("");
+    } catch (err) {
+      console.error("Error", err);
+    }
+  };
 
   useEffect(() => {
     loadEmails();
@@ -26,7 +53,7 @@ export function EmailIndex({ filterBy, isMenuVisible, toggleMenu }) {
     }
   }
 
-  if (!emails) return <div>Loading...</div>;
+  if (!emails) return <div className="loading">Loading...</div>;
 
   return (
     <section className="email-index">
@@ -43,7 +70,10 @@ export function EmailIndex({ filterBy, isMenuVisible, toggleMenu }) {
       <RightNav />
 
       {searchParams.get("compose") && (
-        <EmailComposeModal currentNav={params.folder} />
+        <EmailComposeModal
+          currentNav={params.folder}
+          handleSubmit={handleSubmit}
+        />
       )}
     </section>
   );

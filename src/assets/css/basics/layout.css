@@ -25,3 +25,11 @@ td svg, section svg{
     cursor: pointer;
 }
 
+
+.loading{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+

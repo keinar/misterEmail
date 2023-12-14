@@ -27,10 +27,6 @@ tr.subject {
     color: rgb(87, 87, 87);
 }
 
-.loading{
-    padding-left: 20px;
-}
-
 @media screen and (max-width: 600px) {
     td.subject {
         width: auto;
