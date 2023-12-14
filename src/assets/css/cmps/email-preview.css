@@ -11,7 +11,7 @@ table.email-list{
 tr.subject {
     display: grid;
     border-bottom: #d6d6d6 2px solid;
-    grid-template-columns: auto 1fr 100px auto;
+    grid-template-columns: auto 1fr auto auto;
     align-items: center;
     padding-left: 10px;
     padding-right: 10px;
@@ -34,6 +34,11 @@ tr.subject {
 @media screen and (max-width: 600px) {
     td.subject {
         width: auto;
+    }
+
+    .subject td{
+        display: flex;
+        flex-wrap: wrap;
     }
 
     tr.subject{
@@ -74,5 +79,9 @@ tr.subject {
     }
     .mobile-compose-btn:hover{
         box-shadow:  1px 3px 0 rgba(60,64,67,0.302), 0 4px 8px 3px rgba(60,64,67,0.149);
+        }
+
+        .subject a{
+            padding: 2px;
         }
 }

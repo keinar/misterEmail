@@ -5,6 +5,7 @@ import { EmailIndex } from "./pages/EmailIndex";
 import { useState } from "react";
 import { emailService } from "./services/email.service";
 import { AppFooter } from "./components/AppFooter";
+import { EmailComposeModal } from "./components/EmailComposeModal";
 
 export function App() {
   const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter());
@@ -37,7 +38,10 @@ export function App() {
                   toggleMenu={toggleMenu}
                 />
               }
-            />
+            >
+              <Route path="/email/:emailId" element={<EmailDetails />} />
+              <Route path="/email/compose" element={<EmailComposeModal />} />
+            </Route>
             <Route
               path="/starred"
               element={
@@ -78,7 +82,6 @@ export function App() {
                 />
               }
             />
-            <Route path="/email/:emailId" element={<EmailDetails />} />
           </Routes>
         </main>
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { EmailList } from "../components/EmailList";
 import { emailService } from "../services/email.service";
 import { SideNav } from "../components/SideNav";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { EmailComposeModal } from "../components/EmailComposeModal.jsx";
 import { RightNav } from "../components/RightNav.jsx";
@@ -28,12 +28,14 @@ export function EmailIndex({ filterBy, isMenuVisible, toggleMenu }) {
   if (!emails) return <div>Loading...</div>;
   const isEmailDetailsPage = location.pathname.includes("/email/");
 
-  const currentNav = location.pathname.includes("/email/sent")
+  const currentNav = location.pathname.includes("/sent")
     ? "sent"
-    : location.pathname.includes("/email/drafts")
+    : location.pathname.includes("/drafts")
     ? "drafts"
-    : location.pathname.includes("/email/bin")
+    : location.pathname.includes("/bin")
     ? "bin"
+    : location.pathname.includes("/starred")
+    ? "starred"
     : "inbox";
 
   function handleComposeModalChange(newValue) {
@@ -49,14 +51,11 @@ export function EmailIndex({ filterBy, isMenuVisible, toggleMenu }) {
         isMenuVisible={isMenuVisible}
         toggleMenu={toggleMenu}
       />
-
       <section className="inbox-container">
         {/* render here pages - email list / starred / drafts / sent etc.  */}
         {isEmailDetailsPage ? <Outlet /> : <EmailList emails={emails} />}
       </section>
-
       <RightNav />
-
       {isComposeOpen && (
         <EmailComposeModal onComposeModalChange={handleComposeModalChange} />
       )}

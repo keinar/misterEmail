@@ -17,7 +17,7 @@ export function EmailDetails() {
       await emailService.remove(params.emailId);
       navigate("/");
     } catch (err) {
-      console.error("error: ", err);
+      console.error("Can't navigate back: ", err);
     }
   }
 
@@ -26,12 +26,12 @@ export function EmailDetails() {
       const email = await emailService.getById(params.emailId);
       setEmail(email);
     } catch (err) {
-      console.error("error: ", err);
+      console.error("Error on load emails: ", err);
     }
   }
 
   function onBack() {
-    navigate("/");
+    navigate(-1);
   }
   if (!email) return <div className="loading">loading...</div>;
 

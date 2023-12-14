@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Mail, MailOpen, Star, Trash2 } from "lucide-react";
 import { emailService } from "../services/email.service";
 
@@ -83,12 +83,19 @@ export function EmailPreview({ email, onRemoveEmail }) {
       <td>
         <span className="email-sent-time">{email.sentAt}</span>
       </td>
-      {onHover ? (
+      {onHover && (
         <td>
           <Trash2 size={20} onClick={() => onRemoveEmail(email.id)} />
+
+          {!isOpened ? (
+            <Mail size={20} />
+          ) : (
+            <MailOpen
+              size={20}
+              // onClick={() => setIsOpened((prevIsOpen) => !prevIsOpen)}
+            />
+          )}
         </td>
-      ) : (
-        <td>{!isOpened ? <Mail size={20} /> : <MailOpen size={20} />}</td>
       )}
     </tr>
   );

@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { emailService } from "../services/email.service";
-import { NavLink } from "react-router-dom";
+import { NavItem } from "./ItemNav";
 
 export function SideNav({
   currentNav,
@@ -18,6 +18,56 @@ export function SideNav({
   isMenuVisible,
   toggleMenu,
 }) {
+  const navItems = [
+    {
+      to: "/",
+      label: "Inbox",
+      icon: (
+        <Inbox
+          size={20}
+          stroke={currentNav === "inbox" ? "black" : "#484A49"}
+        />
+      ),
+    },
+    {
+      to: "/starred",
+      label: "Starred",
+      icon: (
+        <Star
+          size={20}
+          stroke={currentNav === "starred" ? "black" : "#484A49"}
+        />
+      ),
+    },
+    {
+      to: "/sent",
+      label: "Sent",
+      icon: (
+        <SendHorizontal
+          size={20}
+          stroke={currentNav === "sent" ? "black" : "#484A49"}
+        />
+      ),
+    },
+    {
+      to: "/drafts",
+      label: "Drafts",
+      icon: (
+        <File
+          size={20}
+          stroke={currentNav === "drafts" ? "black" : "#484A49"}
+        />
+      ),
+    },
+    {
+      to: "/bin",
+      label: "Bin",
+      icon: (
+        <Trash2 size={20} stroke={currentNav === "bin" ? "black" : "#484A49"} />
+      ),
+    },
+  ];
+
   function openComposeModal() {
     onComposeModalChange(true);
   }
@@ -52,54 +102,16 @@ export function SideNav({
         <MailPlus size={20} /> Compose
       </button>
 
-      <NavLink to="/">
-        <ul className={`index ${currentNav === "inbox" ? "active" : ""}`}>
-          <Inbox
-            size={20}
-            stroke={currentNav === "inbox" ? "black" : "#484A49"}
-          />
-          Inbox <span>{emails.length}</span>
-        </ul>
-      </NavLink>
-      <NavLink to="/starred">
-        <ul className={`starred ${currentNav === "starred" ? "active" : ""}`}>
-          <Star
-            size={20}
-            stroke={currentNav === "starred" ? "black" : "#484A49"}
-          />
-          Starred
-        </ul>
-      </NavLink>
-
-      <NavLink to="/sent">
-        <ul className={`sent ${currentNav === "sent" ? "active" : ""}`}>
-          <SendHorizontal
-            size={20}
-            stroke={currentNav === "sent" ? "black" : "#484A49"}
-          />
-          Sent
-        </ul>
-      </NavLink>
-
-      <NavLink to="/drafts">
-        <ul className={`drafts ${currentNav === "drafts" ? "active" : ""}`}>
-          <File
-            size={20}
-            stroke={currentNav === "drafts" ? "black" : "#484A49"}
-          />
-          Drafts
-        </ul>
-      </NavLink>
-
-      <NavLink to="/bin">
-        <ul className={`bin ${currentNav === "bin" ? "active" : ""}`}>
-          <Trash2
-            size={20}
-            stroke={currentNav === "bin" ? "black" : "#484A49"}
-          />
-          Bin
-        </ul>
-      </NavLink>
+      {navItems.map((item) => (
+        <NavItem
+          key={item.label}
+          to={item.to}
+          icon={item.icon}
+          label={item.label}
+          isActive={currentNav === item.label.toLowerCase()}
+          emails={emails}
+        />
+      ))}
     </nav>
   );
 }
