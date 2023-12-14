@@ -3,11 +3,14 @@ import { emailService } from "../services/email.service";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export function EmailComposeModal({ currentNav, handleSubmit }) {
+export function EmailComposeModal({
+  currentNav,
+  handleSubmit,
+  message,
+  subject,
+}) {
   const [userEmail, setUserEmail] = useState("");
   const [to, setTo] = useState("");
-  const [subject, setSubject] = useState("");
-  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   function handleOpenCompose() {

@@ -9,6 +9,8 @@ import { RightNav } from "../components/RightNav.jsx";
 export function EmailIndex({ filterBy, isMenuVisible, toggleMenu }) {
   const [emails, setEmails] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
   const params = useParams();
 
   const handleSubmit = async (subject, message, to) => {
@@ -73,6 +75,8 @@ export function EmailIndex({ filterBy, isMenuVisible, toggleMenu }) {
         <EmailComposeModal
           currentNav={params.folder}
           handleSubmit={handleSubmit}
+          subject={subject}
+          message={message}
         />
       )}
     </section>
