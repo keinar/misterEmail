@@ -11,9 +11,10 @@ export function EmailIndex({ filterBy, isMenuVisible, toggleMenu }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
+  const [to, setTo] = useState("");
   const params = useParams();
 
-  const handleSubmit = async (subject, message, to) => {
+  const handleSubmit = async (e, subject, message, to, userEmail) => {
     try {
       e.preventDefault();
       if (!message) {
@@ -34,7 +35,6 @@ export function EmailIndex({ filterBy, isMenuVisible, toggleMenu }) {
       );
       // Clear the form fields after submission
       alert("Your message sent successfully");
-      setTo("");
       setSubject("");
       setMessage("");
     } catch (err) {
@@ -77,6 +77,10 @@ export function EmailIndex({ filterBy, isMenuVisible, toggleMenu }) {
           handleSubmit={handleSubmit}
           subject={subject}
           message={message}
+          setMessage={setMessage}
+          setSubject={setSubject}
+          to={to}
+          setTo={setTo}
         />
       )}
     </section>

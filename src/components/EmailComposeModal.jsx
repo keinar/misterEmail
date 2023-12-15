@@ -8,9 +8,12 @@ export function EmailComposeModal({
   handleSubmit,
   message,
   subject,
+  setSubject,
+  setMessage,
+  to,
+  setTo,
 }) {
   const [userEmail, setUserEmail] = useState("");
-  const [to, setTo] = useState("");
   const navigate = useNavigate();
 
   function handleOpenCompose() {
@@ -28,7 +31,8 @@ export function EmailComposeModal({
 
   const submit = (e) => {
     e.preventDefault();
-    handleSubmit(subject, message, to);
+    handleSubmit(e, subject, message, to, userEmail);
+    setTo("");
   };
 
   return (
