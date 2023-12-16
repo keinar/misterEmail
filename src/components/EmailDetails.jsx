@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { emailService } from "../services/email.service";
 import { Trash2 } from "lucide-react";
 
@@ -14,8 +14,12 @@ export function EmailDetails() {
 
   async function onRemoveEmail() {
     try {
+      const userConfirmed = confirm("Are you sure to remove this email?");
+      if (!userConfirmed) {
+        return;
+      }
       await emailService.remove(params.emailId);
-      navigate(`/${params.folder}/`);
+      navigate(`/${params.folder}/`, { state: { refresh: true } });
     } catch (err) {
       console.error("Can't navigate back: ", err);
     }

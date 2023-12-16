@@ -1,4 +1,9 @@
-import { Route, HashRouter as Router, Routes } from "react-router-dom";
+import {
+  Navigate,
+  Route,
+  HashRouter as Router,
+  Routes,
+} from "react-router-dom";
 import { AppHeader } from "./components/AppHeader";
 import { EmailDetails } from "./components/EmailDetails";
 import { EmailIndex } from "./pages/EmailIndex";
@@ -29,6 +34,7 @@ export function App() {
         />
         <main className="container">
           <Routes>
+            <Route path="/" element={<Navigate replace to="/inbox" />} />
             <Route
               path="/:folder"
               element={

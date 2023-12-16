@@ -6,7 +6,9 @@ export function NavItem({ to, icon, label, isActive, emails }) {
       <ul className={`${label.toLowerCase()} ${isActive ? "active" : ""}`}>
         {icon}
         {label}
-        {label === "Inbox" && <span>{emails.length}</span>}
+        {label === "Inbox" && (
+          <span>{emails.length ? emails.length : "Empty"}</span>
+        )}
       </ul>
     </NavLink>
   );

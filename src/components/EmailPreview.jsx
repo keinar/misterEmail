@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Mail, MailOpen, Star, Trash2 } from "lucide-react";
 import { emailService } from "../services/email.service";
 
-export function EmailPreview({ email, onRemoveEmail }) {
+export function EmailPreview({ email, onRemoveEmail, loadEmails }) {
   const [isOpened, setIsOpened] = useState(false);
   const [isStarred, setIsStarred] = useState(email.isStarred);
   const [onHover, setOnHover] = useState(false);
@@ -19,15 +19,27 @@ export function EmailPreview({ email, onRemoveEmail }) {
   useEffect(() => {
     setIsOpened(email.isRead);
     setIsStarred(email.isStarred);
-  }, [email.isRead, email.isStarred]);
+  }, []);
 
   async function handleOpenState() {
     try {
       setIsOpened(true);
       const updatedEmail = { ...email, isRead: true };
       await emailService.save(updatedEmail);
+      loadEmails();
     } catch (error) {
       console.error("Failed to open email:", error);
+    }
+  }
+
+  async function onSetIsUnread() {
+    try {
+      setIsOpened((prevIsOpen) => !prevIsOpen);
+      const updatedEmail = { ...email, isRead: !isOpened };
+      await emailService.save(updatedEmail);
+      loadEmails();
+    } catch (error) {
+      console.error("Failed to change read status:", error);
     }
   }
 
@@ -42,6 +54,7 @@ export function EmailPreview({ email, onRemoveEmail }) {
         const updatedEmail = { ...email, isStarred: true };
         await emailService.saveToStarred(updatedEmail);
       }
+      loadEmails();
     } catch (error) {
       setIsStarred(isStarred); // Revert the state on error
       console.error("Failed to toggle star:", error);
@@ -88,12 +101,9 @@ export function EmailPreview({ email, onRemoveEmail }) {
           <Trash2 size={20} onClick={() => onRemoveEmail(email.id)} />
 
           {!isOpened ? (
-            <Mail size={20} />
+            <Mail size={20} onClick={() => onSetIsUnread()} />
           ) : (
-            <MailOpen
-              size={20}
-              // onClick={() => setIsOpened((prevIsOpen) => !prevIsOpen)}
-            />
+            <MailOpen size={20} onClick={() => onSetIsUnread()} />
           )}
         </td>
       )}

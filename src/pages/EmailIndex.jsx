@@ -2,7 +2,12 @@ import { useEffect, useState } from "react";
 import { EmailList } from "../components/EmailList";
 import { emailService } from "../services/email.service";
 import { SideNav } from "../components/SideNav";
-import { Outlet, useParams, useSearchParams } from "react-router-dom";
+import {
+  Outlet,
+  useLocation,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { EmailComposeModal } from "../components/EmailComposeModal.jsx";
 import { RightNav } from "../components/RightNav.jsx";
 
@@ -13,8 +18,9 @@ export function EmailIndex({ filterBy, isMenuVisible, toggleMenu }) {
   const [message, setMessage] = useState("");
   const [to, setTo] = useState("");
   const params = useParams();
+  const location = useLocation();
 
-  const handleSubmit = async (e, subject, message, to, userEmail) => {
+  async function handleSubmit(e, subject, message, to, userEmail) {
     try {
       e.preventDefault();
       if (!message) {
@@ -37,14 +43,15 @@ export function EmailIndex({ filterBy, isMenuVisible, toggleMenu }) {
       alert("Your message sent successfully");
       setSubject("");
       setMessage("");
+      loadEmails();
     } catch (err) {
       console.error("Error", err);
     }
-  };
+  }
 
   useEffect(() => {
     loadEmails();
-  }, [filterBy]);
+  }, [filterBy, location]);
 
   async function loadEmails() {
     try {
@@ -67,7 +74,11 @@ export function EmailIndex({ filterBy, isMenuVisible, toggleMenu }) {
       />
       <section className="inbox-container">
         {/* render here pages - email list / starred / drafts / sent etc.  */}
-        {params.emailId ? <Outlet /> : <EmailList emails={emails} />}
+        {params.emailId ? (
+          <Outlet />
+        ) : (
+          <EmailList emails={emails} loadEmails={loadEmails} />
+        )}
       </section>
       <RightNav />
 
@@ -81,6 +92,7 @@ export function EmailIndex({ filterBy, isMenuVisible, toggleMenu }) {
           setSubject={setSubject}
           to={to}
           setTo={setTo}
+          loadEmails={loadEmails}
         />
       )}
     </section>

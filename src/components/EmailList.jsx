@@ -2,7 +2,7 @@ import { emailService } from "../services/email.service";
 import { EmailFilters } from "./EmailFilters";
 import { EmailPreview } from "./EmailPreview";
 
-export function EmailList({ emails }) {
+export function EmailList({ emails, loadEmails }) {
   async function onRemoveEmail(emailId) {
     try {
       const userConfirmed = confirm("Are you sure to remove this email?");
@@ -10,6 +10,7 @@ export function EmailList({ emails }) {
         return;
       }
       await emailService.remove(emailId);
+      loadEmails();
     } catch (err) {
       console.error("error: ", err);
     }
@@ -26,6 +27,7 @@ export function EmailList({ emails }) {
               email={email}
               className="email-raw"
               onRemoveEmail={onRemoveEmail}
+              loadEmails={loadEmails}
             />
           ))}
         </tbody>
