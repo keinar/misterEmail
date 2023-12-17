@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import { emailService } from "../../services/email.service";
+import { mailService } from "../../services/mailService";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MailComposeForm } from "./MailComposeForm";
@@ -23,7 +23,7 @@ export function EmailComposeModal({
 
   useEffect(() => {
     async function fetchUserEmail() {
-      const userEmailData = await emailService.getDemoUser();
+      const userEmailData = await mailService.getDemoUser();
       setUserEmail(userEmailData[0].email);
     }
 

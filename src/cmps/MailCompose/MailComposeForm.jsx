@@ -1,5 +1,5 @@
 import { SendHorizonal, X } from "lucide-react";
-import { emailService } from "../../services/email.service";
+import { mailService } from "../../services/mailService";
 import { useEffect, useState } from "react";
 
 export function MailComposeForm({
@@ -15,7 +15,7 @@ export function MailComposeForm({
 
   useEffect(() => {
     async function fetchUserEmail() {
-      const userEmailData = await emailService.getDemoUser();
+      const userEmailData = await mailService.getDemoUser();
       setUserEmail(userEmailData[0].email);
     }
 

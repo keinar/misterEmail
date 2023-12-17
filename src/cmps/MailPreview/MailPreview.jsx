@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Mail, MailOpen, Star, Trash2 } from "lucide-react";
-import { emailService } from "../../services/email.service";
+import { mailService } from "../../services/mailService";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 
 export function MailPreview({ email, onRemoveEmail, loadEmails }) {
   const [isOpened, setIsOpened] = useState(false);
@@ -25,7 +28,7 @@ export function MailPreview({ email, onRemoveEmail, loadEmails }) {
     try {
       setIsOpened(true);
       const updatedEmail = { ...email, isRead: true };
-      await emailService.save(updatedEmail);
+      await mailService.save(updatedEmail);
       loadEmails();
     } catch (error) {
       console.error("Failed to open email:", error);
@@ -36,7 +39,7 @@ export function MailPreview({ email, onRemoveEmail, loadEmails }) {
     try {
       setIsOpened((prevIsOpen) => !prevIsOpen);
       const updatedEmail = { ...email, isRead: !isOpened };
-      await emailService.save(updatedEmail);
+      await mailService.save(updatedEmail);
       loadEmails();
     } catch (error) {
       console.error("Failed to change read status:", error);
@@ -49,10 +52,10 @@ export function MailPreview({ email, onRemoveEmail, loadEmails }) {
       setIsStarred(!prevIsStarred); // Optimistically set the state
 
       if (prevIsStarred) {
-        await emailService.removeFromStarred(email.id);
+        await mailService.removeFromStarred(email.id);
       } else {
         const updatedEmail = { ...email, isStarred: true };
-        await emailService.saveToStarred(updatedEmail);
+        await mailService.saveToStarred(updatedEmail);
       }
       loadEmails();
     } catch (error) {
@@ -94,7 +97,11 @@ export function MailPreview({ email, onRemoveEmail, loadEmails }) {
         </Link>
       </td>
       <td>
-        <span className="email-sent-time">{email.sentAt}</span>
+        <span className="email-sent-time">
+          {dayjs(email.sentAt).isBefore(dayjs().subtract(1), "day")
+            ? dayjs(email.sentAt).format("MMM DD")
+            : dayjs(email.sentAt).fromNow(true)}
+        </span>
       </td>
       {onHover && (
         <td>

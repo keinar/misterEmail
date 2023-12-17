@@ -1,7 +1,7 @@
 import { storageService } from './async-storage.service.js'
 import { utilService } from './util.service.js'
 
-export const emailService = {
+export const mailService = {
     query,
     save,
     remove,
@@ -11,8 +11,7 @@ export const emailService = {
     getDemoUser,
     getStarredEmails,
     saveToStarred,
-    removeFromStarred,
-    getFormattedDateTime
+    removeFromStarred
 }
 
 const EMAIL_KEY = 'emails'
@@ -25,9 +24,9 @@ _createDemoUser()
 
 function getDefaultFilter(){
     return{
-        status: '', // inbox/sent/star/trash
-        txt: '', // no need to support complex text search
-        isRead: null, // false/true/null (optional property, if missing: show all)
+        status: '', 
+        txt: '', 
+        isRead: null, 
     }
 }
 
@@ -118,24 +117,13 @@ async function createEmail(subject, body, isRead, isStarred, from, to) {
         body,
         isRead,
         isStarred,
-        sentAt: getFormattedDateTime(),
+        sentAt: Date.now(),
         removedAt: null, // for later use
         from,
         to
     };
     return storageService.post(EMAIL_KEY, email)
 }
-
-function getFormattedDateTime() {
-    const now = new Date();
-    const hours = now.getHours().toString().padStart(2, '0');
-    const minutes = now.getMinutes().toString().padStart(2, '0');
-    const day = now.getDate().toString().padStart(2, '0');
-    const monthIndex = now.getMonth();
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const month = monthNames[monthIndex];
-    return `${day} ${month} ${hours}:${minutes}`;
-  }
 
   function _createDemoUser(){
     let user = utilService.loadFromStorage(USER_KEY)
@@ -165,7 +153,7 @@ function _createEmails() {
             body: 'Would love to catch up sometimes',
             isRead: false,
             isStarred: false,
-            sentAt : getFormattedDateTime(),
+            sentAt : Date.now(),
             removedAt : null, //for later use
             from: 'momo@momo.com',
             to: 'user@appsus.com' },
@@ -175,7 +163,7 @@ function _createEmails() {
             body: 'Your Wednesday morning update',
             isRead: false,
             isStarred: false,
-            sentAt : getFormattedDateTime(),
+            sentAt : Date.now(),
             removedAt : null, //for later use
             from: 'momo@momo.com',
             to: 'user@appsus.com' },
@@ -185,7 +173,7 @@ function _createEmails() {
             body: `We've saved a copy of Mister Email`,
             isRead: false,
             isStarred: false,
-            sentAt : getFormattedDateTime(),
+            sentAt : Date.now(),
             removedAt : null, //for later use
             from: 'momo@momo.com',
             to: 'user@appsus.com' },

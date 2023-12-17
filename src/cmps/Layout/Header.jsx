@@ -1,7 +1,7 @@
 import { NavLink, useParams } from "react-router-dom";
 import logo from "../../assets/imgs/logo_gmail.png";
 import userLogo from "../../assets/imgs/userLogo.jpg";
-import { emailService } from "../../services/email.service";
+import { mailService } from "../../services/mailService";
 import { useEffect, useState } from "react";
 import { AlignJustify } from "lucide-react";
 import { MailFilter } from "../MailFilter/MailFilter";
@@ -12,7 +12,7 @@ export function Header({ filterBy, onSetFilter, toggleMenu }) {
   useEffect(() => {
     async function getUserName() {
       try {
-        setUserName(await emailService.getDemoUser());
+        setUserName(await mailService.getDemoUser());
       } catch (error) {
         console.error("Failed to fetch user name:", error);
       }

@@ -5,14 +5,14 @@ import {
   Routes,
 } from "react-router-dom";
 import { useState } from "react";
-import { emailService } from "./services/email.service";
+import { mailService } from "./services/mailService";
 import { Header } from "./cmps/Layout/Header";
 import { Footer } from "./cmps/Layout/Footer";
 import { EmailDetails } from "./cmps/MailDetails/MailDetails";
 import { MailIndex } from "./pages/MailIndex";
 
 export function App() {
-  const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter());
+  const [filterBy, setFilterBy] = useState(mailService.getDefaultFilter());
   const [isMenuVisible, setIsMenuVisible] = useState(false);
 
   const toggleMenu = () => {

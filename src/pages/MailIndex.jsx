@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { EmailList } from "../cmps/MailList/MailList.jsx";
-import { emailService } from "../services/email.service.js";
+import { mailService } from "../services/mailService.js";
 import { SideNav } from "../cmps/SideNav/SideNav.jsx";
 import {
   Outlet,
@@ -32,7 +32,7 @@ export function MailIndex({ filterBy, isMenuVisible, toggleMenu }) {
           return;
         }
       }
-      const emailData = await emailService.createEmail(
+      const emailData = await mailService.createEmail(
         subject,
         message,
         false, // isRead
@@ -56,7 +56,7 @@ export function MailIndex({ filterBy, isMenuVisible, toggleMenu }) {
 
   async function loadEmails() {
     try {
-      const loadedEmails = await emailService.query(filterBy);
+      const loadedEmails = await mailService.query(filterBy);
       let filteredEmails;
 
       if (params.folder === "starred") {

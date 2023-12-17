@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { emailService } from "../../services/email.service";
+import { mailService } from "../../services/mailService";
 import { Trash2 } from "lucide-react";
+import dayjs from "dayjs";
 
 export function EmailDetails() {
   const [email, setEmail] = useState(null);
@@ -18,7 +19,7 @@ export function EmailDetails() {
       if (!userConfirmed) {
         return;
       }
-      await emailService.remove(params.emailId);
+      await mailService.remove(params.emailId);
       navigate(`/${params.folder}/`, { state: { refresh: true } });
     } catch (err) {
       console.error("Can't navigate back: ", err);
@@ -27,7 +28,7 @@ export function EmailDetails() {
 
   async function loadEmail() {
     try {
-      const email = await emailService.getById(params.emailId);
+      const email = await mailService.getById(params.emailId);
       setEmail(email);
     } catch (err) {
       console.error("Error on load emails: ", err);
@@ -39,7 +40,7 @@ export function EmailDetails() {
   }
 
   async function onNextEmail() {
-    const emails = await emailService.query();
+    const emails = await mailService.query();
     const emailIdToFind = email.id;
     const emailIndex = emails.findIndex((email) => email.id === emailIdToFind);
 
@@ -59,9 +60,11 @@ export function EmailDetails() {
   return (
     <section className="email-details">
       <h1>{email.subject}</h1>
-      <p className="email-from">from: {email.from}</p>
-      <p className="email-to">to: {email.to}</p>
-      <p className="email-sent-at">sent at: {email.sentAt}</p>
+      <p className="email-from">Author: {email.from}</p>
+      <p className="email-to">To: {email.to}</p>
+      <p className="email-sent-at">
+        sent at: {dayjs(email.sentAt).format("MMMM DD, YYYY [@] H:mm A")}
+      </p>
       <br></br>
       <p className="email-body">{email.body}</p>
       <br></br>

@@ -8,7 +8,7 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { mailService } from "../../services/mailService";
+import { mailService } from "../services/mailService";
 import { NavItem } from "./ItemNav";
 import { useNavigate } from "react-router-dom";
 
@@ -27,7 +27,7 @@ export function SideNav({
 
   const navItems = [
     {
-      to: "/inbox/",
+      to: "/",
       label: "Inbox",
       icon: (
         <Inbox
@@ -99,7 +99,7 @@ export function SideNav({
   };
 
   return (
-    <aside className="side-nav" style={navStyles}>
+    <nav className="side-nav" style={navStyles}>
       {isMenuVisible && <X onClick={toggleMenu} />}
 
       <button className="email-compose" onClick={handleOpenCompose}>
@@ -117,6 +117,6 @@ export function SideNav({
           inboxCount={inboxCount}
         />
       ))}
-    </aside>
+    </nav>
   );
 }
