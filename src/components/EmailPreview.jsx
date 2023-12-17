@@ -77,7 +77,7 @@ export function EmailPreview({ email, onRemoveEmail, loadEmails }) {
       </td>
       <td>
         <Link
-          to={`/email/${email.id}`}
+          to={`/inbox/${email.id}`}
           className={email.id}
           style={{ fontWeight: fontWeight }}
           onClick={handleOpenState}
@@ -86,7 +86,7 @@ export function EmailPreview({ email, onRemoveEmail, loadEmails }) {
         </Link>
 
         <Link
-          to={`/email/${email.id}`}
+          to={`/inbox/${email.id}`}
           className={email.id}
           onClick={handleOpenState}
         >

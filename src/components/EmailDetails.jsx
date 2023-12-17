@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { emailService } from "../services/email.service";
 import { Trash2 } from "lucide-react";
 
@@ -37,6 +37,23 @@ export function EmailDetails() {
   function onBack() {
     navigate(`/${params.folder}/`);
   }
+
+  async function onNextEmail() {
+    const emails = await emailService.query();
+    const emailIdToFind = email.id;
+    const emailIndex = emails.findIndex((email) => email.id === emailIdToFind);
+
+    let nextEmailIndex;
+
+    if (emailIndex >= 0 && emailIndex < emails.length - 1) {
+      nextEmailIndex = emailIndex + 1;
+    } else {
+      nextEmailIndex = 0;
+    }
+    const nextEmail = emails[nextEmailIndex];
+    navigate(`/${params.folder}/${nextEmail.id}`);
+  }
+
   if (!email) return <div className="loading">loading...</div>;
 
   return (
@@ -50,7 +67,7 @@ export function EmailDetails() {
       <br></br>
       <hr></hr>
       <button onClick={onBack}>Back</button>{" "}
-      <Link to={`/email/:e103`}>Next Email</Link>
+      <button onClick={onNextEmail}>Next Email</button>
       <Trash2 size={20} onClick={onRemoveEmail} />
     </section>
   );
