@@ -12,7 +12,13 @@ import { emailService } from "../services/email.service";
 import { NavItem } from "./ItemNav";
 import { useNavigate } from "react-router-dom";
 
-export function SideNav({ currentNav, emails, isMenuVisible, toggleMenu }) {
+export function SideNav({
+  currentNav,
+  emails,
+  isMenuVisible,
+  toggleMenu,
+  inboxCount,
+}) {
   const navigate = useNavigate();
 
   function handleOpenCompose() {
@@ -108,6 +114,7 @@ export function SideNav({ currentNav, emails, isMenuVisible, toggleMenu }) {
           label={item.label}
           isActive={currentNav === item.label.toLowerCase()}
           emails={emails}
+          inboxCount={inboxCount}
         />
       ))}
     </nav>

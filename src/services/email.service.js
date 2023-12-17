@@ -39,6 +39,7 @@ async function query(filterBy) {
 
 
         if (filterBy.txt) {
+            console.log(filterBy)
             filteredEmails = filteredEmails.filter(email => 
                 { 
                     const subject = email.subject
@@ -53,6 +54,10 @@ async function query(filterBy) {
             filteredEmails = filteredEmails.filter(email => 
                 email.isRead === filterBy.isRead
             );
+        }
+
+        if(filterBy.status === "starred"){
+            filteredEmails = filteredEmails.filter(email => email.isStarred)
         }
 
         return filteredEmails;

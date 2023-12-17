@@ -16,6 +16,7 @@ export function EmailIndex({ filterBy, isMenuVisible, toggleMenu }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
+  const [inboxCount, setInboxCount] = useState(0);
   const [to, setTo] = useState("");
   const params = useParams();
   const location = useLocation();
@@ -56,12 +57,22 @@ export function EmailIndex({ filterBy, isMenuVisible, toggleMenu }) {
   async function loadEmails() {
     try {
       const loadedEmails = await emailService.query(filterBy);
-      setEmails(loadedEmails);
+      let filteredEmails;
+
+      if (params.folder === "starred") {
+        filteredEmails = loadedEmails.filter((email) => email.isStarred);
+      } else if (params.folder === "inbox") {
+        filteredEmails = loadedEmails;
+      } else {
+        filteredEmails = loadedEmails;
+      }
+
+      setEmails(filteredEmails);
+      setInboxCount(loadedEmails.length);
     } catch (err) {
       console.error("error: ", err);
     }
   }
-
   if (!emails) return <div className="loading">Loading...</div>;
 
   return (
@@ -71,13 +82,19 @@ export function EmailIndex({ filterBy, isMenuVisible, toggleMenu }) {
         emails={emails}
         isMenuVisible={isMenuVisible}
         toggleMenu={toggleMenu}
+        inboxCount={inboxCount}
       />
       <section className="inbox-container">
         {/* render here pages - email list / starred / drafts / sent etc.  */}
         {params.emailId ? (
           <Outlet />
         ) : (
-          <EmailList emails={emails} loadEmails={loadEmails} />
+          <EmailList
+            emails={emails.filter((email) =>
+              filterBy.status === "starred" ? email.isStarred : true
+            )}
+            loadEmails={loadEmails}
+          />
         )}
       </section>
       <RightNav />
