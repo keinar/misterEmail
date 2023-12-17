@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export function EmailFilter({ filterBy, onSetFilter }) {
+export function MailFilter({ filterBy, onSetFilter }) {
   const [filterByToEdit, setFilterByToEdit] = useState(filterBy);
 
   function handleChange(ev) {

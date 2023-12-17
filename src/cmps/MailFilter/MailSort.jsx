@@ -1,4 +1,4 @@
-export function EmailFilters() {
+export function MailSort() {
   return (
     <thead className="email-filters">
       <tr>

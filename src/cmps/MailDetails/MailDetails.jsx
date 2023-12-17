@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { emailService } from "../services/email.service";
+import { emailService } from "../../services/email.service";
 import { Trash2 } from "lucide-react";
 
 export function EmailDetails() {

@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
-import { EmailList } from "../components/EmailList";
-import { emailService } from "../services/email.service";
-import { SideNav } from "../components/SideNav";
+import { EmailList } from "../cmps/MailList/MailList.jsx";
+import { emailService } from "../services/email.service.js";
+import { SideNav } from "../cmps/SideNav/SideNav.jsx";
 import {
   Outlet,
   useLocation,
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import { EmailComposeModal } from "../components/EmailComposeModal.jsx";
-import { RightNav } from "../components/RightNav.jsx";
+import { EmailComposeModal } from "../cmps/MailCompose/MailCompose.jsx";
+import { RightNav } from "../cmps/SideNav/RightNav.jsx";
 
-export function EmailIndex({ filterBy, isMenuVisible, toggleMenu }) {
+export function MailIndex({ filterBy, isMenuVisible, toggleMenu }) {
   const [emails, setEmails] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const [subject, setSubject] = useState("");

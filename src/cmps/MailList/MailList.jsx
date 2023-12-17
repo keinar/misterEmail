@@ -1,6 +1,6 @@
-import { emailService } from "../services/email.service";
-import { EmailFilters } from "./EmailFilters";
-import { EmailPreview } from "./EmailPreview";
+import { emailService } from "../../services/email.service";
+import { MailSort } from "../MailFilter/MailSort";
+import { MailPreview } from "../MailPreview/MailPreview";
 
 export function EmailList({ emails, loadEmails }) {
   async function onRemoveEmail(emailId) {
@@ -19,10 +19,10 @@ export function EmailList({ emails, loadEmails }) {
   return (
     <>
       <table className="email-list">
-        <EmailFilters />
+        <MailSort />
         <tbody>
           {emails.map((email) => (
-            <EmailPreview
+            <MailPreview
               key={email.id}
               email={email}
               className="email-raw"

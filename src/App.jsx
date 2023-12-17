@@ -4,12 +4,12 @@ import {
   HashRouter as Router,
   Routes,
 } from "react-router-dom";
-import { AppHeader } from "./components/AppHeader";
-import { EmailDetails } from "./components/EmailDetails";
-import { EmailIndex } from "./pages/EmailIndex";
 import { useState } from "react";
 import { emailService } from "./services/email.service";
-import { AppFooter } from "./components/AppFooter";
+import { Header } from "./cmps/Layout/Header";
+import { Footer } from "./cmps/Layout/Footer";
+import { EmailDetails } from "./cmps/MailDetails/MailDetails";
+import { MailIndex } from "./pages/MailIndex";
 
 export function App() {
   const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter());
@@ -26,18 +26,17 @@ export function App() {
   return (
     <Router>
       <section className="main-app">
-        <AppHeader
+        <Header
           filterBy={filterBy}
           onSetFilter={onSetFilter}
           toggleMenu={toggleMenu}
         />
         <main className="container">
           <Routes>
-            <Route path="/" element={<Navigate replace to="/inbox" />} />
             <Route
               path="/:folder"
               element={
-                <EmailIndex
+                <MailIndex
                   filterBy={filterBy}
                   isMenuVisible={isMenuVisible}
                   toggleMenu={toggleMenu}
@@ -49,7 +48,7 @@ export function App() {
           </Routes>
         </main>
 
-        <AppFooter />
+        <Footer />
       </section>
     </Router>
   );

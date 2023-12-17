@@ -1,4 +1,4 @@
-export function EmailStarred() {
+export function MailStarred() {
   return (
     <section className="email-starred">
       <p>starred</p>

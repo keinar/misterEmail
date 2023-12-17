@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Mail, MailOpen, Star, Trash2 } from "lucide-react";
-import { emailService } from "../services/email.service";
+import { emailService } from "../../services/email.service";
 
-export function EmailPreview({ email, onRemoveEmail, loadEmails }) {
+export function MailPreview({ email, onRemoveEmail, loadEmails }) {
   const [isOpened, setIsOpened] = useState(false);
   const [isStarred, setIsStarred] = useState(email.isStarred);
   const [onHover, setOnHover] = useState(false);

@@ -1,12 +1,12 @@
-import { NavLink } from "react-router-dom";
-import logo from "../assets/imgs/logo_gmail.png";
-import userLogo from "../assets/imgs/userLogo.jpg";
-import { emailService } from "../services/email.service";
+import { NavLink, useParams } from "react-router-dom";
+import logo from "../../assets/imgs/logo_gmail.png";
+import userLogo from "../../assets/imgs/userLogo.jpg";
+import { emailService } from "../../services/email.service";
 import { useEffect, useState } from "react";
-import { EmailFilter } from "./EmailFilter";
 import { AlignJustify } from "lucide-react";
+import { MailFilter } from "../MailFilter/MailFilter";
 
-export function AppHeader({ filterBy, onSetFilter, toggleMenu }) {
+export function Header({ filterBy, onSetFilter, toggleMenu }) {
   const [userName, setUserName] = useState(null);
 
   useEffect(() => {
@@ -33,13 +33,13 @@ export function AppHeader({ filterBy, onSetFilter, toggleMenu }) {
         </div>
 
         <div className="app-logo">
-          <NavLink to="/">
+          <NavLink to="/inbox/">
             <img src={logo} alt="Mister Email" className="logoME" />
           </NavLink>
         </div>
 
         <div className="search-filter">
-          <EmailFilter filterBy={filterBy} onSetFilter={onSetFilter} />
+          <MailFilter filterBy={filterBy} onSetFilter={onSetFilter} />
         </div>
 
         <div className="user-settings">
