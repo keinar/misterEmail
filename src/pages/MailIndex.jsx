@@ -21,6 +21,12 @@ export function MailIndex({ filterBy, isMenuVisible, setIsMenuVisible }) {
   const params = useParams();
   const location = useLocation();
   let emptyMailmessage = '';
+  const [isAscending, setIsAscending] = useState(true);
+
+  function onToggleSortByDate() {
+    setIsAscending(!isAscending);
+    loadEmails();
+  }
 
   if (!emails || !emails.length) {
     if (params.folder === 'inbox') {
@@ -67,12 +73,12 @@ export function MailIndex({ filterBy, isMenuVisible, setIsMenuVisible }) {
 
   useEffect(() => {
     loadEmails();
-  }, [filterBy, location]);
+  }, [filterBy, location, isAscending]);
 
   async function loadEmails() {
     try {
       const loadedEmails = await mailService.query(filterBy);
-      let filteredEmails;
+      let filteredEmails = [...loadedEmails];
 
       if (params.folder === 'starred') {
         filteredEmails = loadedEmails.filter(email => email.isStarred);
@@ -81,6 +87,10 @@ export function MailIndex({ filterBy, isMenuVisible, setIsMenuVisible }) {
       } else {
         filteredEmails = loadedEmails;
       }
+
+      filteredEmails.sort((a, b) =>
+        isAscending ? a.sentAt - b.sentAt : b.sentAt - a.sentAt
+      );
 
       setEmails(filteredEmails);
       setInboxCount(loadedEmails.length);
@@ -101,7 +111,6 @@ export function MailIndex({ filterBy, isMenuVisible, setIsMenuVisible }) {
       />
       <section className="inbox-container">
         {/* render here pages - email list / starred / drafts / sent etc.  */}
-        {emptyMailmessage}
         {params.emailId ? (
           <Outlet />
         ) : (
@@ -110,8 +119,11 @@ export function MailIndex({ filterBy, isMenuVisible, setIsMenuVisible }) {
               filterBy.status === 'starred' ? email.isStarred : true
             )}
             loadEmails={loadEmails}
+            onToggleSortByDate={onToggleSortByDate}
+            isAscending={isAscending}
           />
-        )}
+        )}{' '}
+        {emptyMailmessage}
       </section>
       <RightNav />
 

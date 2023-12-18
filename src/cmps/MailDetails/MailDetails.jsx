@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { mailService } from "../../services/mailService";
-import { Trash2 } from "lucide-react";
-import dayjs from "dayjs";
+import { useEffect, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { mailService } from '../../services/mailService';
+import { Trash2 } from 'lucide-react';
+import dayjs from 'dayjs';
 
 export function EmailDetails() {
   const [email, setEmail] = useState(null);
@@ -15,7 +15,7 @@ export function EmailDetails() {
 
   async function onRemoveEmail() {
     try {
-      const userConfirmed = confirm("Are you sure to remove this email?");
+      const userConfirmed = confirm('Are you sure to remove this email?');
       if (!userConfirmed) {
         return;
       }
@@ -31,7 +31,7 @@ export function EmailDetails() {
       const email = await mailService.getById(params.emailId);
       setEmail(email);
     } catch (err) {
-      console.error("Error on load emails: ", err);
+      console.error('Error on load emails: ', err);
     }
   }
 
@@ -42,7 +42,7 @@ export function EmailDetails() {
   async function onNextEmail() {
     const emails = await mailService.query();
     const emailIdToFind = email.id;
-    const emailIndex = emails.findIndex((email) => email.id === emailIdToFind);
+    const emailIndex = emails.findIndex(email => email.id === emailIdToFind);
 
     let nextEmailIndex;
 
@@ -63,15 +63,21 @@ export function EmailDetails() {
       <p className="email-from">Author: {email.from}</p>
       <p className="email-to">To: {email.to}</p>
       <p className="email-sent-at">
-        sent at: {dayjs(email.sentAt).format("MMMM DD, YYYY [@] H:mm A")}
+        sent at: {dayjs(email.sentAt).format('MMMM DD, YYYY [@] H:mm A')}
       </p>
       <br></br>
       <p className="email-body">{email.body}</p>
       <br></br>
       <hr></hr>
-      <button onClick={onBack}>Back</button>{" "}
-      <button onClick={onNextEmail}>Next Email</button>
-      <Trash2 size={20} onClick={onRemoveEmail} />
+      <div className="flex">
+        <button className="modern-button" onClick={onBack}>
+          Back
+        </button>
+        <button className="modern-button" onClick={onNextEmail}>
+          Next Email
+        </button>
+        <Trash2 size={20} onClick={onRemoveEmail} />
+      </div>
     </section>
   );
 }

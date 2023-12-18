@@ -1,27 +1,36 @@
-import { mailService } from "../../services/mailService";
-import { MailSort } from "../MailFilter/MailSort";
-import { MailPreview } from "../MailPreview/MailPreview";
+import { mailService } from '../../services/mailService';
+import { MailSort } from '../MailFilter/MailSort';
+import { MailPreview } from '../MailPreview/MailPreview';
 
-export function EmailList({ emails, loadEmails }) {
+export function EmailList({
+  emails,
+  loadEmails,
+  onToggleSortByDate,
+  isAscending,
+}) {
   async function onRemoveEmail(emailId) {
     try {
-      const userConfirmed = confirm("Are you sure to remove this email?");
+      const userConfirmed = confirm('Are you sure to remove this email?');
       if (!userConfirmed) {
         return;
       }
+
       await mailService.remove(emailId);
       loadEmails();
     } catch (err) {
-      console.error("error: ", err);
+      console.error('error: ', err);
     }
   }
-
   return (
     <>
       <table className="email-list">
-        <MailSort />
+        <MailSort
+          emails={emails}
+          onToggleSortByDate={onToggleSortByDate}
+          isAscending={isAscending}
+        />
         <tbody>
-          {emails.map((email) => (
+          {emails.map(email => (
             <MailPreview
               key={email.id}
               email={email}
