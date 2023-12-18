@@ -20,6 +20,21 @@ export function MailIndex({ filterBy, isMenuVisible, setIsMenuVisible }) {
   const [to, setTo] = useState('');
   const params = useParams();
   const location = useLocation();
+  let emptyMailmessage = '';
+
+  if (!emails || !emails.length) {
+    if (params.folder === 'inbox') {
+      emptyMailmessage = 'The email inbox is empty :(';
+    } else if (params.folder === 'starred') {
+      emptyMailmessage = 'You have not starred any message yet :(';
+    } else if (params.folder === 'bin') {
+      emptyMailmessage = 'The bin is empty';
+    } else if (params.folder === 'drafts') {
+      emptyMailmessage = 'There are no draft emails here';
+    } else if (params.folder === 'sent') {
+      emptyMailmessage = 'You did not send any messages yet';
+    }
+  }
 
   async function handleSubmit(e, subject, message, to, userEmail) {
     try {
@@ -86,6 +101,7 @@ export function MailIndex({ filterBy, isMenuVisible, setIsMenuVisible }) {
       />
       <section className="inbox-container">
         {/* render here pages - email list / starred / drafts / sent etc.  */}
+        {emptyMailmessage}
         {params.emailId ? (
           <Outlet />
         ) : (

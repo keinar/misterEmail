@@ -1,35 +1,34 @@
 .container {
-    margin: 0 auto;
+  margin: 0 auto;
 }
 
 section.inbox-container {
-    width: 100%;
-    background-color: white;
-    border-radius: 16px;
-    margin-bottom: 16px;
-    overflow: hidden;
+  width: 100%;
+  background-color: white;
+  border-radius: 16px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  padding: 20px;
 }
 
-section.inbox-container thead tr{
-    height: 48px;
+section.inbox-container thead tr {
+  height: 48px;
 }
 
 /* GRIDS */
 .simple-cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    grid-gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-gap: 10px;
 }
 
-td svg, section svg{
-    cursor: pointer;
+td svg,
+section svg {
+  cursor: pointer;
 }
 
-
-.loading{
-    position: absolute;
-    top: 50%;
-    left: 50%;
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
 }
-
-
