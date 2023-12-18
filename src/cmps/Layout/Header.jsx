@@ -1,27 +1,36 @@
-import { NavLink, useParams } from "react-router-dom";
-import logo from "../../assets/imgs/logo_gmail.png";
-import userLogo from "../../assets/imgs/userLogo.jpg";
-import { mailService } from "../../services/mailService";
-import { useEffect, useState } from "react";
-import { AlignJustify } from "lucide-react";
-import { MailFilter } from "../MailFilter/MailFilter";
+import { NavLink, useParams } from 'react-router-dom';
+import logo from '../../assets/imgs/logo_gmail.png';
+import userLogo from '../../assets/imgs/userLogo.jpg';
+import { mailService } from '../../services/mailService';
+import { useEffect, useState } from 'react';
+import { AlignJustify } from 'lucide-react';
+import { MailFilter } from '../MailFilter/MailFilter';
 
-export function Header({ filterBy, onSetFilter, toggleMenu }) {
+export function Header({
+  filterBy,
+  onSetFilter,
+  setIsMenuVisible,
+  isMenuVisible,
+}) {
   const [userName, setUserName] = useState(null);
+
+  const toggleMenu = () => {
+    setIsMenuVisible(!isMenuVisible);
+  };
 
   useEffect(() => {
     async function getUserName() {
       try {
         setUserName(await mailService.getDemoUser());
       } catch (error) {
-        console.error("Failed to fetch user name:", error);
+        console.error('Failed to fetch user name:', error);
       }
     }
 
     getUserName();
   }, []);
 
-  let WCuserName = "Welcome ";
+  let WCuserName = 'Welcome ';
   if (userName && userName[0].fullname) {
     WCuserName += userName[0].fullname;
   }

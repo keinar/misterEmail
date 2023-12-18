@@ -6,17 +6,17 @@ import {
   Star,
   Trash2,
   X,
-} from "lucide-react";
-import { useEffect, useState } from "react";
-import { mailService } from "../../services/mailService";
-import { NavItem } from "./ItemNav";
-import { useNavigate } from "react-router-dom";
+} from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { mailService } from '../../services/mailService';
+import { useNavigate } from 'react-router-dom';
+import { ItemNav } from './ItemNav';
 
 export function SideNav({
   currentNav,
   emails,
   isMenuVisible,
-  toggleMenu,
+  setIsMenuVisible,
   inboxCount,
 }) {
   const navigate = useNavigate();
@@ -27,50 +27,50 @@ export function SideNav({
 
   const navItems = [
     {
-      to: "/inbox/",
-      label: "Inbox",
+      to: '/inbox',
+      label: 'Inbox',
       icon: (
         <Inbox
           size={20}
-          stroke={currentNav === "inbox" ? "black" : "#484A49"}
+          stroke={currentNav === 'inbox' ? 'black' : '#484A49'}
         />
       ),
     },
     {
-      to: "/starred",
-      label: "Starred",
+      to: '/starred',
+      label: 'Starred',
       icon: (
         <Star
           size={20}
-          stroke={currentNav === "starred" ? "black" : "#484A49"}
+          stroke={currentNav === 'starred' ? 'black' : '#484A49'}
         />
       ),
     },
     {
-      to: "/sent",
-      label: "Sent",
+      to: '/sent',
+      label: 'Sent',
       icon: (
         <SendHorizontal
           size={20}
-          stroke={currentNav === "sent" ? "black" : "#484A49"}
+          stroke={currentNav === 'sent' ? 'black' : '#484A49'}
         />
       ),
     },
     {
-      to: "/drafts",
-      label: "Drafts",
+      to: '/drafts',
+      label: 'Drafts',
       icon: (
         <File
           size={20}
-          stroke={currentNav === "drafts" ? "black" : "#484A49"}
+          stroke={currentNav === 'drafts' ? 'black' : '#484A49'}
         />
       ),
     },
     {
-      to: "/bin",
-      label: "Bin",
+      to: '/bin',
+      label: 'Bin',
       icon: (
-        <Trash2 size={20} stroke={currentNav === "bin" ? "black" : "#484A49"} />
+        <Trash2 size={20} stroke={currentNav === 'bin' ? 'black' : '#484A49'} />
       ),
     },
   ];
@@ -82,32 +82,32 @@ export function SideNav({
       try {
         setUserName(await mailService.getDemoUser());
       } catch (error) {
-        console.error("Failed to fetch user name:", error);
+        console.error('Failed to fetch user name:', error);
       }
     }
 
     getUserName();
   }, []);
 
-  let WCuserName = "Welcome ";
+  let WCuserName = 'Welcome ';
   if (userName && userName[0].fullname) {
     WCuserName += userName[0].fullname;
   }
 
   const navStyles = {
-    left: isMenuVisible ? "0" : "-300px",
+    left: isMenuVisible ? '0' : '-300px',
   };
 
   return (
-    <aside className="side-nav" style={navStyles}>
-      {isMenuVisible && <X onClick={toggleMenu} />}
+    <nav className="side-nav" style={navStyles}>
+      {isMenuVisible && <X onClick={() => setIsMenuVisible(false)} />}
 
       <button className="email-compose" onClick={handleOpenCompose}>
         <MailPlus size={20} /> Compose
       </button>
 
-      {navItems.map((item) => (
-        <NavItem
+      {navItems.map(item => (
+        <ItemNav
           key={item.label}
           to={item.to}
           icon={item.icon}
@@ -115,8 +115,9 @@ export function SideNav({
           isActive={currentNav === item.label.toLowerCase()}
           emails={emails}
           inboxCount={inboxCount}
+          setIsMenuVisible={setIsMenuVisible}
         />
       ))}
-    </aside>
+    </nav>
   );
 }

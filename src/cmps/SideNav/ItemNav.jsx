@@ -1,13 +1,27 @@
-import { NavLink } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
-export function NavItem({ to, icon, label, isActive, emails, inboxCount }) {
+export function ItemNav({
+  to,
+  icon,
+  label,
+  isActive,
+  emails,
+  inboxCount,
+  setIsMenuVisible,
+}) {
+  const navigate = useNavigate();
+
+  function navigateToPage() {
+    setIsMenuVisible(false);
+    navigate(to);
+  }
   return (
-    <NavLink to={to}>
-      <ul className={`${label.toLowerCase()} ${isActive ? "active" : ""}`}>
+    <div onClick={() => navigateToPage()}>
+      <ul className={`${label.toLowerCase()} ${isActive ? 'active' : ''}`}>
         {icon}
         {label}
-        {label === "Inbox" && <span>{inboxCount ? inboxCount : "Empty"}</span>}
+        {label === 'Inbox' && <span>{inboxCount ? inboxCount : 'Empty'}</span>}
       </ul>
-    </NavLink>
+    </div>
   );
 }
