@@ -53,6 +53,10 @@ async function query(filterBy) {
       filteredEmails = filteredEmails.filter(email => email.isStarred);
     }
 
+    if (filterBy.removedAt) {
+      filteredEmails = filteredEmails.filter(email => !email.removedAt);
+    }
+
     return filteredEmails;
   }
 

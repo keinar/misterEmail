@@ -7,6 +7,7 @@ export function EmailList({
   loadEmails,
   onToggleSortByDate,
   isAscending,
+  params,
 }) {
   async function onRemoveEmail(emailId) {
     try {
@@ -14,8 +15,13 @@ export function EmailList({
       if (!userConfirmed) {
         return;
       }
+      const emailToRemove = await mailService.getById(emailId);
+      emailToRemove.removedAt = Date.now();
+      await mailService.save(emailToRemove);
+      if (params.folder === 'bin') {
+        await mailService.remove(emailId);
+      }
 
-      await mailService.remove(emailId);
       loadEmails();
     } catch (err) {
       console.error('error: ', err);

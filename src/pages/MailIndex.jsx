@@ -82,8 +82,14 @@ export function MailIndex({ filterBy, isMenuVisible, setIsMenuVisible }) {
 
       if (params.folder === 'starred') {
         filteredEmails = loadedEmails.filter(email => email.isStarred);
+      } else if (params.folder === 'sent') {
+        console.log('sent');
+        filteredEmails = loadedEmails.filter(email => email.sentAt);
+      } else if (params.folder === 'bin') {
+        console.log('bin');
+        filteredEmails = loadedEmails.filter(email => email.removedAt);
       } else if (params.folder === 'inbox') {
-        filteredEmails = loadedEmails;
+        filteredEmails = loadedEmails.filter(email => !email.removedAt);
       } else {
         filteredEmails = loadedEmails;
       }
@@ -121,6 +127,7 @@ export function MailIndex({ filterBy, isMenuVisible, setIsMenuVisible }) {
             loadEmails={loadEmails}
             onToggleSortByDate={onToggleSortByDate}
             isAscending={isAscending}
+            params={params}
           />
         )}{' '}
         {emptyMailmessage}
