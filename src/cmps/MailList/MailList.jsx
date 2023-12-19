@@ -35,11 +35,13 @@ export function EmailList({
   return (
     <>
       <table className="email-list">
-        <MailSort
-          emails={emails}
-          onToggleSortByDate={onToggleSortByDate}
-          isAscending={isAscending}
-        />
+        {emails.length > 1 && (
+          <MailSort
+            emails={emails}
+            onToggleSortByDate={onToggleSortByDate}
+            isAscending={isAscending}
+          />
+        )}
         <tbody>
           {emails.map(email => (
             <MailPreview
