@@ -22,7 +22,7 @@ export function EmailDetails() {
       const emailToRemove = await mailService.getById(email.id);
       emailToRemove.removedAt = Date.now();
       await mailService.save(emailToRemove);
-      if (params.folder === 'bin') {
+      if (params.folder === 'trash') {
         await mailService.remove(email.id);
       }
 

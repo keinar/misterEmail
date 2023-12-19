@@ -18,7 +18,7 @@ export function EmailList({
       const emailToRemove = await mailService.getById(emailId);
       emailToRemove.removedAt = Date.now();
       await mailService.save(emailToRemove);
-      if (params.folder === 'bin') {
+      if (params.folder === 'trash') {
         await mailService.remove(emailId);
       }
 

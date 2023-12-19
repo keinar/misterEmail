@@ -68,10 +68,13 @@ export function SideNav({
       ),
     },
     {
-      to: '/bin',
-      label: 'Bin',
+      to: '/trash',
+      label: 'Trash',
       icon: (
-        <Trash2 size={20} stroke={currentNav === 'bin' ? 'black' : '#484A49'} />
+        <Trash2
+          size={20}
+          stroke={currentNav === 'trash' ? 'black' : '#484A49'}
+        />
       ),
     },
   ];

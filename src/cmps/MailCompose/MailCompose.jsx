@@ -1,8 +1,8 @@
-import { X } from "lucide-react";
-import { mailService } from "../../services/mailService";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { MailComposeForm } from "./MailComposeForm";
+import { X } from 'lucide-react';
+import { mailService } from '../../services/mailService';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { MailComposeForm } from './MailComposeForm';
 
 export function EmailComposeModal({
   currentNav,
@@ -14,7 +14,7 @@ export function EmailComposeModal({
   to,
   setTo,
 }) {
-  const [userEmail, setUserEmail] = useState("");
+  const [userEmail, setUserEmail] = useState('');
   const navigate = useNavigate();
 
   function handleOpenCompose() {

@@ -35,8 +35,8 @@ export function MailIndex({ filterBy, isMenuVisible, setIsMenuVisible }) {
       emptyMailmessage = 'The email inbox is empty :(';
     } else if (params.folder === 'starred') {
       emptyMailmessage = 'You have not starred any message yet :(';
-    } else if (params.folder === 'bin') {
-      emptyMailmessage = 'The bin is empty';
+    } else if (params.folder === 'trash') {
+      emptyMailmessage = 'The trash is empty';
     } else if (params.folder === 'drafts') {
       emptyMailmessage = 'There are no draft emails here';
     } else if (params.folder === 'sent') {
@@ -63,7 +63,9 @@ export function MailIndex({ filterBy, isMenuVisible, setIsMenuVisible }) {
         userEmail,
         to
       );
-
+      setSubject('');
+      setMessage('');
+      setTo('');
       alert('Your message sent successfully');
       loadEmails();
       navigate('/inbox/');
@@ -85,7 +87,7 @@ export function MailIndex({ filterBy, isMenuVisible, setIsMenuVisible }) {
         filteredEmails = loadedEmails.filter(email => email.isStarred);
       } else if (params.folder === 'sent') {
         filteredEmails = loadedEmails.filter(email => email.sentAt);
-      } else if (params.folder === 'bin') {
+      } else if (params.folder === 'trash') {
         filteredEmails = loadedEmails.filter(email => email.removedAt);
       } else if (params.folder === 'inbox') {
         filteredEmails = loadedEmails.filter(email => !email.removedAt);
