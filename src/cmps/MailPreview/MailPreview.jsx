@@ -1,12 +1,17 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { Mail, MailOpen, Star, Trash2 } from "lucide-react";
-import { mailService } from "../../services/mailService";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Mail, MailOpen, Star, Trash2 } from 'lucide-react';
+import { mailService } from '../../services/mailService';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
 
-export function MailPreview({ email, onRemoveEmail, loadEmails }) {
+export function MailPreview({
+  email,
+  onRemoveEmail,
+  loadEmails,
+  currentFolder,
+}) {
   const [isOpened, setIsOpened] = useState(false);
   const [isStarred, setIsStarred] = useState(email.isStarred);
   const [onHover, setOnHover] = useState(false);
@@ -31,18 +36,18 @@ export function MailPreview({ email, onRemoveEmail, loadEmails }) {
       await mailService.save(updatedEmail);
       loadEmails();
     } catch (error) {
-      console.error("Failed to open email:", error);
+      console.error('Failed to open email:', error);
     }
   }
 
   async function onSetIsUnread() {
     try {
-      setIsOpened((prevIsOpen) => !prevIsOpen);
+      setIsOpened(prevIsOpen => !prevIsOpen);
       const updatedEmail = { ...email, isRead: !isOpened };
       await mailService.save(updatedEmail);
       loadEmails();
     } catch (error) {
-      console.error("Failed to change read status:", error);
+      console.error('Failed to change read status:', error);
     }
   }
 
@@ -60,13 +65,13 @@ export function MailPreview({ email, onRemoveEmail, loadEmails }) {
       loadEmails();
     } catch (error) {
       setIsStarred(isStarred); // Revert the state on error
-      console.error("Failed to toggle star:", error);
+      console.error('Failed to toggle star:', error);
     }
   }
 
   const fontWeight = !isOpened ? 700 : 500;
-  const backgroundColor = isOpened ? "#F2F6FC" : undefined;
-  const star = !isStarred ? "none" : "yellow";
+  const backgroundColor = isOpened ? '#F2F6FC' : undefined;
+  const star = !isStarred ? 'none' : 'yellow';
 
   return (
     <tr
@@ -80,7 +85,7 @@ export function MailPreview({ email, onRemoveEmail, loadEmails }) {
       </td>
       <td>
         <Link
-          to={`/inbox/${email.id}`}
+          to={`/${currentFolder}/${email.id}`}
           className={email.id}
           style={{ fontWeight: fontWeight }}
           onClick={handleOpenState}
@@ -98,8 +103,8 @@ export function MailPreview({ email, onRemoveEmail, loadEmails }) {
       </td>
       <td>
         <span className="email-sent-time">
-          {dayjs(email.sentAt).isBefore(dayjs().subtract(1), "day")
-            ? dayjs(email.sentAt).format("MMM DD")
+          {dayjs(email.sentAt).isBefore(dayjs().subtract(1), 'day')
+            ? dayjs(email.sentAt).format('MMM DD')
             : dayjs(email.sentAt).fromNow(true)}
         </span>
       </td>

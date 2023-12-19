@@ -11,17 +11,22 @@ export function EmailList({
 }) {
   async function onRemoveEmail(emailId) {
     try {
-      const userConfirmed = confirm('Are you sure to remove this email?');
-      if (!userConfirmed) {
-        return;
-      }
-      const emailToRemove = await mailService.getById(emailId);
-      emailToRemove.removedAt = Date.now();
-      await mailService.save(emailToRemove);
+      let userConfirmed = '';
       if (params.folder === 'trash') {
+        userConfirmed = confirm('Are you sure to remove this email forever?');
+        if (!userConfirmed) {
+          return;
+        }
         await mailService.remove(emailId);
+      } else {
+        userConfirmed = confirm('Are you sure to remove this email?');
+        if (!userConfirmed) {
+          return;
+        }
+        const emailToRemove = await mailService.getById(emailId);
+        emailToRemove.removedAt = Date.now();
+        await mailService.save(emailToRemove);
       }
-
       loadEmails();
     } catch (err) {
       console.error('error: ', err);
@@ -43,6 +48,7 @@ export function EmailList({
               className="email-raw"
               onRemoveEmail={onRemoveEmail}
               loadEmails={loadEmails}
+              currentFolder={params.folder}
             />
           ))}
         </tbody>

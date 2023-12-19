@@ -102,7 +102,7 @@ export function MailIndex({ filterBy, isMenuVisible, setIsMenuVisible }) {
       );
 
       setEmails(filteredEmails);
-      setInboxCount(loadedEmails.length);
+      setInboxCount(filteredEmails.length);
     } catch (err) {
       console.error('error: ', err);
     }
@@ -119,7 +119,6 @@ export function MailIndex({ filterBy, isMenuVisible, setIsMenuVisible }) {
         inboxCount={inboxCount}
       />
       <section className="inbox-container">
-        {/* render here pages - email list / starred / drafts / sent etc.  */}
         {params.emailId ? (
           <Outlet />
         ) : (

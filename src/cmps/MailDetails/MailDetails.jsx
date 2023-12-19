@@ -15,17 +15,22 @@ export function EmailDetails() {
 
   async function onRemoveEmail() {
     try {
-      const userConfirmed = confirm('Are you sure to remove this email?');
-      if (!userConfirmed) {
-        return;
-      }
-      const emailToRemove = await mailService.getById(email.id);
-      emailToRemove.removedAt = Date.now();
-      await mailService.save(emailToRemove);
+      let userConfirmed = '';
       if (params.folder === 'trash') {
+        userConfirmed = confirm('Are you sure to remove this email forever?');
+        if (!userConfirmed) {
+          return;
+        }
         await mailService.remove(email.id);
+      } else {
+        userConfirmed = confirm('Are you sure to remove this email?');
+        if (!userConfirmed) {
+          return;
+        }
+        const emailToRemove = await mailService.getById(email.id);
+        emailToRemove.removedAt = Date.now();
+        await mailService.save(emailToRemove);
       }
-
       navigate(`/${params.folder}/`, { state: { refresh: true } });
     } catch (err) {
       console.error("Can't navigate back: ", err);

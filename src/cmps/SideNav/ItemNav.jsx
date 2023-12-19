@@ -5,7 +5,6 @@ export function ItemNav({
   icon,
   label,
   isActive,
-  emails,
   inboxCount,
   setIsMenuVisible,
 }) {
@@ -15,12 +14,13 @@ export function ItemNav({
     setIsMenuVisible(false);
     navigate(to);
   }
+
   return (
     <div onClick={() => navigateToPage()}>
       <ul className={`${label.toLowerCase()} ${isActive ? 'active' : ''}`}>
         {icon}
         {label}
-        {label === 'Inbox' && <span>{inboxCount ? inboxCount : 'Empty'}</span>}
+        {isActive && <span>{inboxCount ? inboxCount : 'Empty'}</span>}
       </ul>
     </div>
   );
