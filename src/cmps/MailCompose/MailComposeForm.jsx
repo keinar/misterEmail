@@ -1,6 +1,6 @@
-import { SendHorizonal, X } from "lucide-react";
-import { mailService } from "../../services/mailService";
-import { useEffect, useState } from "react";
+import { SendHorizonal, X } from 'lucide-react';
+import { mailService } from '../../services/mailService';
+import { useEffect, useState } from 'react';
 
 export function MailComposeForm({
   handleSubmit,
@@ -11,7 +11,7 @@ export function MailComposeForm({
   to,
   setTo,
 }) {
-  const [userEmail, setUserEmail] = useState("");
+  const [userEmail, setUserEmail] = useState('');
 
   useEffect(() => {
     async function fetchUserEmail() {
@@ -22,10 +22,10 @@ export function MailComposeForm({
     fetchUserEmail();
   }, []);
 
-  const submit = (e) => {
+  const submit = e => {
     e.preventDefault();
     handleSubmit(e, subject, message, to, userEmail);
-    setTo("");
+    setTo('');
   };
 
   return (
@@ -42,7 +42,7 @@ export function MailComposeForm({
           id="to"
           name="to"
           value={to}
-          onChange={(e) => setTo(e.target.value)}
+          onChange={e => setTo(e.target.value)}
           required
         />
       </fieldset>
@@ -53,7 +53,7 @@ export function MailComposeForm({
           id="subject"
           name="subject"
           value={subject}
-          onChange={(e) => setSubject(e.target.value)}
+          onChange={e => setSubject(e.target.value)}
           required
         />
       </fieldset>
@@ -61,10 +61,10 @@ export function MailComposeForm({
         <textarea
           id="message"
           name="message"
-          rows="11"
-          cols="60"
+          rows="15"
+          cols="48"
           value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={e => setMessage(e.target.value)}
         />
       </fieldset>
 

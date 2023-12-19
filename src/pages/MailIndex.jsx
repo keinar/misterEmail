@@ -13,7 +13,7 @@ import { RightNav } from '../cmps/SideNav/RightNav.jsx';
 
 export function MailIndex({ filterBy, isMenuVisible, setIsMenuVisible }) {
   const [emails, setEmails] = useState(null);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [inboxCount, setInboxCount] = useState(0);
