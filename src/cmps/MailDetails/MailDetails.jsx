@@ -19,7 +19,13 @@ export function EmailDetails() {
       if (!userConfirmed) {
         return;
       }
-      await mailService.remove(params.emailId);
+      const emailToRemove = await mailService.getById(email.id);
+      emailToRemove.removedAt = Date.now();
+      await mailService.save(emailToRemove);
+      if (params.folder === 'bin') {
+        await mailService.remove(email.id);
+      }
+
       navigate(`/${params.folder}/`, { state: { refresh: true } });
     } catch (err) {
       console.error("Can't navigate back: ", err);

@@ -23,6 +23,7 @@ export function SideNav({
 
   function handleOpenCompose() {
     navigate(`/${currentNav}?compose=new`);
+    setIsMenuVisible(false);
   }
 
   const navItems = [

@@ -25,7 +25,6 @@ export function MailComposeForm({
   const submit = e => {
     e.preventDefault();
     handleSubmit(e, subject, message, to, userEmail);
-    setTo('');
   };
 
   return (
@@ -61,8 +60,6 @@ export function MailComposeForm({
         <textarea
           id="message"
           name="message"
-          rows="15"
-          cols="48"
           value={message}
           onChange={e => setMessage(e.target.value)}
         />

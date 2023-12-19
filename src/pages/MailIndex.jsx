@@ -5,6 +5,7 @@ import { SideNav } from '../cmps/SideNav/SideNav.jsx';
 import {
   Outlet,
   useLocation,
+  useNavigate,
   useParams,
   useSearchParams,
 } from 'react-router-dom';
@@ -22,6 +23,7 @@ export function MailIndex({ filterBy, isMenuVisible, setIsMenuVisible }) {
   const location = useLocation();
   let emptyMailmessage = '';
   const [isAscending, setIsAscending] = useState(true);
+  const navigate = useNavigate();
 
   function onToggleSortByDate() {
     setIsAscending(!isAscending);
@@ -61,11 +63,10 @@ export function MailIndex({ filterBy, isMenuVisible, setIsMenuVisible }) {
         userEmail,
         to
       );
-      // Clear the form fields after submission
+
       alert('Your message sent successfully');
-      setSubject('');
-      setMessage('');
       loadEmails();
+      navigate('/inbox/');
     } catch (err) {
       console.error('Error', err);
     }
@@ -83,13 +84,13 @@ export function MailIndex({ filterBy, isMenuVisible, setIsMenuVisible }) {
       if (params.folder === 'starred') {
         filteredEmails = loadedEmails.filter(email => email.isStarred);
       } else if (params.folder === 'sent') {
-        console.log('sent');
         filteredEmails = loadedEmails.filter(email => email.sentAt);
       } else if (params.folder === 'bin') {
-        console.log('bin');
         filteredEmails = loadedEmails.filter(email => email.removedAt);
       } else if (params.folder === 'inbox') {
         filteredEmails = loadedEmails.filter(email => !email.removedAt);
+      } else if (params.folder === 'drafts') {
+        console.log('drafts');
       } else {
         filteredEmails = loadedEmails;
       }
