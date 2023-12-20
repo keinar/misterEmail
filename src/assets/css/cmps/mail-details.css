@@ -1,4 +1,30 @@
-.email-body {
+.mail-body {
   padding: 20px 0 20px 0;
   font-size: 16px;
+}
+
+.mail-details h1 {
+  font-size: 24px;
+  padding: 10px 0;
+}
+
+section.email-details {
+  width: 100%;
+}
+
+.mail-details-sent-at,
+.mail-sent-at,
+.mail-to,
+.mail-from {
+  color: rgb(107, 107, 107);
+  font-size: 15px;
+}
+
+@media screen and (max-width: 600px) {
+  .mail-details-sent-at,
+  .mail-sent-at,
+  .mail-to,
+  .mail-from {
+    font-size: 13px;
+  }
 }

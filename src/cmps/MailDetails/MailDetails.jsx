@@ -69,15 +69,17 @@ export function EmailDetails() {
   if (!email) return <div className="loading">loading...</div>;
 
   return (
-    <section className="email-details">
+    <section className="mail-details">
       <h1>{email.subject}</h1>
       <div className="flex space-between">
-        <p className="email-from">Author: {email.from}</p>{' '}
-        <p>{dayjs(email.sentAt).format('MMMM DD, YYYY [@] H:mm A')}</p>
+        <p className="mail-from">Author: {email.from}</p>{' '}
+        <p className="mail-details-sent-at">
+          {dayjs(email.sentAt).format('MMMM DD, YYYY [@] H:mm A')}
+        </p>
       </div>
-      <p className="email-to">To: {email.to}</p>
+      <p className="mail-to">To: {email.to}</p>
 
-      <p className="email-body">{email.body}</p>
+      <p className="mail-body">{email.body}</p>
 
       <div className="flex">
         <button className="modern-button" onClick={onBack}>
