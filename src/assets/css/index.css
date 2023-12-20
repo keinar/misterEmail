@@ -1,23 +1,20 @@
 /*  Basics */
-@import "basics/base.css";
-@import "basics/helpers.css";
-@import "basics/layout.css";
-@import "basics/animations.css";
+@import 'basics/base.css';
+@import 'basics/helpers.css';
+@import 'basics/layout.css';
+@import 'basics/animations.css';
 
 /* Pages */
-@import "./pages/email-index.css";
+@import './pages/email-index.css';
 
 /* Components */
-@import "./cmps/app-header.css";
-@import "./cmps/email-list.css";
-@import "./cmps/email-filter.css";
-@import "./cmps/email-preview.css";
-@import "./cmps/side-nav.css";
-@import "./cmps/compose-modal.css";
-@import "./cmps/right-nav.css";
-@import "./cmps/app-footer.css";
-@import "./cmps/email-filters.css"
-
-
-
-
+@import './cmps/app-header.css';
+@import './cmps/email-list.css';
+@import './cmps/email-filter.css';
+@import './cmps/email-preview.css';
+@import './cmps/side-nav.css';
+@import './cmps/compose-modal.css';
+@import './cmps/right-nav.css';
+@import './cmps/app-footer.css';
+@import './cmps/email-filters.css';
+@import './cmps/mail-details.css';

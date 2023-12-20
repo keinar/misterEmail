@@ -1,21 +1,19 @@
-
-
-.email-details h1{
-    font-size: 24px;
-    padding: 10px 0;
+.email-details h1 {
+  font-size: 24px;
+  padding: 10px 0;
 }
 
 section.email-details {
-    width: 100%;
-    padding: 20px;
+  width: 100%;
+  padding: 20px;
 }
 
-.email-sent-at ,.email-to ,.email-from{
-    color: rgb(107, 107, 107);
+.email-sent-at,
+.email-to,
+.email-from {
+  color: rgb(107, 107, 107);
 }
-.email-body{
-    font-size: 18px;
-}
-.table-body{
-    background-color: #F2F6FC;
+
+.table-body {
+  background-color: #f2f6fc;
 }

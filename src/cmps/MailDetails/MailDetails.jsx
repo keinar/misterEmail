@@ -71,15 +71,14 @@ export function EmailDetails() {
   return (
     <section className="email-details">
       <h1>{email.subject}</h1>
-      <p className="email-from">Author: {email.from}</p>
+      <div className="flex space-between">
+        <p className="email-from">Author: {email.from}</p>{' '}
+        <p>{dayjs(email.sentAt).format('MMMM DD, YYYY [@] H:mm A')}</p>
+      </div>
       <p className="email-to">To: {email.to}</p>
-      <p className="email-sent-at">
-        sent at: {dayjs(email.sentAt).format('MMMM DD, YYYY [@] H:mm A')}
-      </p>
-      <br></br>
+
       <p className="email-body">{email.body}</p>
-      <br></br>
-      <hr></hr>
+
       <div className="flex">
         <button className="modern-button" onClick={onBack}>
           Back

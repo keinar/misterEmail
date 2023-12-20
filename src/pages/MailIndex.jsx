@@ -83,18 +83,24 @@ export function MailIndex({ filterBy, isMenuVisible, setIsMenuVisible }) {
       const loadedEmails = await mailService.query(filterBy);
       let filteredEmails = [...loadedEmails];
 
-      if (params.folder === 'starred') {
-        filteredEmails = loadedEmails.filter(email => email.isStarred);
-      } else if (params.folder === 'sent') {
-        filteredEmails = loadedEmails.filter(email => email.sentAt);
-      } else if (params.folder === 'trash') {
-        filteredEmails = loadedEmails.filter(email => email.removedAt);
-      } else if (params.folder === 'inbox') {
-        filteredEmails = loadedEmails.filter(email => !email.removedAt);
-      } else if (params.folder === 'drafts') {
-        console.log('drafts');
-      } else {
-        filteredEmails = loadedEmails;
+      switch (params.folder) {
+        case 'inbox':
+          filteredEmails = loadedEmails.filter(email => !email.removedAt);
+          break;
+        case 'starred':
+          filteredEmails = loadedEmails.filter(email => email.isStarred);
+          break;
+        case 'sent':
+          filteredEmails = loadedEmails.filter(email => email.sentAt);
+          break;
+        case 'drafts':
+          console.log('drafts');
+          break;
+        case 'trash':
+          filteredEmails = loadedEmails.filter(email => email.removedAt);
+          break;
+        default:
+          filteredEmails = loadedEmails;
       }
 
       filteredEmails.sort((a, b) =>
