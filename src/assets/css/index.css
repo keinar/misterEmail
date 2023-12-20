@@ -5,16 +5,16 @@
 @import 'basics/animations.css';
 
 /* Pages */
-@import './pages/email-index.css';
+@import './pages/mail-index.css';
 
 /* Components */
 @import './cmps/app-header.css';
-@import './cmps/email-list.css';
-@import './cmps/email-filter.css';
-@import './cmps/email-preview.css';
+@import './cmps/mail-list.css';
+@import './cmps/mail-filter.css';
+@import './cmps/mail-preview.css';
 @import './cmps/side-nav.css';
 @import './cmps/compose-modal.css';
 @import './cmps/right-nav.css';
 @import './cmps/app-footer.css';
-@import './cmps/email-filters.css';
+@import './cmps/mail-filters.css';
 @import './cmps/mail-details.css';
