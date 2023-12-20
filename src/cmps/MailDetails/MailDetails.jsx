@@ -4,7 +4,7 @@ import { mailService } from '../../services/mailService';
 import { ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
 import dayjs from 'dayjs';
 
-export function EmailDetails() {
+export function MailDetails() {
   const [email, setEmail] = useState(null);
   const params = useParams();
   const navigate = useNavigate();
@@ -81,11 +81,11 @@ export function EmailDetails() {
 
       <p className="mail-body">{email.body}</p>
 
-      <div className="flex">
-        <button className="modern-button" onClick={onBack}>
+      <div className="flex align-center">
+        <button className="simple-button left" onClick={onBack}>
           <ChevronLeft size={18} /> Back
         </button>
-        <button className="modern-button" onClick={onNextEmail}>
+        <button className="simple-button right" onClick={onNextEmail}>
           Next Email <ChevronRight size={18} />
         </button>
         <Trash2 size={20} onClick={onRemoveEmail} />
