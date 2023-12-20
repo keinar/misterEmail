@@ -101,13 +101,15 @@ export function MailPreview({
           {email.body}
         </Link>
       </td>
-      <td>
-        <span className="email-sent-time">
-          {dayjs(email.sentAt).isBefore(dayjs().subtract(1), 'day')
-            ? dayjs(email.sentAt).format('MMM DD')
-            : dayjs(email.sentAt).fromNow(true)}
-        </span>
-      </td>
+      {!onHover && (
+        <td>
+          <span className="email-sent-time">
+            {dayjs(email.sentAt).isBefore(dayjs().subtract(1), 'day')
+              ? dayjs(email.sentAt).format('MMM DD')
+              : dayjs(email.sentAt).fromNow(true)}
+          </span>
+        </td>
+      )}
       {onHover && (
         <td>
           <Trash2 size={20} onClick={() => onRemoveEmail(email.id)} />
