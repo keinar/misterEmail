@@ -11,8 +11,10 @@ import {
 } from 'react-router-dom';
 import { EmailComposeModal } from '../cmps/MailCompose/MailCompose.jsx';
 import { RightNav } from '../cmps/SideNav/RightNav.jsx';
+import { Footer } from '../cmps/Layout/Footer.jsx';
+import { Header } from '../cmps/Layout/Header.jsx';
 
-export function MailIndex({ filterBy, isMenuVisible, setIsMenuVisible }) {
+export function MailIndex() {
   const [emails, setEmails] = useState(null);
   const [searchParams] = useSearchParams();
   const [subject, setSubject] = useState('');
@@ -24,6 +26,12 @@ export function MailIndex({ filterBy, isMenuVisible, setIsMenuVisible }) {
   let emptyMailmessage = '';
   const [isAscending, setIsAscending] = useState(true);
   const navigate = useNavigate();
+  const [filterBy, setFilterBy] = useState(mailService.getDefaultFilter());
+  const [isMenuVisible, setIsMenuVisible] = useState(false);
+
+  const onSetFilter = newFilter => {
+    setFilterBy(newFilter);
+  };
 
   function onToggleSortByDate() {
     setIsAscending(!isAscending);
@@ -116,45 +124,57 @@ export function MailIndex({ filterBy, isMenuVisible, setIsMenuVisible }) {
   if (!emails) return <div className="loading">Loading...</div>;
 
   return (
-    <section className="email-index">
-      <SideNav
-        currentNav={params.folder}
-        emails={emails}
-        isMenuVisible={isMenuVisible}
+    <section className="main-app">
+      <Header
+        filterBy={filterBy}
+        onSetFilter={onSetFilter}
         setIsMenuVisible={setIsMenuVisible}
-        inboxCount={inboxCount}
+        isMenuVisible={isMenuVisible}
       />
-      <section className="inbox-container">
-        {params.emailId ? (
-          <Outlet />
-        ) : (
-          <EmailList
-            emails={emails.filter(email =>
-              filterBy.status === 'starred' ? email.isStarred : true
-            )}
-            loadEmails={loadEmails}
-            onToggleSortByDate={onToggleSortByDate}
-            isAscending={isAscending}
-            params={params}
+      <main className="container">
+        <section className="email-index">
+          <SideNav
+            currentNav={params.folder}
+            emails={emails}
+            isMenuVisible={isMenuVisible}
+            setIsMenuVisible={setIsMenuVisible}
+            inboxCount={inboxCount}
           />
-        )}{' '}
-        {emptyMailmessage}
-      </section>
-      <RightNav />
+          <section className="inbox-container">
+            {params.emailId ? (
+              <Outlet />
+            ) : (
+              <EmailList
+                emails={emails.filter(email =>
+                  filterBy.status === 'starred' ? email.isStarred : true
+                )}
+                loadEmails={loadEmails}
+                onToggleSortByDate={onToggleSortByDate}
+                isAscending={isAscending}
+                params={params}
+              />
+            )}{' '}
+            {emptyMailmessage}
+          </section>
+          <RightNav />
 
-      {searchParams.get('compose') && (
-        <EmailComposeModal
-          currentNav={params.folder}
-          handleSubmit={handleSubmit}
-          subject={subject}
-          message={message}
-          setMessage={setMessage}
-          setSubject={setSubject}
-          to={to}
-          setTo={setTo}
-          loadEmails={loadEmails}
-        />
-      )}
+          {searchParams.get('compose') && (
+            <EmailComposeModal
+              currentNav={params.folder}
+              handleSubmit={handleSubmit}
+              subject={subject}
+              message={message}
+              setMessage={setMessage}
+              setSubject={setSubject}
+              to={to}
+              setTo={setTo}
+              loadEmails={loadEmails}
+            />
+          )}
+        </section>
+      </main>
+
+      <Footer />
     </section>
   );
 }
