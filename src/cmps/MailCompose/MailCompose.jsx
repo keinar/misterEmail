@@ -7,12 +7,8 @@ import { MailComposeForm } from './MailComposeForm';
 export function EmailComposeModal({
   currentNav,
   handleSubmit,
-  message,
-  subject,
-  setSubject,
-  setMessage,
-  to,
-  setTo,
+  newMail,
+  setNewMail,
 }) {
   const [userEmail, setUserEmail] = useState('');
   const navigate = useNavigate();
@@ -37,14 +33,10 @@ export function EmailComposeModal({
         <X size={16} className="close" onClick={handleOpenCompose} />
       </header>
       <MailComposeForm
-        setSubject={setSubject}
-        setMessage={setMessage}
+        newMail={newMail}
+        setNewMail={setNewMail}
         userEmail={userEmail}
         handleSubmit={handleSubmit}
-        message={message}
-        subject={subject}
-        to={to}
-        setTo={setTo}
       />
     </section>
   );

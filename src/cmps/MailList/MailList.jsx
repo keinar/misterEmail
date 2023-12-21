@@ -4,34 +4,13 @@ import { MailPreview } from '../MailPreview/MailPreview';
 
 export function EmailList({
   emails,
+  onRemoveEmail,
   loadEmails,
   onToggleSortByDate,
   isAscending,
   params,
+  onUpdateMail,
 }) {
-  async function onRemoveEmail(emailId) {
-    try {
-      let userConfirmed = '';
-      const emailToRemove = await mailService.getById(emailId);
-
-      if (params.folder === 'trash') {
-        userConfirmed = confirm('Are you sure to remove this email forever?');
-        if (!userConfirmed) return;
-
-        await mailService.remove(emailId);
-      } else {
-        userConfirmed = confirm('Are you sure to remove this email?');
-        if (!userConfirmed) return;
-
-        emailToRemove.removedAt = Date.now();
-        await mailService.save(emailToRemove);
-      }
-      loadEmails();
-    } catch (err) {
-      console.error('error: ', err);
-    }
-  }
-
   return (
     <>
       <table className="email-list">
@@ -51,6 +30,7 @@ export function EmailList({
               onRemoveEmail={onRemoveEmail}
               loadEmails={loadEmails}
               currentFolder={params.folder}
+              onUpdateMail={onUpdateMail}
             />
           ))}
         </tbody>

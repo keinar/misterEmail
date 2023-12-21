@@ -66,6 +66,15 @@ export function MailDetails() {
     navigate(`/${params.folder}/${nextEmail.id}`);
   }
 
+  // async function loadNextEmailId() {
+  //   try {
+  //     const email = await mailService.getById(params.emailId);
+  //     setEmail(email);
+  //   } catch (err) {
+  //     console.error('Error on load emails: ', err);
+  //   }
+  // }
+
   if (!email) return <div className="loading">loading...</div>;
 
   return (

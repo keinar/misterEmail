@@ -8,6 +8,7 @@ export const mailService = {
   getById,
   createEmail,
   getDefaultFilter,
+  getDefaultMail,
   getDemoUser,
   getStarredEmails,
   saveToStarred,
@@ -28,39 +29,81 @@ function getDefaultFilter() {
   };
 }
 
-async function query(filterBy) {
+function getDefaultMail(
+  to = '',
+  subject = '',
+  message = '',
+  isRead = false,
+  isStarred = false,
+  sentAt = Date.now(),
+  removedAt = null
+) {
+  return {
+    to,
+    subject,
+    message,
+    isRead,
+    isStarred,
+    sentAt,
+    removedAt,
+    from: getDemoUser().email,
+  };
+}
+
+async function query(filterBy, params, isAscending) {
   const emails = await storageService.query(EMAIL_KEY);
-  if (filterBy) {
-    let filteredEmails = emails;
-
-    if (filterBy.txt) {
-      console.log(filterBy);
-      filteredEmails = filteredEmails.filter(email => {
-        const subject = email.subject;
-        const body = email.body;
-        const jointString = [subject, body].join(' ');
-        return jointString.toLowerCase().includes(filterBy.txt.toLowerCase());
-      });
-    }
-
-    if (filterBy.isRead === true) {
-      filteredEmails = filteredEmails.filter(
-        email => email.isRead === filterBy.isRead
-      );
-    }
-
-    if (filterBy.status === 'starred') {
-      filteredEmails = filteredEmails.filter(email => email.isStarred);
-    }
-
-    if (filterBy.removedAt) {
-      filteredEmails = filteredEmails.filter(email => !email.removedAt);
-    }
-
-    return filteredEmails;
+  let filteredEmails = emails;
+  switch (params.folder) {
+    case 'inbox':
+      filteredEmails = emails.filter(email => !email.removedAt);
+      break;
+    case 'starred':
+      filteredEmails = emails.filter(email => email.isStarred);
+      break;
+    case 'sent':
+      filteredEmails = emails.filter(email => email.sentAt);
+      break;
+    case 'drafts':
+      console.log('drafts');
+      break;
+    case 'trash':
+      filteredEmails = emails.filter(email => email.removedAt);
+      break;
+    default:
+      filteredEmails = emails;
   }
 
-  return emails;
+  filteredEmails.sort((a, b) =>
+    isAscending ? a.sentAt - b.sentAt : b.sentAt - a.sentAt
+  );
+
+  if (!filterBy) return emails;
+
+  if (filterBy.txt) {
+    console.log(filterBy);
+    filteredEmails = filteredEmails.filter(email => {
+      const subject = email.subject;
+      const body = email.body;
+      const jointString = [subject, body].join(' ');
+      return jointString.toLowerCase().includes(filterBy.txt.toLowerCase());
+    });
+  }
+
+  if (filterBy.isRead === true) {
+    filteredEmails = filteredEmails.filter(
+      email => email.isRead === filterBy.isRead
+    );
+  }
+
+  if (filterBy.status === 'starred') {
+    filteredEmails = filteredEmails.filter(email => email.isStarred);
+  }
+
+  if (filterBy.removedAt) {
+    filteredEmails = filteredEmails.filter(email => !email.removedAt);
+  }
+
+  return filteredEmails;
 }
 
 function getById(id) {
@@ -108,18 +151,7 @@ async function getStarredEmails() {
   return emails.filter(email => email.isStarred);
 }
 
-async function createEmail(subject, body, isRead, isStarred, from, to) {
-  const email = {
-    id: utilService.makeId(5),
-    subject,
-    body,
-    isRead,
-    isStarred,
-    sentAt: Date.now(),
-    removedAt: null, // for later use
-    from,
-    to,
-  };
+async function createEmail(email) {
   return storageService.post(EMAIL_KEY, email);
 }
 

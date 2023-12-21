@@ -2,15 +2,7 @@ import { SendHorizonal, X } from 'lucide-react';
 import { mailService } from '../../services/mailService';
 import { useEffect, useState } from 'react';
 
-export function MailComposeForm({
-  handleSubmit,
-  message,
-  subject,
-  setSubject,
-  setMessage,
-  to,
-  setTo,
-}) {
+export function MailComposeForm({ handleSubmit, newMail, setNewMail }) {
   const [userEmail, setUserEmail] = useState('');
 
   useEffect(() => {
@@ -24,8 +16,14 @@ export function MailComposeForm({
 
   const submit = e => {
     e.preventDefault();
-    handleSubmit(e, subject, message, to, userEmail);
+    handleSubmit(e);
   };
+
+  function handleChange(e) {
+    const name = e.target.name;
+    const value = e.target.value;
+    setNewMail(prevMail => ({ ...prevMail, [name]: value }));
+  }
 
   return (
     <form onSubmit={submit}>
@@ -40,8 +38,8 @@ export function MailComposeForm({
           type="email"
           id="to"
           name="to"
-          value={to}
-          onChange={e => setTo(e.target.value)}
+          value={newMail.to}
+          onChange={handleChange}
           required
         />
       </fieldset>
@@ -51,8 +49,8 @@ export function MailComposeForm({
           type="text"
           id="subject"
           name="subject"
-          value={subject}
-          onChange={e => setSubject(e.target.value)}
+          value={newMail.subject}
+          onChange={handleChange}
           required
         />
       </fieldset>
@@ -60,8 +58,8 @@ export function MailComposeForm({
         <textarea
           id="message"
           name="message"
-          value={message}
-          onChange={e => setMessage(e.target.value)}
+          value={newMail.message}
+          onChange={handleChange}
         />
       </fieldset>
 

@@ -4,7 +4,6 @@ import { mailService } from '../services/mailService.js';
 import { SideNav } from '../cmps/SideNav/SideNav.jsx';
 import {
   Outlet,
-  useLocation,
   useNavigate,
   useParams,
   useSearchParams,
@@ -15,19 +14,69 @@ import { Footer } from '../cmps/Layout/Footer.jsx';
 import { Header } from '../cmps/Layout/Header.jsx';
 
 export function MailIndex() {
-  const [emails, setEmails] = useState(null);
   const [searchParams] = useSearchParams();
-  const [subject, setSubject] = useState('');
-  const [message, setMessage] = useState('');
+
+  const [emails, setEmails] = useState(null);
   const [inboxCount, setInboxCount] = useState(0);
-  const [to, setTo] = useState('');
-  const params = useParams();
-  const location = useLocation();
-  let emptyMailmessage = '';
   const [isAscending, setIsAscending] = useState(true);
+
+  const [newMail, setNewMail] = useState(mailService.getDefaultMail());
+
+  const params = useParams();
   const navigate = useNavigate();
+
   const [filterBy, setFilterBy] = useState(mailService.getDefaultFilter());
   const [isMenuVisible, setIsMenuVisible] = useState(false);
+
+  useEffect(() => {
+    loadEmails();
+  }, [filterBy, params, isAscending]);
+
+  async function loadEmails() {
+    try {
+      const emails = await mailService.query(filterBy, params, isAscending);
+      setEmails(emails);
+      setInboxCount(emails.length);
+    } catch (err) {
+      console.error('error: ', err);
+    }
+  }
+
+  async function onRemoveEmail(emailId) {
+    try {
+      let userConfirmed = '';
+      const emailToRemove = await mailService.getById(emailId);
+
+      if (params.folder === 'trash') {
+        userConfirmed = confirm('Are you sure to remove this email forever?');
+        if (!userConfirmed) return;
+
+        await mailService.remove(emailId);
+      } else {
+        userConfirmed = confirm('Are you sure to remove this email?');
+        if (!userConfirmed) return;
+
+        emailToRemove.removedAt = Date.now();
+        await mailService.save(emailToRemove);
+      }
+      loadEmails();
+    } catch (err) {
+      console.error('error: ', err);
+    }
+  }
+
+  async function onUpdateMail(mailToUpdate) {
+    try {
+      const updatedMail = await mailService.save(mailToUpdate);
+      setEmails(prevEmails =>
+        prevEmails.map(email => {
+          return email.id === updatedMail.id ? updatedMail : email;
+        })
+      );
+    } catch (error) {
+      console.error('Failed to change read status:', error);
+    }
+  }
 
   const onSetFilter = newFilter => {
     setFilterBy(newFilter);
@@ -38,21 +87,25 @@ export function MailIndex() {
     loadEmails();
   }
 
-  if (!emails || !emails.length) {
-    if (params.folder === 'inbox') {
-      emptyMailmessage = 'The email inbox is empty :(';
-    } else if (params.folder === 'starred') {
-      emptyMailmessage = 'You have not starred any message yet :(';
-    } else if (params.folder === 'trash') {
-      emptyMailmessage = 'The trash is empty';
-    } else if (params.folder === 'drafts') {
-      emptyMailmessage = 'There are no draft emails here';
-    } else if (params.folder === 'sent') {
-      emptyMailmessage = 'You did not send any messages yet';
+  function getEmptyMsg() {
+    let emptyMailmessage = '';
+    if (!emails || !emails.length) {
+      if (params.folder === 'inbox') {
+        emptyMailmessage = 'The email inbox is empty :(';
+      } else if (params.folder === 'starred') {
+        emptyMailmessage = 'You have not starred any message yet :(';
+      } else if (params.folder === 'trash') {
+        emptyMailmessage = 'The trash is empty';
+      } else if (params.folder === 'drafts') {
+        emptyMailmessage = 'There are no draft emails here';
+      } else if (params.folder === 'sent') {
+        emptyMailmessage = 'You did not send any messages yet';
+      }
     }
+    return emptyMailmessage;
   }
 
-  async function handleSubmit(e, subject, message, to, userEmail) {
+  async function handleSubmit(e) {
     try {
       e.preventDefault();
       if (!message) {
@@ -63,64 +116,15 @@ export function MailIndex() {
           return;
         }
       }
-      const emailData = await mailService.createEmail(
-        subject,
-        message,
-        false, // isRead
-        false, // isStarred
-        userEmail,
-        to
-      );
-      setSubject('');
-      setMessage('');
-      setTo('');
+      const emailData = await mailService.createEmail(newMail);
+      setEmails(prevEmails => [...prevEmails, emailData]);
       alert('Your message sent successfully');
-      loadEmails();
       navigate('/inbox/');
     } catch (err) {
       console.error('Error', err);
     }
   }
 
-  useEffect(() => {
-    loadEmails();
-  }, [filterBy, location, isAscending]);
-
-  async function loadEmails() {
-    try {
-      const loadedEmails = await mailService.query(filterBy);
-      let filteredEmails = [...loadedEmails];
-
-      switch (params.folder) {
-        case 'inbox':
-          filteredEmails = loadedEmails.filter(email => !email.removedAt);
-          break;
-        case 'starred':
-          filteredEmails = loadedEmails.filter(email => email.isStarred);
-          break;
-        case 'sent':
-          filteredEmails = loadedEmails.filter(email => email.sentAt);
-          break;
-        case 'drafts':
-          console.log('drafts');
-          break;
-        case 'trash':
-          filteredEmails = loadedEmails.filter(email => email.removedAt);
-          break;
-        default:
-          filteredEmails = loadedEmails;
-      }
-
-      filteredEmails.sort((a, b) =>
-        isAscending ? a.sentAt - b.sentAt : b.sentAt - a.sentAt
-      );
-
-      setEmails(filteredEmails);
-      setInboxCount(filteredEmails.length);
-    } catch (err) {
-      console.error('error: ', err);
-    }
-  }
   if (!emails) return <div className="loading">Loading...</div>;
 
   return (
@@ -152,9 +156,11 @@ export function MailIndex() {
                 onToggleSortByDate={onToggleSortByDate}
                 isAscending={isAscending}
                 params={params}
+                onRemoveEmail={onRemoveEmail}
+                onUpdateMail={onUpdateMail}
               />
-            )}{' '}
-            {emptyMailmessage}
+            )}
+            {getEmptyMsg()}
           </section>
           <RightNav />
 
@@ -162,18 +168,13 @@ export function MailIndex() {
             <EmailComposeModal
               currentNav={params.folder}
               handleSubmit={handleSubmit}
-              subject={subject}
-              message={message}
-              setMessage={setMessage}
-              setSubject={setSubject}
-              to={to}
-              setTo={setTo}
+              newMail={newMail}
+              setNewMail={setNewMail}
               loadEmails={loadEmails}
             />
           )}
         </section>
       </main>
-
       <Footer />
     </section>
   );

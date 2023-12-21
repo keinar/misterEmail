@@ -11,10 +11,16 @@ export function MailPreview({
   onRemoveEmail,
   loadEmails,
   currentFolder,
+  onUpdateMail,
 }) {
   const [isOpened, setIsOpened] = useState(false);
   const [isStarred, setIsStarred] = useState(email.isStarred);
   const [onHover, setOnHover] = useState(false);
+
+  useEffect(() => {
+    setIsOpened(email.isRead);
+    setIsStarred(email.isStarred);
+  }, []);
 
   const handleMouseEnter = () => {
     setOnHover(true);
@@ -24,17 +30,10 @@ export function MailPreview({
     setOnHover(false);
   };
 
-  useEffect(() => {
-    setIsOpened(email.isRead);
-    setIsStarred(email.isStarred);
-  }, []);
-
   async function handleOpenState() {
     try {
-      setIsOpened(true);
-      const updatedEmail = { ...email, isRead: true };
-      await mailService.save(updatedEmail);
-      loadEmails();
+      const updatedMail = { ...email, isRead: true };
+      onUpdateMail(updatedMail);
     } catch (error) {
       console.error('Failed to open email:', error);
     }
@@ -42,10 +41,8 @@ export function MailPreview({
 
   async function onSetIsUnread() {
     try {
-      setIsOpened(prevIsOpen => !prevIsOpen);
-      const updatedEmail = { ...email, isRead: !isOpened };
-      await mailService.save(updatedEmail);
-      loadEmails();
+      const updatedMail = { ...email, isRead: !email.isRead };
+      onUpdateMail(updatedMail);
     } catch (error) {
       console.error('Failed to change read status:', error);
     }
@@ -59,8 +56,8 @@ export function MailPreview({
       if (prevIsStarred) {
         await mailService.removeFromStarred(email.id);
       } else {
-        const updatedEmail = { ...email, isStarred: true };
-        await mailService.saveToStarred(updatedEmail);
+        const updatedMail = { ...email, isStarred: true };
+        await mailService.saveToStarred(updatedMail);
       }
       loadEmails();
     } catch (error) {
@@ -69,8 +66,8 @@ export function MailPreview({
     }
   }
 
-  const fontWeight = !isOpened ? 700 : 500;
-  const backgroundColor = isOpened ? '#F2F6FC' : undefined;
+  const fontWeight = !email.isRead ? 700 : 500;
+  const backgroundColor = email.isRead ? '#F2F6FC' : undefined;
   const star = !isStarred ? 'none' : 'yellow';
 
   return (
@@ -114,7 +111,7 @@ export function MailPreview({
         <td>
           <Trash2 size={20} onClick={() => onRemoveEmail(email.id)} />
 
-          {!isOpened ? (
+          {!email.isRead ? (
             <Mail size={20} onClick={() => onSetIsUnread()} />
           ) : (
             <MailOpen size={20} onClick={() => onSetIsUnread()} />
