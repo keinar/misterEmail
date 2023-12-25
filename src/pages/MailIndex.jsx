@@ -26,6 +26,7 @@ export function MailIndex() {
 
   const [filterBy, setFilterBy] = useState({ txt: '' });
   const [isMenuVisible, setIsMenuVisible] = useState(false);
+  const [onHover, setOnHover] = useState(false);
 
   useEffect(() => {
     loadMails();
@@ -153,6 +154,34 @@ export function MailIndex() {
     }
   }
 
+  async function handleOpenState(mailId) {
+    try {
+      const mail = await mailService.getById(mailId);
+      const updatedMail = { ...mail, isRead: true };
+      onUpdateMail(updatedMail);
+    } catch (error) {
+      console.error('Failed to open email:', error);
+    }
+  }
+
+  async function onSetIsUnread(mailId) {
+    try {
+      const mail = await mailService.getById(mailId);
+      const updatedMail = { ...mail, isRead: !mail.isRead };
+      onUpdateMail(updatedMail);
+    } catch (error) {
+      console.error('Failed to change read status:', error);
+    }
+  }
+
+  const handleMouseEnter = mailId => {
+    setOnHover(mailId);
+  };
+
+  const handleMouseLeave = mailId => {
+    setOnHover(null);
+  };
+
   if (!mails) return <div className="loading">Loading...</div>;
 
   return (
@@ -180,13 +209,16 @@ export function MailIndex() {
                 mails={mails.filter(email =>
                   filterBy.status === 'starred' ? email.isStarred : true
                 )}
-                loadMails={loadMails}
                 onToggleSortByDate={onToggleSortByDate}
                 isAscending={isAscending}
                 params={params}
                 onRemoveMail={onRemoveMail}
-                onUpdateMail={onUpdateMail}
+                handleOpenState={handleOpenState}
+                onSetIsUnread={onSetIsUnread}
                 toggleStar={toggleStar}
+                onHover={onHover}
+                handleMouseEnter={handleMouseEnter}
+                handleMouseLeave={handleMouseLeave}
               />
             )}
             {getEmptyMsg()}

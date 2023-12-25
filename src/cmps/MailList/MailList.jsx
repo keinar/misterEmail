@@ -1,16 +1,18 @@
-import { mailService } from '../../services/mailService';
 import { MailSort } from '../MailFilter/MailSort';
 import { MailPreview } from '../MailPreview/MailPreview';
 
 export function MailList({
   mails,
   onRemoveMail,
-  loadMails,
   onToggleSortByDate,
   isAscending,
   params,
-  onUpdateMail,
   toggleStar,
+  onHover,
+  handleMouseEnter,
+  handleMouseLeave,
+  handleOpenState,
+  onSetIsUnread,
 }) {
   return (
     <>
@@ -29,10 +31,13 @@ export function MailList({
               mail={mail}
               className="email-raw"
               onRemoveMail={onRemoveMail}
-              loadMails={loadMails}
               currentFolder={params.folder}
-              onUpdateMail={onUpdateMail}
+              handleOpenState={handleOpenState}
+              onSetIsUnread={onSetIsUnread}
               toggleStar={toggleStar}
+              onHover={onHover === mail.id}
+              handleMouseEnter={() => handleMouseEnter(mail.id)}
+              handleMouseLeave={handleMouseLeave}
             />
           ))}
         </tbody>

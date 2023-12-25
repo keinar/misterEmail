@@ -1,7 +1,5 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, MailOpen, Star, Trash2 } from 'lucide-react';
-import { mailService } from '../../services/mailService';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
@@ -10,41 +8,13 @@ export function MailPreview({
   mail,
   onRemoveMail,
   currentFolder,
-  onUpdateMail,
+  handleOpenState,
+  onSetIsUnread,
   toggleStar,
+  onHover,
+  handleMouseEnter,
+  handleMouseLeave,
 }) {
-  const [onHover, setOnHover] = useState(false);
-
-  useEffect(() => {
-    !mail.isRead;
-  }, []);
-
-  const handleMouseEnter = () => {
-    setOnHover(true);
-  };
-
-  const handleMouseLeave = () => {
-    setOnHover(false);
-  };
-
-  async function handleOpenState() {
-    try {
-      const updatedMail = { ...mail, isRead: true };
-      onUpdateMail(updatedMail);
-    } catch (error) {
-      console.error('Failed to open email:', error);
-    }
-  }
-
-  async function onSetIsUnread() {
-    try {
-      const updatedMail = { ...mail, isRead: !mail.isRead };
-      onUpdateMail(updatedMail);
-    } catch (error) {
-      console.error('Failed to change read status:', error);
-    }
-  }
-
   const fontWeight = !mail.isRead ? 700 : 500;
   const backgroundColor = mail.isRead ? '#F2F6FC' : undefined;
   const star = !mail.isStarred ? 'none' : 'yellow';
@@ -64,7 +34,7 @@ export function MailPreview({
           to={`/${currentFolder}/${mail.id}`}
           className={mail.id}
           style={{ fontWeight: fontWeight }}
-          onClick={handleOpenState}
+          onClick={() => handleOpenState(mail.id)}
         >
           {mail.subject}
         </Link>
@@ -72,7 +42,7 @@ export function MailPreview({
         <Link
           to={`/inbox/${mail.id}`}
           className={mail.id}
-          onClick={handleOpenState}
+          onClick={() => handleOpenState(mail.id)}
         >
           {mail.body}
         </Link>
@@ -91,9 +61,9 @@ export function MailPreview({
           <Trash2 size={20} onClick={() => onRemoveMail(mail.id)} />
 
           {!mail.isRead ? (
-            <Mail size={20} onClick={() => onSetIsUnread()} />
+            <Mail size={20} onClick={() => onSetIsUnread(mail.id)} />
           ) : (
-            <MailOpen size={20} onClick={() => onSetIsUnread()} />
+            <MailOpen size={20} onClick={() => onSetIsUnread(mail.id)} />
           )}
         </td>
       )}
