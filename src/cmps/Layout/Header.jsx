@@ -4,7 +4,7 @@ import userLogo from '../../assets/imgs/userLogo.jpg';
 import { mailService } from '../../services/mailService';
 import { useEffect, useState } from 'react';
 import { AlignJustify } from 'lucide-react';
-import { MailFilter } from '../MailFilter/MailFilter';
+import { MailSearchFilter } from '../MailFilter/MailSearchFilter';
 
 export function Header({
   filterBy,
@@ -43,12 +43,12 @@ export function Header({
 
         <div className="app-logo">
           <NavLink to="/inbox/">
-            <img src={logo} alt="Mister Email" className="logoME" />
+            <img src={logo} alt="Mister Mail" className="logoME" />
           </NavLink>
         </div>
 
         <div className="search-filter">
-          <MailFilter filterBy={filterBy} onSetFilter={onSetFilter} />
+          <MailSearchFilter filterBy={filterBy} onSetFilter={onSetFilter} />
         </div>
 
         <div className="user-settings">

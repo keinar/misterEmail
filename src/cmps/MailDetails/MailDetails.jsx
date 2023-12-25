@@ -5,15 +5,15 @@ import { ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
 import dayjs from 'dayjs';
 
 export function MailDetails() {
-  const [email, setEmail] = useState(null);
+  const [email, setMail] = useState(null);
   const params = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    loadEmail();
+    loadMail();
   }, [params.emailId]);
 
-  async function onRemoveEmail() {
+  async function onRemoveMail() {
     try {
       let userConfirmed = '';
       if (params.folder === 'trash') {
@@ -37,12 +37,12 @@ export function MailDetails() {
     }
   }
 
-  async function loadEmail() {
+  async function loadMail() {
     try {
       const email = await mailService.getById(params.emailId);
-      setEmail(email);
+      setMail(email);
     } catch (err) {
-      console.error('Error on load emails: ', err);
+      console.error('Error on load mails: ', err);
     }
   }
 
@@ -50,30 +50,21 @@ export function MailDetails() {
     navigate(`/${params.folder}/`);
   }
 
-  async function onNextEmail() {
-    const emails = await mailService.query();
+  async function onNextMail() {
+    const mails = await mailService.query();
     const emailIdToFind = email.id;
-    const emailIndex = emails.findIndex(email => email.id === emailIdToFind);
+    const emailIndex = mails.findIndex(email => email.id === emailIdToFind);
 
-    let nextEmailIndex;
+    let nextMailIndex;
 
-    if (emailIndex >= 0 && emailIndex < emails.length - 1) {
-      nextEmailIndex = emailIndex + 1;
+    if (emailIndex >= 0 && emailIndex < mails.length - 1) {
+      nextMailIndex = emailIndex + 1;
     } else {
-      nextEmailIndex = 0;
+      nextMailIndex = 0;
     }
-    const nextEmail = emails[nextEmailIndex];
-    navigate(`/${params.folder}/${nextEmail.id}`);
+    const nextMail = mails[nextMailIndex];
+    navigate(`/${params.folder}/${nextMail.id}`);
   }
-
-  // async function loadNextEmailId() {
-  //   try {
-  //     const email = await mailService.getById(params.emailId);
-  //     setEmail(email);
-  //   } catch (err) {
-  //     console.error('Error on load emails: ', err);
-  //   }
-  // }
 
   if (!email) return <div className="loading">loading...</div>;
 
@@ -94,10 +85,10 @@ export function MailDetails() {
         <button className="simple-button left" onClick={onBack}>
           <ChevronLeft size={18} /> Back
         </button>
-        <button className="simple-button right" onClick={onNextEmail}>
-          Next Email <ChevronRight size={18} />
+        <button className="simple-button right" onClick={onNextMail}>
+          Next Mail <ChevronRight size={18} />
         </button>
-        <Trash2 size={20} onClick={onRemoveEmail} />
+        <Trash2 size={20} onClick={onRemoveMail} />
       </div>
     </section>
   );

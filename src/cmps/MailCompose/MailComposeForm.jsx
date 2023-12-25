@@ -3,15 +3,15 @@ import { mailService } from '../../services/mailService';
 import { useEffect, useState } from 'react';
 
 export function MailComposeForm({ handleSubmit, newMail, setNewMail }) {
-  const [userEmail, setUserEmail] = useState('');
+  const [userMail, setUserMail] = useState('');
 
   useEffect(() => {
-    async function fetchUserEmail() {
-      const userEmailData = await mailService.getDemoUser();
-      setUserEmail(userEmailData[0].email);
+    async function fetchUserMail() {
+      const userMailData = await mailService.getDemoUser();
+      setUserMail(userMailData[0].email);
     }
 
-    fetchUserEmail();
+    fetchUserMail();
   }, []);
 
   const submit = e => {
@@ -29,7 +29,7 @@ export function MailComposeForm({ handleSubmit, newMail, setNewMail }) {
     <form onSubmit={submit}>
       <fieldset className="from">
         <label htmlFor="from">From:</label>
-        <input type="email" id="from" name="from" value={userEmail} readOnly />
+        <input type="email" id="from" name="from" value={userMail} readOnly />
       </fieldset>
 
       <fieldset className="to">

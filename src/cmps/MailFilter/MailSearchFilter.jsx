@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-export function MailFilter({ filterBy, onSetFilter }) {
+export function MailSearchFilter({ filterBy, onSetFilter }) {
   const [filterByToEdit, setFilterByToEdit] = useState(filterBy);
 
   function handleChange(ev) {
     const { name: field, value } = ev.target;
-    setFilterByToEdit((prevFilter) => ({ ...prevFilter, [field]: value }));
+    setFilterByToEdit(prevFilter => ({ ...prevFilter, [field]: value }));
   }
 
   useEffect(() => {

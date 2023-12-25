@@ -2,35 +2,37 @@ import { mailService } from '../../services/mailService';
 import { MailSort } from '../MailFilter/MailSort';
 import { MailPreview } from '../MailPreview/MailPreview';
 
-export function EmailList({
-  emails,
-  onRemoveEmail,
-  loadEmails,
+export function MailList({
+  mails,
+  onRemoveMail,
+  loadMails,
   onToggleSortByDate,
   isAscending,
   params,
   onUpdateMail,
+  toggleStar,
 }) {
   return (
     <>
       <table className="email-list">
-        {emails.length > 1 && (
+        {mails.length > 1 && (
           <MailSort
-            emails={emails}
+            mails={mails}
             onToggleSortByDate={onToggleSortByDate}
             isAscending={isAscending}
           />
         )}
         <tbody>
-          {emails.map(email => (
+          {mails.map(mail => (
             <MailPreview
-              key={email.id}
-              email={email}
+              key={mail.id}
+              mail={mail}
               className="email-raw"
-              onRemoveEmail={onRemoveEmail}
-              loadEmails={loadEmails}
+              onRemoveMail={onRemoveMail}
+              loadMails={loadMails}
               currentFolder={params.folder}
               onUpdateMail={onUpdateMail}
+              toggleStar={toggleStar}
             />
           ))}
         </tbody>

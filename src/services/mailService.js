@@ -6,28 +6,19 @@ export const mailService = {
   save,
   remove,
   getById,
-  createEmail,
-  getDefaultFilter,
+  createMail,
   getDefaultMail,
   getDemoUser,
-  getStarredEmails,
+  getStarredMails,
   saveToStarred,
   removeFromStarred,
 };
 
-const EMAIL_KEY = 'emails';
+const EMAIL_KEY = 'mails';
 const USER_KEY = 'loggedInUser';
 
-_createEmails();
+_createMails();
 _createDemoUser();
-
-function getDefaultFilter() {
-  return {
-    status: '',
-    txt: '',
-    isRead: null,
-  };
-}
 
 function getDefaultMail(
   to = '',
@@ -46,64 +37,55 @@ function getDefaultMail(
     isStarred,
     sentAt,
     removedAt,
-    from: getDemoUser().email,
+    from: getDemoUser().mail,
   };
 }
 
-async function query(filterBy, params, isAscending) {
-  const emails = await storageService.query(EMAIL_KEY);
-  let filteredEmails = emails;
-  switch (params.folder) {
+async function query(filterBy, folder, isAscending, setInboxCount) {
+  const mails = await storageService.query(EMAIL_KEY);
+
+  let filteredMails = mails;
+  switch (folder) {
     case 'inbox':
-      filteredEmails = emails.filter(email => !email.removedAt);
+      //filter the removed mails and get the others
+      filteredMails = mails.filter(mail => !mail.removedAt);
       break;
     case 'starred':
-      filteredEmails = emails.filter(email => email.isStarred);
+      //get only the starred mails
+      filteredMails = mails.filter(mail => mail.isStarred);
       break;
     case 'sent':
-      filteredEmails = emails.filter(email => email.sentAt);
+      //get only the sent mails - with sent time
+      filteredMails = mails.filter(mail => mail.sentAt && !mail.removedAt);
       break;
     case 'drafts':
       console.log('drafts');
       break;
     case 'trash':
-      filteredEmails = emails.filter(email => email.removedAt);
+      // get only the mails with removed time
+      filteredMails = mails.filter(mail => mail.removedAt);
       break;
     default:
-      filteredEmails = emails;
+      filteredMails = mails;
   }
-
-  filteredEmails.sort((a, b) =>
+  // sort mails by asc / desc
+  filteredMails.sort((a, b) =>
     isAscending ? a.sentAt - b.sentAt : b.sentAt - a.sentAt
   );
 
-  if (!filterBy) return emails;
+  if (!filterBy) return filteredMails;
 
+  //search filter by subject and body
   if (filterBy.txt) {
-    console.log(filterBy);
-    filteredEmails = filteredEmails.filter(email => {
-      const subject = email.subject;
-      const body = email.body;
+    filteredMails = filteredMails.filter(mail => {
+      const subject = mail.subject;
+      const body = mail.body;
       const jointString = [subject, body].join(' ');
       return jointString.toLowerCase().includes(filterBy.txt.toLowerCase());
     });
   }
-
-  if (filterBy.isRead === true) {
-    filteredEmails = filteredEmails.filter(
-      email => email.isRead === filterBy.isRead
-    );
-  }
-
-  if (filterBy.status === 'starred') {
-    filteredEmails = filteredEmails.filter(email => email.isStarred);
-  }
-
-  if (filterBy.removedAt) {
-    filteredEmails = filteredEmails.filter(email => !email.removedAt);
-  }
-
-  return filteredEmails;
+  setInboxCount(filteredMails.length);
+  return filteredMails;
 }
 
 function getById(id) {
@@ -114,45 +96,45 @@ function remove(id) {
   return storageService.remove(EMAIL_KEY, id);
 }
 
-function save(emailToSave) {
-  if (emailToSave.id) {
-    return storageService.put(EMAIL_KEY, emailToSave);
+function save(mailToSave) {
+  if (mailToSave.id) {
+    return storageService.put(EMAIL_KEY, mailToSave);
   } else {
-    emailToSave.id = utilService.makeId(5);
-    emailToSave.isOn = false; // Make sure all properties are set before saving
-    return storageService.post(EMAIL_KEY, emailToSave);
+    mailToSave.id = utilService.makeId(5);
+    mailToSave.isOn = false; // Make sure all properties are set before saving
+    return storageService.post(EMAIL_KEY, mailToSave);
   }
 }
 
-async function saveToStarred(emailToUpdate) {
+async function saveToStarred(mailToUpdate) {
   try {
-    const email = await storageService.get(EMAIL_KEY, emailToUpdate.id);
-    email.isStarred = true;
-    return await storageService.put(EMAIL_KEY, email);
+    const mail = await storageService.get(EMAIL_KEY, mailToUpdate.id);
+    mail.isStarred = true;
+    return await storageService.put(EMAIL_KEY, mail);
   } catch (error) {
     console.error('Failed to save to starred:', error);
     throw error;
   }
 }
 
-async function removeFromStarred(emailId) {
+async function removeFromStarred(mailId) {
   try {
-    const email = await storageService.get(EMAIL_KEY, emailId);
-    email.isStarred = false;
-    return await storageService.put(EMAIL_KEY, email);
+    const mail = await storageService.get(EMAIL_KEY, mailId);
+    mail.isStarred = false;
+    return await storageService.put(EMAIL_KEY, mail);
   } catch (error) {
     console.error('Failed to remove from starred:', error);
     throw error;
   }
 }
 
-async function getStarredEmails() {
-  const emails = await storageService.query(EMAIL_KEY);
-  return emails.filter(email => email.isStarred);
+async function getStarredMails() {
+  const mails = await storageService.query(EMAIL_KEY);
+  return mails.filter(mail => mail.isStarred);
 }
 
-async function createEmail(email) {
-  return storageService.post(EMAIL_KEY, email);
+async function createMail(mail) {
+  return storageService.post(EMAIL_KEY, mail);
 }
 
 function _createDemoUser() {
@@ -160,7 +142,7 @@ function _createDemoUser() {
   if (!user || !user.length) {
     user = [
       {
-        email: 'info@digital-solution.co.il',
+        mail: 'info@digital-solution.co.il',
         fullname: 'Keinar Elkayam',
       },
     ];
@@ -173,10 +155,10 @@ async function getDemoUser() {
   return user;
 }
 
-function _createEmails() {
-  let emails = utilService.loadFromStorage(EMAIL_KEY);
-  if (!emails || !emails.length) {
-    emails = [
+function _createMails() {
+  let mails = utilService.loadFromStorage(EMAIL_KEY);
+  if (!mails || !mails.length) {
+    mails = [
       {
         id: utilService.makeId(5),
         subject: 'Miss you!',
@@ -204,7 +186,7 @@ function _createEmails() {
       {
         id: utilService.makeId(5),
         subject: 'Please you help me',
-        body: `We've saved a copy of Mister Email`,
+        body: `We've saved a copy of Mister Mail`,
         isRead: false,
         isStarred: false,
         sentAt: Date.now(),
@@ -213,6 +195,6 @@ function _createEmails() {
         to: 'user@appsus.com',
       },
     ];
-    utilService.saveToStorage(EMAIL_KEY, emails);
+    utilService.saveToStorage(EMAIL_KEY, mails);
   }
 }
