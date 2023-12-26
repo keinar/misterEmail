@@ -13,13 +13,12 @@ export function MailCompose({ currentNav, handleSubmit, newMail, setNewMail }) {
   }
 
   useEffect(() => {
-    async function fetchUserMail() {
-      const userMailData = await mailService.getDemoUser();
-      setUserMail(userMailData[0].email);
-    }
-
     fetchUserMail();
   }, []);
+  async function fetchUserMail() {
+    const userMailData = await mailService.getDemoUser();
+    setUserMail(userMailData[0].mail);
+  }
 
   return (
     <section className="compose-modal">
@@ -30,8 +29,8 @@ export function MailCompose({ currentNav, handleSubmit, newMail, setNewMail }) {
       <MailComposeForm
         newMail={newMail}
         setNewMail={setNewMail}
-        userMail={userMail}
         handleSubmit={handleSubmit}
+        userMail={userMail}
       />
     </section>
   );

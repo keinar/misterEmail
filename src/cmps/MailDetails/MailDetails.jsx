@@ -5,31 +5,30 @@ import { ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
 import dayjs from 'dayjs';
 
 export function MailDetails() {
-  const [email, setMail] = useState(null);
+  const [mail, setMail] = useState(null);
   const params = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
     loadMail();
-  }, [params.emailId]);
-
+  }, []);
   async function onRemoveMail() {
     try {
       let userConfirmed = '';
       if (params.folder === 'trash') {
-        userConfirmed = confirm('Are you sure to remove this email forever?');
+        userConfirmed = confirm('Are you sure to remove this mail forever?');
         if (!userConfirmed) {
           return;
         }
-        await mailService.remove(email.id);
+        await mailService.remove(mail.id);
       } else {
-        userConfirmed = confirm('Are you sure to remove this email?');
+        userConfirmed = confirm('Are you sure to remove this mail?');
         if (!userConfirmed) {
           return;
         }
-        const emailToRemove = await mailService.getById(email.id);
-        emailToRemove.removedAt = Date.now();
-        await mailService.save(emailToRemove);
+        const mailToRemove = await mailService.getById(mail.id);
+        mailToRemove.removedAt = Date.now();
+        await mailService.save(mailToRemove);
       }
       navigate(`/${params.folder}/`, { state: { refresh: true } });
     } catch (err) {
@@ -39,8 +38,8 @@ export function MailDetails() {
 
   async function loadMail() {
     try {
-      const email = await mailService.getById(params.emailId);
-      setMail(email);
+      const mail = await mailService.getById(params.mailId);
+      setMail(mail);
     } catch (err) {
       console.error('Error on load mails: ', err);
     }
@@ -52,13 +51,13 @@ export function MailDetails() {
 
   async function onNextMail() {
     const mails = await mailService.query();
-    const emailIdToFind = email.id;
-    const emailIndex = mails.findIndex(email => email.id === emailIdToFind);
+    const mailIdToFind = mail.id;
+    const mailIndex = mails.findIndex(mail => mail.id === mailIdToFind);
 
     let nextMailIndex;
 
-    if (emailIndex >= 0 && emailIndex < mails.length - 1) {
-      nextMailIndex = emailIndex + 1;
+    if (mailIndex >= 0 && mailIndex < mails.length - 1) {
+      nextMailIndex = mailIndex + 1;
     } else {
       nextMailIndex = 0;
     }
@@ -66,20 +65,20 @@ export function MailDetails() {
     navigate(`/${params.folder}/${nextMail.id}`);
   }
 
-  if (!email) return <div className="loading">loading...</div>;
+  if (!mail) return <div className="loading">loading...</div>;
 
   return (
     <section className="mail-details">
-      <h1>{email.subject}</h1>
+      <h1>{mail.subject}</h1>
       <div className="flex space-between">
-        <p className="mail-from">Author: {email.from}</p>{' '}
+        <p className="mail-from">Author: {mail.from}</p>{' '}
         <p className="mail-details-sent-at">
-          {dayjs(email.sentAt).format('MMMM DD, YYYY [@] H:mm A')}
+          {dayjs(mail.sentAt).format('MMMM DD, YYYY [@] H:mm A')}
         </p>
       </div>
-      <p className="mail-to">To: {email.to}</p>
+      <p className="mail-to">To: {mail.to}</p>
 
-      <p className="mail-body">{email.body}</p>
+      <p className="mail-body">{mail.body}</p>
 
       <div className="flex align-center">
         <button className="simple-button left" onClick={onBack}>

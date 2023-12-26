@@ -3,7 +3,7 @@
   padding: 10px;
 }
 
-table.email-list {
+table.mail-list {
   width: 100%;
 }
 
@@ -22,7 +22,7 @@ tr.subject {
   padding: 5px 0px;
 }
 
-.email-sent-time {
+.mail-sent-time {
   font-size: 14px;
   color: rgb(87, 87, 87);
 }
@@ -37,7 +37,7 @@ tr.subject {
     flex-wrap: wrap;
   }
 
-  table.email-list {
+  table.mail-list {
     width: 100%;
   }
 
@@ -45,7 +45,7 @@ tr.subject {
     width: 100%;
   }
 
-  .email-sent-time {
+  .mail-sent-time {
     font-size: 12px;
   }
 

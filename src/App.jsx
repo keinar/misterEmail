@@ -11,7 +11,7 @@ export function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/aboutUs" element={<AboutUs />} />
         <Route path="/:folder" element={<MailIndex />}>
-          <Route path="/:folder/:emailId" element={<MailDetails />} />
+          <Route path="/:folder/:mailId" element={<MailDetails />} />
         </Route>
       </Routes>
     </HashRouter>

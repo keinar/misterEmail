@@ -6,7 +6,7 @@ export function HomePage() {
     <div className="flex space-between">
       <div className="container">
         <h1 className="text-center">Welcome to Gmail</h1>
-        <img src={logo} alt="mister email"></img>
+        <img src={logo} alt="mister mail"></img>
       </div>
       <RightNav />
     </div>

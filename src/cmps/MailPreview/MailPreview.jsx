@@ -49,7 +49,7 @@ export function MailPreview({
       </td>
       {!onHover && (
         <td>
-          <span className="email-sent-time">
+          <span className="mail-sent-time">
             {dayjs(mail.sentAt).isBefore(dayjs().subtract(1), 'day')
               ? dayjs(mail.sentAt).format('MMM DD')
               : dayjs(mail.sentAt).fromNow(true)}

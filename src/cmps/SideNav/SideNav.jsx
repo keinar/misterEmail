@@ -106,7 +106,7 @@ export function SideNav({
     <nav className="side-nav" style={navStyles}>
       {isMenuVisible && <X onClick={() => setIsMenuVisible(false)} />}
 
-      <button className="email-compose" onClick={handleOpenCompose}>
+      <button className="mail-compose" onClick={handleOpenCompose}>
         <MailPlus size={20} /> Compose
       </button>
 

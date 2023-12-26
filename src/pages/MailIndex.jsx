@@ -14,21 +14,26 @@ import { Footer } from '../cmps/Layout/Footer.jsx';
 import { Header } from '../cmps/Layout/Header.jsx';
 
 export function MailIndex() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const params = useParams();
   const [mails, setMails] = useState(null);
   const [isAscending, setIsAscending] = useState(true);
-  const [inboxCount, setInboxCount] = useState(0);
-
-  const [newMail, setNewMail] = useState(mailService.getDefaultMail());
+  const [newMail, setNewMail] = useState(null);
 
   const navigate = useNavigate();
 
-  const [filterBy, setFilterBy] = useState({ txt: '' });
+  const [filterBy, setFilterBy] = useState(
+    mailService.getFilterFromParams(searchParams)
+  );
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [onHover, setOnHover] = useState(false);
 
   useEffect(() => {
+    async function initNewMail() {
+      const defaultMail = await mailService.getDefaultMail();
+      setNewMail(defaultMail);
+    }
+    initNewMail();
     loadMails();
   }, [filterBy, params, isAscending]);
 
@@ -37,8 +42,7 @@ export function MailIndex() {
       const mails = await mailService.query(
         filterBy,
         params.folder,
-        isAscending,
-        setInboxCount
+        isAscending
       );
       setMails(mails);
     } catch (err) {
@@ -52,11 +56,11 @@ export function MailIndex() {
       const mailToRemove = await mailService.getById(mailId);
 
       if (params.folder === 'trash') {
-        userConfirmed = confirm('Are you sure to remove this email forever?');
+        userConfirmed = confirm('Are you sure to remove this mail forever?');
         if (!userConfirmed) return;
         await mailService.remove(mailId);
       } else {
-        userConfirmed = confirm('Are you sure to remove this email?');
+        userConfirmed = confirm('Are you sure to remove this mail?');
         if (!userConfirmed) return;
         mailToRemove.removedAt = Date.now();
         await mailService.save(mailToRemove);
@@ -74,8 +78,8 @@ export function MailIndex() {
     try {
       const updatedMail = await mailService.save(mailToUpdate);
       setMails(prevMails =>
-        prevMails.map(email => {
-          return email.id === updatedMail.id ? updatedMail : email;
+        prevMails.map(mail => {
+          return mail.id === updatedMail.id ? updatedMail : mail;
         })
       );
     } catch (error) {
@@ -85,18 +89,18 @@ export function MailIndex() {
 
   const onSetFilter = newFilter => {
     setFilterBy(newFilter);
+    setSearchParams(newFilter);
   };
 
   function onToggleSortByDate() {
     setIsAscending(!isAscending);
-    loadMails();
   }
 
   function getEmptyMsg() {
     let emptyMailmessage = '';
     if (!mails || !mails.length) {
       if (params.folder === 'inbox') {
-        emptyMailmessage = 'The email inbox is empty :(';
+        emptyMailmessage = 'The mail inbox is empty :(';
       } else if (params.folder === 'starred') {
         emptyMailmessage = 'You have not starred any message yet :(';
       } else if (params.folder === 'trash') {
@@ -121,8 +125,8 @@ export function MailIndex() {
           return;
         }
       }
-      const emailData = await mailService.createMail(newMail);
-      setMails(prevMails => [...prevMails, emailData]);
+      const mailData = await mailService.createMail(newMail);
+      setMails(prevMails => [...prevMails, mailData]);
       alert('Your message sent successfully');
       navigate('/inbox/');
     } catch (err) {
@@ -160,7 +164,7 @@ export function MailIndex() {
       const updatedMail = { ...mail, isRead: true };
       onUpdateMail(updatedMail);
     } catch (error) {
-      console.error('Failed to open email:', error);
+      console.error('Failed to open mail:', error);
     }
   }
 
@@ -193,7 +197,7 @@ export function MailIndex() {
         isMenuVisible={isMenuVisible}
       />
       <main className="container">
-        <section className="email-index">
+        <section className="mail-index">
           <SideNav
             currentNav={params.folder}
             mails={mails}
@@ -202,12 +206,12 @@ export function MailIndex() {
             inboxCount={mails.length}
           />
           <section className="inbox-container">
-            {params.emailId ? (
+            {params.mailId ? (
               <Outlet />
             ) : (
               <MailList
-                mails={mails.filter(email =>
-                  filterBy.status === 'starred' ? email.isStarred : true
+                mails={mails.filter(mail =>
+                  filterBy.status === 'starred' ? mail.isStarred : true
                 )}
                 onToggleSortByDate={onToggleSortByDate}
                 isAscending={isAscending}
@@ -231,7 +235,6 @@ export function MailIndex() {
               handleSubmit={handleSubmit}
               newMail={newMail}
               setNewMail={setNewMail}
-              loadMails={loadMails}
             />
           )}
         </section>

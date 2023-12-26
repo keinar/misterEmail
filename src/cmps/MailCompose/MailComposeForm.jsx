@@ -2,18 +2,12 @@ import { SendHorizonal, X } from 'lucide-react';
 import { mailService } from '../../services/mailService';
 import { useEffect, useState } from 'react';
 
-export function MailComposeForm({ handleSubmit, newMail, setNewMail }) {
-  const [userMail, setUserMail] = useState('');
-
-  useEffect(() => {
-    async function fetchUserMail() {
-      const userMailData = await mailService.getDemoUser();
-      setUserMail(userMailData[0].email);
-    }
-
-    fetchUserMail();
-  }, []);
-
+export function MailComposeForm({
+  handleSubmit,
+  newMail,
+  setNewMail,
+  userMail,
+}) {
   const submit = e => {
     e.preventDefault();
     handleSubmit(e);

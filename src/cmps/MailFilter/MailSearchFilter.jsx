@@ -15,7 +15,7 @@ export function MailSearchFilter({ filterBy, onSetFilter }) {
   const { txt } = filterByToEdit;
 
   return (
-    <form className="email-filter">
+    <form className="mail-filter">
       <label htmlFor="search" hidden>
         Search
       </label>

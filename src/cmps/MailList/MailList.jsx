@@ -16,7 +16,7 @@ export function MailList({
 }) {
   return (
     <>
-      <table className="email-list">
+      <table className="mail-list">
         {mails.length > 1 && (
           <MailSort
             mails={mails}
@@ -29,7 +29,7 @@ export function MailList({
             <MailPreview
               key={mail.id}
               mail={mail}
-              className="email-raw"
+              className="mail-raw"
               onRemoveMail={onRemoveMail}
               currentFolder={params.folder}
               handleOpenState={handleOpenState}

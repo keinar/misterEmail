@@ -12,6 +12,8 @@ export const mailService = {
   getStarredMails,
   saveToStarred,
   removeFromStarred,
+  getDefaultFilter,
+  getFilterFromParams,
 };
 
 const EMAIL_KEY = 'mails';
@@ -20,7 +22,7 @@ const USER_KEY = 'loggedInUser';
 _createMails();
 _createDemoUser();
 
-function getDefaultMail(
+async function getDefaultMail(
   to = '',
   subject = '',
   message = '',
@@ -29,6 +31,7 @@ function getDefaultMail(
   sentAt = Date.now(),
   removedAt = null
 ) {
+  const demoUser = await getDemoUser();
   return {
     to,
     subject,
@@ -37,8 +40,21 @@ function getDefaultMail(
     isStarred,
     sentAt,
     removedAt,
-    from: getDemoUser().mail,
+    from: demoUser[0].mail,
   };
+}
+
+function getDefaultFilter() {
+  return { txt: '' };
+}
+
+function getFilterFromParams(searchParams) {
+  const defaultFilter = getDefaultFilter();
+  const filterBy = {};
+  for (const field in defaultFilter) {
+    filterBy[field] = searchParams.get(field) || '';
+  }
+  return filterBy;
 }
 
 async function query(filterBy, folder, isAscending, setInboxCount) {
@@ -84,7 +100,6 @@ async function query(filterBy, folder, isAscending, setInboxCount) {
       return jointString.toLowerCase().includes(filterBy.txt.toLowerCase());
     });
   }
-  setInboxCount(filteredMails.length);
   return filteredMails;
 }
 

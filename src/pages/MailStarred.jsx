@@ -1,6 +1,6 @@
 export function MailStarred() {
   return (
-    <section className="email-starred">
+    <section className="mail-starred">
       <p>starred</p>
     </section>
   );
