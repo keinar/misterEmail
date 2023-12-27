@@ -14,6 +14,8 @@ export function RightNav() {
         <NavLink to="/aboutUs">
           <Info />
         </NavLink>
+
+        {/* <ArrowRightCircle /> */}
       </nav>
     </div>
   );

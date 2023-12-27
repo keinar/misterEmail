@@ -45,7 +45,6 @@ export function MailComposeForm({
           name="subject"
           value={newMail.subject}
           onChange={handleChange}
-          required
         />
       </fieldset>
       <fieldset className="message">

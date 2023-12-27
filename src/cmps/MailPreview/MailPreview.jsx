@@ -36,8 +36,10 @@ export function MailPreview({
           fill={star}
         />
       </td>
-      <td style={{ fontWeight: fontWeight }}>{mail.subject}</td>
-      <td className="body"> {mail.body}</td>
+      <td>
+        <span style={{ fontWeight: fontWeight }}>{mail.subject}</span>
+        <span className="body">{mail.message}</span>
+      </td>
 
       {!onHover && (
         <td>

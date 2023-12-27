@@ -5,10 +5,9 @@ table.mail-list {
 tr.subject {
   display: grid;
   border-bottom: #d6d6d6 2px solid;
-  grid-template-columns: auto auto 1fr auto;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding: 5px 10px;
   gap: 5px;
   border-radius: 10px;
   cursor: pointer;
@@ -17,6 +16,10 @@ tr.subject {
 .subject td {
   padding: 5px 0px;
   font-size: 14px;
+}
+
+.subject td span {
+  padding-inline: 5px;
 }
 
 .subject td.body {

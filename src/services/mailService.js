@@ -95,8 +95,8 @@ async function query(filterBy, folder, isAscending, setInboxCount) {
   if (filterBy.txt) {
     filteredMails = filteredMails.filter(mail => {
       const subject = mail.subject;
-      const body = mail.body;
-      const jointString = [subject, body].join(' ');
+      const message = mail.message;
+      const jointString = [subject, message].join(' ');
       return jointString.toLowerCase().includes(filterBy.txt.toLowerCase());
     });
   }
@@ -177,7 +177,7 @@ function _createMails() {
       {
         id: utilService.makeId(5),
         subject: 'Miss you!',
-        body: 'Would love to catch up sometimes',
+        message: 'Would love to catch up sometimes',
         isRead: false,
         isStarred: false,
         sentAt: Date.now(),
@@ -189,7 +189,7 @@ function _createMails() {
       {
         id: utilService.makeId(5),
         subject: 'How are you?',
-        body: 'Your Wednesday morning update',
+        message: 'Your Wednesday morning update',
         isRead: false,
         isStarred: false,
         sentAt: Date.now(),
@@ -201,7 +201,7 @@ function _createMails() {
       {
         id: utilService.makeId(5),
         subject: 'Please you help me',
-        body: `We've saved a copy of Mister Mail`,
+        message: `We've saved a copy of Mister Mail`,
         isRead: false,
         isStarred: false,
         sentAt: Date.now(),

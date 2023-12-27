@@ -28,7 +28,6 @@ export function MailIndex() {
   );
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [onHover, setOnHover] = useState(false);
-
   useEffect(() => {
     async function initNewMail() {
       const defaultMail = await mailService.getDefaultMail();
@@ -120,16 +119,20 @@ export function MailIndex() {
   async function handleSubmit(e) {
     try {
       e.preventDefault();
-      if (!message) {
+      if (!message.value && !subject.value) {
         const userConfirmed = confirm(
-          'Are you sure that you want to send an empty messsage?'
+          'Send this message without text in the subject or body of the message?'
         );
         if (!userConfirmed) {
           return;
         }
       }
       const mailData = await mailService.createMail(newMail);
+
       setMails(prevMails => [...prevMails, mailData]);
+      // if (!mailData.subject) {
+      //   mailData.subject = 'bla';
+      // }
       showSuccessMsg('Your message sent successfully');
       navigate('/inbox/');
     } catch (err) {
@@ -194,6 +197,10 @@ export function MailIndex() {
     setOnHover(null);
   };
 
+  function onBack() {
+    navigate(`/${params.folder}/`);
+  }
+
   if (!mails) return <div className="loading">Loading...</div>;
 
   return (
@@ -215,7 +222,14 @@ export function MailIndex() {
           />
           <section className="inbox-container">
             {params.mailId ? (
-              <Outlet />
+              <Outlet
+                context={{
+                  onRemoveMail,
+                  loadMails,
+                  onBack,
+                  mails,
+                }}
+              />
             ) : (
               <MailList
                 mails={mails.filter(mail =>
