@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { Mail, MailOpen, Star, Trash2 } from 'lucide-react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -51,32 +50,35 @@ export function MailPreview({
         </td>
       )}
       {onHover && (
-        <td>
-          <Trash2
-            size={20}
-            onClick={e => {
-              e.stopPropagation();
-              onRemoveMail(mail.id);
-            }}
-          />
-
-          {!mail.isRead ? (
-            <Mail
+        <td className="flex">
+          <span className="hover-wrapper">
+            <Trash2
               size={20}
               onClick={e => {
                 e.stopPropagation();
-                onSetIsUnread(mail.id);
+                onRemoveMail(mail.id);
               }}
             />
-          ) : (
-            <MailOpen
-              size={20}
-              onClick={e => {
-                e.stopPropagation();
-                onSetIsUnread(mail.id);
-              }}
-            />
-          )}
+          </span>
+          <span className="hover-wrapper">
+            {!mail.isRead ? (
+              <Mail
+                size={20}
+                onClick={e => {
+                  e.stopPropagation();
+                  onSetIsUnread(mail.id);
+                }}
+              />
+            ) : (
+              <MailOpen
+                size={20}
+                onClick={e => {
+                  e.stopPropagation();
+                  onSetIsUnread(mail.id);
+                }}
+              />
+            )}
+          </span>
         </td>
       )}
     </tr>

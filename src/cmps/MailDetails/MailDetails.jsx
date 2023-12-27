@@ -1,17 +1,52 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
-import { mailService } from '../../services/mailService';
-import { ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
+import { useOutletContext } from 'react-router-dom';
+import { ChevronLeft, Mail, MailOpen, Star, Trash2 } from 'lucide-react';
 import dayjs from 'dayjs';
 
 export function MailDetails() {
-  const { mails, onRemoveMail, onBack, onNextMail } = useOutletContext();
-  const mail = mails.find(mail => mail);
+  const { mail, onRemoveMail, onBack, onNextMail, toggleStar, onSetIsUnread } =
+    useOutletContext();
 
   if (!mail) return <div className="loading">loading...</div>;
-
+  const star = !mail.isStarred ? 'none' : 'yellow';
   return (
     <section className="mail-details">
+      <div className="mail-details-toolbar">
+        <div className="hover-wrapper">
+          <ChevronLeft size={15} onClick={onBack} />
+        </div>
+        <div className="hover-wrapper">
+          <Trash2 size={15} onClick={() => onRemoveMail(mail.id)} />
+        </div>
+        <div className="hover-wrapper">
+          <Star
+            size={15}
+            onClick={() => {
+              toggleStar(mail.id);
+            }}
+            fill={star}
+          />
+        </div>
+
+        <div className="hover-wrapper">
+          {!mail.isRead ? (
+            <Mail
+              size={15}
+              onClick={() => {
+                onSetIsUnread(mail.id);
+              }}
+            />
+          ) : (
+            <MailOpen
+              size={15}
+              onClick={() => {
+                onSetIsUnread(mail.id);
+              }}
+            />
+          )}
+        </div>
+        <p onClick={() => onNextMail(mail.id)}>Next Mail</p>
+      </div>
+
       <h1>{mail.subject}</h1>
       <div className="flex space-between">
         <p className="mail-from">Author: {mail.from}</p>{' '}
@@ -20,18 +55,8 @@ export function MailDetails() {
         </p>
       </div>
       <p className="mail-to">To: {mail.to}</p>
-
       <p className="mail-body">{mail.body}</p>
-
-      <div className="flex align-center">
-        <button className="simple-button left" onClick={onBack}>
-          <ChevronLeft size={18} /> Back
-        </button>
-        <button className="simple-button right" onClick={onNextMail}>
-          Next Mail <ChevronRight size={18} />
-        </button>
-        <Trash2 size={20} onClick={onRemoveMail} />
-      </div>
+      <div className="flex align-center"></div>
     </section>
   );
 }

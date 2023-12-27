@@ -69,6 +69,10 @@ export function MailIndex() {
         return prevMails.filter(mail => mail.id !== mailId);
       });
       showSuccessMsg('The mail has been removed successfully');
+
+      if (params.folder + '/' + mailId) {
+        onBack();
+      }
     } catch (err) {
       console.error("Can't remove mail: ", err);
       showErrorMsg("Error: Can't remove mail");
@@ -193,7 +197,7 @@ export function MailIndex() {
     setOnHover(mailId);
   };
 
-  const handleMouseLeave = mailId => {
+  const handleMouseLeave = () => {
     setOnHover(null);
   };
 
@@ -201,8 +205,24 @@ export function MailIndex() {
     navigate(`/${params.folder}/`);
   }
 
-  if (!mails) return <div className="loading">Loading...</div>;
+  async function onNextMail(mailId) {
+    const mails = await mailService.query();
+    const mailIndex = mails.findIndex(mail => mail.id === mailId);
 
+    let nextMailIndex;
+
+    if (mailIndex >= 0 && mailIndex < mails.length - 1) {
+      nextMailIndex = mailIndex + 1;
+    } else {
+      nextMailIndex = 0;
+    }
+    const nextMail = mails[nextMailIndex];
+
+    navigate(`/${params.folder}/${nextMail.id}`);
+  }
+
+  if (!mails) return <div className="loading">Loading...</div>;
+  const mail = mails.find(mail => mail.id === params.mailId);
   return (
     <section className="main-app">
       <Header
@@ -227,7 +247,10 @@ export function MailIndex() {
                   onRemoveMail,
                   loadMails,
                   onBack,
-                  mails,
+                  onNextMail,
+                  toggleStar,
+                  onSetIsUnread,
+                  mail,
                 }}
               />
             ) : (

@@ -20,6 +20,28 @@ section.mail-details {
   font-size: 15px;
 }
 
+.mail-details-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.mail-details-toolbar p {
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.hover-wrapper {
+  border-radius: 50%;
+  display: flex;
+  padding: 4px;
+  transition: background-color 0.3s;
+}
+
+.hover-wrapper:hover {
+  background-color: #ececec;
+}
+
 @media screen and (max-width: 600px) {
   .mail-details-sent-at,
   .mail-sent-at,
