@@ -26,14 +26,16 @@ export function MailPreview({
       onClick={() => handleOpenState(mail.id)}
     >
       <td>
-        <Star
-          size={20}
-          onClick={e => {
-            e.stopPropagation();
-            toggleStar(mail.id);
-          }}
-          fill={star}
-        />
+        <span className="hover-wrapper">
+          <Star
+            size={20}
+            onClick={e => {
+              e.stopPropagation();
+              toggleStar(mail.id);
+            }}
+            fill={star}
+          />
+        </span>
       </td>
       <td>
         <span style={{ fontWeight: fontWeight }}>{mail.subject}</span>
