@@ -12,6 +12,7 @@ import { MailCompose } from '../cmps/MailCompose/MailCompose.jsx';
 import { RightNav } from '../cmps/SideNav/RightNav.jsx';
 import { Footer } from '../cmps/Layout/Footer.jsx';
 import { Header } from '../cmps/Layout/Header.jsx';
+import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js';
 
 export function MailIndex() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -68,8 +69,10 @@ export function MailIndex() {
       setMails(prevMails => {
         return prevMails.filter(mail => mail.id !== mailId);
       });
+      showSuccessMsg('The mail has been removed successfully');
     } catch (err) {
-      console.error('error: ', err);
+      console.error("Can't remove mail: ", err);
+      showErrorMsg("Error: Can't remove mail");
     }
   }
 
@@ -127,10 +130,11 @@ export function MailIndex() {
       }
       const mailData = await mailService.createMail(newMail);
       setMails(prevMails => [...prevMails, mailData]);
-      alert('Your message sent successfully');
+      showSuccessMsg('Your message sent successfully');
       navigate('/inbox/');
     } catch (err) {
       console.error('Error', err);
+      showErrorMsg("Can't sending mail");
     }
   }
 
@@ -142,9 +146,11 @@ export function MailIndex() {
 
       if (prevIsStarred) {
         await mailService.removeFromStarred(mailId);
+        showSuccessMsg('Mail star has been removed');
       } else {
         const updatedMail = { ...mailToStar, isStarred: true };
         await mailService.saveToStarred(updatedMail);
+        showSuccessMsg('Mail starred');
       }
       setMails(prevMails =>
         prevMails.map(mail =>
@@ -155,6 +161,7 @@ export function MailIndex() {
       );
     } catch (error) {
       console.error('Failed to toggle star:', error);
+      showErrorMsg('Failed to toggle star mail');
     }
   }
 
@@ -163,6 +170,7 @@ export function MailIndex() {
       const mail = await mailService.getById(mailId);
       const updatedMail = { ...mail, isRead: true };
       onUpdateMail(updatedMail);
+      navigate(`/${params.folder}/${mailId}`);
     } catch (error) {
       console.error('Failed to open mail:', error);
     }

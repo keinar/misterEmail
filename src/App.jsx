@@ -3,6 +3,7 @@ import { MailDetails } from './cmps/MailDetails/MailDetails';
 import { MailIndex } from './pages/MailIndex';
 import { HomePage } from './pages/HomePage';
 import { AboutUs } from './pages/AboutUs';
+import { UserMsg } from './cmps/UserMsg/UserMsg';
 
 export function App() {
   return (
@@ -14,6 +15,7 @@ export function App() {
           <Route path="/:folder/:mailId" element={<MailDetails />} />
         </Route>
       </Routes>
+      <UserMsg />
     </HashRouter>
   );
 }

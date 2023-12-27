@@ -7,7 +7,6 @@ dayjs.extend(relativeTime);
 export function MailPreview({
   mail,
   onRemoveMail,
-  currentFolder,
   handleOpenState,
   onSetIsUnread,
   toggleStar,
@@ -25,28 +24,21 @@ export function MailPreview({
       style={{ backgroundColor: backgroundColor }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onClick={() => handleOpenState(mail.id)}
     >
       <td>
-        <Star size={20} onClick={() => toggleStar(mail.id)} fill={star} />
+        <Star
+          size={20}
+          onClick={e => {
+            e.stopPropagation();
+            toggleStar(mail.id);
+          }}
+          fill={star}
+        />
       </td>
-      <td>
-        <Link
-          to={`/${currentFolder}/${mail.id}`}
-          className={mail.id}
-          style={{ fontWeight: fontWeight }}
-          onClick={() => handleOpenState(mail.id)}
-        >
-          {mail.subject}
-        </Link>
+      <td style={{ fontWeight: fontWeight }}>{mail.subject}</td>
+      <td className="body"> {mail.body}</td>
 
-        <Link
-          to={`/inbox/${mail.id}`}
-          className={mail.id}
-          onClick={() => handleOpenState(mail.id)}
-        >
-          {mail.body}
-        </Link>
-      </td>
       {!onHover && (
         <td>
           <span className="mail-sent-time">
@@ -58,12 +50,30 @@ export function MailPreview({
       )}
       {onHover && (
         <td>
-          <Trash2 size={20} onClick={() => onRemoveMail(mail.id)} />
+          <Trash2
+            size={20}
+            onClick={e => {
+              e.stopPropagation();
+              onRemoveMail(mail.id);
+            }}
+          />
 
           {!mail.isRead ? (
-            <Mail size={20} onClick={() => onSetIsUnread(mail.id)} />
+            <Mail
+              size={20}
+              onClick={e => {
+                e.stopPropagation();
+                onSetIsUnread(mail.id);
+              }}
+            />
           ) : (
-            <MailOpen size={20} onClick={() => onSetIsUnread(mail.id)} />
+            <MailOpen
+              size={20}
+              onClick={e => {
+                e.stopPropagation();
+                onSetIsUnread(mail.id);
+              }}
+            />
           )}
         </td>
       )}
