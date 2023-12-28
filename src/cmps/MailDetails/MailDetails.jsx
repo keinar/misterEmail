@@ -1,6 +1,8 @@
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useParams } from 'react-router-dom';
 import { ChevronLeft, Mail, MailOpen, Star, Trash2 } from 'lucide-react';
 import dayjs from 'dayjs';
+import { mailService } from '../../services/mailService';
+import { useEffect, useState } from 'react';
 
 export function MailDetails() {
   const { mail, onRemoveMail, onBack, onNextMail, toggleStar, onSetIsUnread } =
@@ -28,15 +30,16 @@ export function MailDetails() {
         </div>
 
         <div className="hover-wrapper">
-          {!mail.isRead ? (
-            <Mail
+          {mail.isRead ? (
+            <MailOpen
               size={15}
               onClick={() => {
                 onSetIsUnread(mail.id);
+                onBack();
               }}
             />
           ) : (
-            <MailOpen
+            <Mail
               size={15}
               onClick={() => {
                 onSetIsUnread(mail.id);
@@ -55,7 +58,7 @@ export function MailDetails() {
         </p>
       </div>
       <p className="mail-to">To: {mail.to}</p>
-      <p className="mail-body">{mail.body}</p>
+      <p className="mail-body">{mail.message}</p>
       <div className="flex align-center"></div>
     </section>
   );

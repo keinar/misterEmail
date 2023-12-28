@@ -1,6 +1,7 @@
 import { Mail, MailOpen, Star, Trash2 } from 'lucide-react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { useState } from 'react';
 dayjs.extend(relativeTime);
 
 export function MailPreview({
@@ -9,10 +10,17 @@ export function MailPreview({
   handleOpenState,
   onSetIsUnread,
   toggleStar,
-  onHover,
-  handleMouseEnter,
-  handleMouseLeave,
 }) {
+  const [onHover, setOnHover] = useState(false);
+
+  const handleMouseEnter = mailId => {
+    setOnHover(mailId);
+  };
+
+  const handleMouseLeave = () => {
+    setOnHover(null);
+  };
+
   const fontWeight = !mail.isRead ? 700 : 500;
   const backgroundColor = mail.isRead ? '#F2F6FC' : undefined;
   const star = !mail.isStarred ? 'none' : 'yellow';

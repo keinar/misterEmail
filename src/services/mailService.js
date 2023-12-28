@@ -8,7 +8,7 @@ export const mailService = {
   getById,
   createMail,
   getDefaultMail,
-  getDemoUser,
+  getLoggedInUser,
   getStarredMails,
   saveToStarred,
   removeFromStarred,
@@ -31,7 +31,7 @@ async function getDefaultMail(
   sentAt = Date.now(),
   removedAt = null
 ) {
-  const demoUser = await getDemoUser();
+  const loggedInUser = await getLoggedInUser();
   return {
     to,
     subject,
@@ -40,7 +40,7 @@ async function getDefaultMail(
     isStarred,
     sentAt,
     removedAt,
-    from: demoUser[0].mail,
+    from: loggedInUser.mail,
   };
 }
 
@@ -57,7 +57,7 @@ function getFilterFromParams(searchParams) {
   return filterBy;
 }
 
-async function query(filterBy, folder, isAscending, setInboxCount) {
+async function query(filterBy, folder, isAscending) {
   const mails = await storageService.query(EMAIL_KEY);
 
   let filteredMails = mails;
@@ -155,18 +155,17 @@ async function createMail(mail) {
 function _createDemoUser() {
   let user = utilService.loadFromStorage(USER_KEY);
   if (!user || !user.length) {
-    user = [
-      {
-        mail: 'info@digital-solution.co.il',
-        fullname: 'Keinar Elkayam',
-      },
-    ];
+    user = {
+      mail: 'info@digital-solution.co.il',
+      fullname: 'Keinar Elkayam',
+    };
+
     utilService.saveToStorage(USER_KEY, user);
   }
 }
 
-async function getDemoUser() {
-  const user = await storageService.query(USER_KEY);
+function getLoggedInUser() {
+  const user = utilService.loadFromStorage(USER_KEY);
   return user;
 }
 

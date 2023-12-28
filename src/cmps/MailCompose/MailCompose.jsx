@@ -5,19 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import { MailComposeForm } from './MailComposeForm';
 
 export function MailCompose({ currentNav, handleSubmit, newMail, setNewMail }) {
-  const [userMail, setUserMail] = useState('');
+  const [userMail] = useState(mailService.getLoggedInUser().mail);
   const navigate = useNavigate();
 
   function handleOpenCompose() {
     navigate(`/${currentNav}/`);
-  }
-
-  useEffect(() => {
-    fetchUserMail();
-  }, []);
-  async function fetchUserMail() {
-    const userMailData = await mailService.getDemoUser();
-    setUserMail(userMailData[0].mail);
   }
 
   return (

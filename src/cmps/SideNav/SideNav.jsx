@@ -7,8 +7,6 @@ import {
   Trash2,
   X,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { mailService } from '../../services/mailService';
 import { useNavigate } from 'react-router-dom';
 import { ItemNav } from './ItemNav';
 
@@ -78,25 +76,6 @@ export function SideNav({
       ),
     },
   ];
-
-  const [userName, setUserName] = useState(null);
-
-  useEffect(() => {
-    async function getUserName() {
-      try {
-        setUserName(await mailService.getDemoUser());
-      } catch (error) {
-        console.error('Failed to fetch user name:', error);
-      }
-    }
-
-    getUserName();
-  }, []);
-
-  let WCuserName = 'Welcome ';
-  if (userName && userName[0].fullname) {
-    WCuserName += userName[0].fullname;
-  }
 
   const navStyles = {
     left: isMenuVisible ? '0' : '-300px',

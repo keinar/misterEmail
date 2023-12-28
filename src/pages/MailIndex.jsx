@@ -17,25 +17,30 @@ import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js';
 export function MailIndex() {
   const [searchParams, setSearchParams] = useSearchParams();
   const params = useParams();
-  const [mails, setMails] = useState(null);
-  const [isAscending, setIsAscending] = useState(true);
-  const [newMail, setNewMail] = useState(null);
-
   const navigate = useNavigate();
+
+  //Used for getting filtered mails list
+  const [mails, setMails] = useState(null);
+  //Used for creating a new mail
+  const [newMail, setNewMail] = useState(null);
+  const [isAscending, setIsAscending] = useState(true);
 
   const [filterBy, setFilterBy] = useState(
     mailService.getFilterFromParams(searchParams)
   );
   const [isMenuVisible, setIsMenuVisible] = useState(false);
-  const [onHover, setOnHover] = useState(false);
+
+  useEffect(() => {
+    loadMails();
+  }, [filterBy, params.folder, isAscending]);
+
   useEffect(() => {
     async function initNewMail() {
       const defaultMail = await mailService.getDefaultMail();
       setNewMail(defaultMail);
     }
     initNewMail();
-    loadMails();
-  }, [filterBy, params, isAscending]);
+  }, []);
 
   async function loadMails() {
     try {
@@ -47,6 +52,97 @@ export function MailIndex() {
       setMails(mails);
     } catch (err) {
       console.error('error: ', err);
+    }
+  }
+
+  const onSetFilter = newFilter => {
+    setFilterBy(newFilter);
+    setSearchParams(newFilter);
+  };
+
+  function onToggleSortByDate() {
+    setIsAscending(prevSort => !prevSort);
+  }
+
+  function getEmptyMsg() {
+    let emptyMailmessage = '';
+    if (!mails || !mails.length) {
+      if (params.folder === 'inbox') {
+        emptyMailmessage = 'The mail inbox is empty :(';
+      } else if (params.folder === 'starred') {
+        emptyMailmessage = 'You have not starred any message yet :(';
+      } else if (params.folder === 'trash') {
+        emptyMailmessage = 'The trash is empty';
+      } else if (params.folder === 'drafts') {
+        emptyMailmessage = 'There are no draft mails here';
+      } else if (params.folder === 'sent') {
+        emptyMailmessage = 'You did not send any messages yet';
+      }
+    }
+    return emptyMailmessage;
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    let subjectValue = subject.value;
+    const messageValue = message.value;
+
+    if (!subjectValue) {
+      subjectValue = '(No Subject)';
+    }
+
+    if (!messageValue && subjectValue === '(No Subject)') {
+      const userConfirmed = confirm(
+        'Send this mail without subject or body message?'
+      );
+      if (!userConfirmed) {
+        return;
+      } else {
+        subjectValue = '(No Subject)';
+      }
+    }
+
+    const mailToCreate = {
+      ...newMail,
+      subject: subjectValue,
+      message: messageValue,
+    };
+    try {
+      const mailData = await mailService.createMail(mailToCreate);
+
+      setMails(prevMails => [...prevMails, mailData]);
+      showSuccessMsg('Your message sent successfully');
+      navigate('/inbox/');
+    } catch (err) {
+      console.error('Error', err);
+      showErrorMsg("Can't sending mail");
+    }
+  }
+
+  async function toggleStar(mailId) {
+    try {
+      const mailToStar = mails.find(mail => mail.id === mailId);
+      const prevIsStarred = mailToStar.isStarred;
+      !prevIsStarred;
+
+      if (prevIsStarred) {
+        await mailService.removeFromStarred(mailId);
+        showSuccessMsg('Mail star has been removed');
+      } else {
+        const updatedMail = { ...mailToStar, isStarred: true };
+        await mailService.saveToStarred(updatedMail);
+        showSuccessMsg('Mail starred');
+      }
+      setMails(prevMails =>
+        prevMails.map(mail =>
+          mail.id === mailToStar.id
+            ? { ...mail, isStarred: !mail.isStarred }
+            : mail
+        )
+      );
+    } catch (error) {
+      console.error('Failed to toggle star:', error);
+      showErrorMsg('Failed to toggle star mail');
     }
   }
 
@@ -93,85 +189,6 @@ export function MailIndex() {
     }
   }
 
-  const onSetFilter = newFilter => {
-    setFilterBy(newFilter);
-    setSearchParams(newFilter);
-  };
-
-  function onToggleSortByDate() {
-    setIsAscending(!isAscending);
-  }
-
-  function getEmptyMsg() {
-    let emptyMailmessage = '';
-    if (!mails || !mails.length) {
-      if (params.folder === 'inbox') {
-        emptyMailmessage = 'The mail inbox is empty :(';
-      } else if (params.folder === 'starred') {
-        emptyMailmessage = 'You have not starred any message yet :(';
-      } else if (params.folder === 'trash') {
-        emptyMailmessage = 'The trash is empty';
-      } else if (params.folder === 'drafts') {
-        emptyMailmessage = 'There are no draft mails here';
-      } else if (params.folder === 'sent') {
-        emptyMailmessage = 'You did not send any messages yet';
-      }
-    }
-    return emptyMailmessage;
-  }
-
-  async function handleSubmit(e) {
-    try {
-      e.preventDefault();
-      if (!message.value && !subject.value) {
-        const userConfirmed = confirm(
-          'Send this message without text in the subject or body of the message?'
-        );
-        if (!userConfirmed) {
-          return;
-        }
-      }
-      const mailData = await mailService.createMail(newMail);
-
-      setMails(prevMails => [...prevMails, mailData]);
-      // if (!mailData.subject) {
-      //   mailData.subject = 'bla';
-      // }
-      showSuccessMsg('Your message sent successfully');
-      navigate('/inbox/');
-    } catch (err) {
-      console.error('Error', err);
-      showErrorMsg("Can't sending mail");
-    }
-  }
-
-  async function toggleStar(mailId) {
-    try {
-      const mailToStar = await mailService.getById(mailId);
-      const prevIsStarred = mailToStar.isStarred;
-      !prevIsStarred;
-
-      if (prevIsStarred) {
-        await mailService.removeFromStarred(mailId);
-        showSuccessMsg('Mail star has been removed');
-      } else {
-        const updatedMail = { ...mailToStar, isStarred: true };
-        await mailService.saveToStarred(updatedMail);
-        showSuccessMsg('Mail starred');
-      }
-      setMails(prevMails =>
-        prevMails.map(mail =>
-          mail.id === mailToStar.id
-            ? { ...mail, isStarred: !mail.isStarred }
-            : mail
-        )
-      );
-    } catch (error) {
-      console.error('Failed to toggle star:', error);
-      showErrorMsg('Failed to toggle star mail');
-    }
-  }
-
   async function handleOpenState(mailId) {
     try {
       const mail = await mailService.getById(mailId);
@@ -185,21 +202,19 @@ export function MailIndex() {
 
   async function onSetIsUnread(mailId) {
     try {
-      const mail = await mailService.getById(mailId);
+      const mail = mails.find(mail => mail.id === mailId);
       const updatedMail = { ...mail, isRead: !mail.isRead };
       onUpdateMail(updatedMail);
+      if (mail.isRead) {
+        showSuccessMsg('Marked as an unread mail');
+      } else {
+        showSuccessMsg('Marked as read mail');
+      }
     } catch (error) {
       console.error('Failed to change read status:', error);
+      showErrorMsg('Error: Failed to change read status');
     }
   }
-
-  const handleMouseEnter = mailId => {
-    setOnHover(mailId);
-  };
-
-  const handleMouseLeave = () => {
-    setOnHover(null);
-  };
 
   function onBack() {
     navigate(`/${params.folder}/`);
@@ -221,15 +236,21 @@ export function MailIndex() {
     navigate(`/${params.folder}/${nextMail.id}`);
   }
 
+  const toggleMenu = () => {
+    setIsMenuVisible(!isMenuVisible);
+  };
+
   if (!mails) return <div className="loading">Loading...</div>;
+
+  // this is the correct way?
   const mail = mails.find(mail => mail.id === params.mailId);
+
   return (
     <section className="main-app">
       <Header
         filterBy={filterBy}
         onSetFilter={onSetFilter}
-        setIsMenuVisible={setIsMenuVisible}
-        isMenuVisible={isMenuVisible}
+        toggleMenu={toggleMenu}
       />
       <main className="container">
         <section className="mail-index">
@@ -265,9 +286,6 @@ export function MailIndex() {
                 handleOpenState={handleOpenState}
                 onSetIsUnread={onSetIsUnread}
                 toggleStar={toggleStar}
-                onHover={onHover}
-                handleMouseEnter={handleMouseEnter}
-                handleMouseLeave={handleMouseLeave}
               />
             )}
             {getEmptyMsg()}

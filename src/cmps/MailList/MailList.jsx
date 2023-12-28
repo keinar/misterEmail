@@ -8,9 +8,6 @@ export function MailList({
   isAscending,
   params,
   toggleStar,
-  onHover,
-  handleMouseEnter,
-  handleMouseLeave,
   handleOpenState,
   onSetIsUnread,
 }) {
@@ -35,9 +32,6 @@ export function MailList({
               handleOpenState={handleOpenState}
               onSetIsUnread={onSetIsUnread}
               toggleStar={toggleStar}
-              onHover={onHover === mail.id}
-              handleMouseEnter={() => handleMouseEnter(mail.id)}
-              handleMouseLeave={handleMouseLeave}
             />
           ))}
         </tbody>

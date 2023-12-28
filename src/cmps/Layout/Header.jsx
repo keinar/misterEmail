@@ -1,4 +1,4 @@
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import logo from '../../assets/imgs/logo_gmail.png';
 import userLogo from '../../assets/imgs/userLogo.jpg';
 import { mailService } from '../../services/mailService';
@@ -6,38 +6,17 @@ import { useEffect, useState } from 'react';
 import { AlignJustify } from 'lucide-react';
 import { MailSearchFilter } from '../MailFilter/MailSearchFilter';
 
-export function Header({
-  filterBy,
-  onSetFilter,
-  setIsMenuVisible,
-  isMenuVisible,
-}) {
-  const [userName, setUserName] = useState(null);
+export function Header({ filterBy, onSetFilter, toggleMenu }) {
+  const [userName] = useState(mailService.getLoggedInUser().fullname);
 
-  const toggleMenu = () => {
-    setIsMenuVisible(!isMenuVisible);
-  };
-
-  useEffect(() => {
-    async function getUserName() {
-      try {
-        setUserName(await mailService.getDemoUser());
-      } catch (error) {
-        console.error('Failed to fetch user name:', error);
-      }
-    }
-
-    getUserName();
-  }, []);
-
-  let WCuserName = 'Welcome ';
-  if (userName && userName[0].fullname) {
-    WCuserName += userName[0].fullname;
+  let walcomeMessage = 'Welcome ';
+  if (userName) {
+    walcomeMessage += userName;
   }
   return (
     <header className="app-header">
       <section className="container">
-        <div className="mobileMenu" onClick={toggleMenu} hidden>
+        <div className="mobile-menu" onClick={() => toggleMenu()} hidden>
           <AlignJustify />
         </div>
 
@@ -56,7 +35,7 @@ export function Header({
             src={userLogo}
             alt="User Logo"
             className="user-logo"
-            title={WCuserName}
+            title={walcomeMessage}
           />
         </div>
       </section>
