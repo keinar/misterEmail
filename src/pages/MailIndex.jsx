@@ -13,6 +13,7 @@ import { RightNav } from '../cmps/SideNav/RightNav.jsx';
 import { Footer } from '../cmps/Layout/Footer.jsx';
 import { Header } from '../cmps/Layout/Header.jsx';
 import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js';
+import { MailSort } from '../cmps/MailFilter/MailSort.jsx';
 
 export function MailIndex() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -262,6 +263,13 @@ export function MailIndex() {
             inboxCount={mails.length}
           />
           <section className="inbox-container">
+            {mails.length > 1 && (
+              <MailSort
+                onToggleSortByDate={onToggleSortByDate}
+                isAscending={isAscending}
+              />
+            )}
+
             {params.mailId ? (
               <Outlet
                 context={{

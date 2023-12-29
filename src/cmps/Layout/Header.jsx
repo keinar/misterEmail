@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 import logo from '../../assets/imgs/logo_gmail.png';
 import userLogo from '../../assets/imgs/userLogo.jpg';
 import { mailService } from '../../services/mailService';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { AlignJustify } from 'lucide-react';
 import { MailSearchFilter } from '../MailFilter/MailSearchFilter';
 

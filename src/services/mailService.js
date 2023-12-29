@@ -10,6 +10,7 @@ export const mailService = {
   getDefaultMail,
   getLoggedInUser,
   getStarredMails,
+  getReadMails,
   saveToStarred,
   removeFromStarred,
   getDefaultFilter,
@@ -148,7 +149,12 @@ async function getStarredMails() {
   return mails.filter(mail => mail.isStarred);
 }
 
-async function createMail(mail) {
+async function getReadMails() {
+  const mails = await storageService.query(EMAIL_KEY);
+  return mails.filter(mail => mail.isRead);
+}
+
+function createMail(mail) {
   return storageService.post(EMAIL_KEY, mail);
 }
 

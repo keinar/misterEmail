@@ -1,11 +1,8 @@
-import { MailSort } from '../MailFilter/MailSort';
 import { MailPreview } from '../MailPreview/MailPreview';
 
 export function MailList({
   mails,
   onRemoveMail,
-  onToggleSortByDate,
-  isAscending,
   params,
   toggleStar,
   handleOpenState,
@@ -14,13 +11,6 @@ export function MailList({
   return (
     <>
       <table className="mail-list">
-        {mails.length > 1 && (
-          <MailSort
-            mails={mails}
-            onToggleSortByDate={onToggleSortByDate}
-            isAscending={isAscending}
-          />
-        )}
         <tbody>
           {mails.map(mail => (
             <MailPreview
