@@ -5,7 +5,7 @@ table.mail-list {
 tr.subject {
   display: grid;
   border-bottom: #d6d6d6 2px solid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto auto 1fr auto;
   align-items: center;
   padding: 5px 10px;
   gap: 5px;
@@ -29,6 +29,19 @@ tr.subject {
 .mail-sent-time {
   font-size: 14px;
   color: rgb(87, 87, 87);
+}
+
+.subject .mail-send-label {
+  border-radius: 4px;
+  padding: 1px 8px;
+  background-color: #dddddd;
+  text-align: center;
+  width: 65px;
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+  color: #666;
+  font-size: 0.85rem;
 }
 
 @media screen and (max-width: 600px) {

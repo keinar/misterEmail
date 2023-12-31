@@ -29,7 +29,7 @@ async function getDefaultMail(
   message = '',
   isRead = false,
   isStarred = false,
-  sentAt = Date.now(),
+  sentAt = null,
   removedAt = null
 ) {
   const loggedInUser = await getLoggedInUser();
@@ -60,23 +60,25 @@ function getFilterFromParams(searchParams) {
 
 async function query(filterBy, folder, isAscending) {
   const mails = await storageService.query(EMAIL_KEY);
-
+  const loggedInUser = await getLoggedInUser();
   let filteredMails = mails;
   switch (folder) {
     case 'inbox':
       //filter the removed mails and get the others
-      filteredMails = mails.filter(mail => !mail.removedAt);
+      filteredMails = mails.filter(
+        mail => !mail.removedAt && mail.from !== loggedInUser.mail
+      );
       break;
     case 'starred':
       //get only the starred mails
-      filteredMails = mails.filter(mail => mail.isStarred);
+      filteredMails = mails.filter(mail => mail.isStarred && !mail.removedAt);
       break;
     case 'sent':
       //get only the sent mails - with sent time
       filteredMails = mails.filter(mail => mail.sentAt && !mail.removedAt);
       break;
     case 'drafts':
-      console.log('drafts');
+      filteredMails = mails.filter(mail => mail.sentAt === null);
       break;
     case 'trash':
       // get only the mails with removed time
@@ -117,7 +119,6 @@ function save(mailToSave) {
     return storageService.put(EMAIL_KEY, mailToSave);
   } else {
     mailToSave.id = utilService.makeId(5);
-    mailToSave.isOn = false; // Make sure all properties are set before saving
     return storageService.post(EMAIL_KEY, mailToSave);
   }
 }
@@ -185,7 +186,7 @@ function _createMails() {
         message: 'Would love to catch up sometimes',
         isRead: false,
         isStarred: false,
-        sentAt: Date.now(),
+        sentAt: null,
         removedAt: null,
         from: 'momo@momo.com',
         to: 'user@appsus.com',
@@ -197,7 +198,7 @@ function _createMails() {
         message: 'Your Wednesday morning update',
         isRead: false,
         isStarred: false,
-        sentAt: Date.now(),
+        sentAt: null,
         removedAt: null,
         from: 'momo@momo.com',
         to: 'user@appsus.com',
@@ -209,7 +210,7 @@ function _createMails() {
         message: `We've saved a copy of Mister Mail`,
         isRead: false,
         isStarred: false,
-        sentAt: Date.now(),
+        sentAt: null,
         removedAt: null,
         from: 'momo@momo.com',
         to: 'user@appsus.com',

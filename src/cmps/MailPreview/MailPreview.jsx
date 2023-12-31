@@ -2,6 +2,7 @@ import { Mail, MailOpen, Star, Trash2 } from 'lucide-react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useState } from 'react';
+import { mailService } from '../../services/mailService';
 dayjs.extend(relativeTime);
 
 export function MailPreview({
@@ -24,7 +25,6 @@ export function MailPreview({
   const fontWeight = !mail.isRead ? 700 : 500;
   const backgroundColor = mail.isRead ? '#F2F6FC' : undefined;
   const star = !mail.isStarred ? 'none' : 'yellow';
-
   return (
     <tr
       className="subject"
@@ -45,6 +45,10 @@ export function MailPreview({
           />
         </span>
       </td>
+      {mail.sentAt && <td className="mail-send-label"> Sent</td>}
+      {mail.from !== mailService.getLoggedInUser().mail && (
+        <td className="mail-send-label"> Incoming</td>
+      )}
       <td>
         <span style={{ fontWeight: fontWeight }}>{mail.subject}</span>
         <span className="body">{mail.message}</span>

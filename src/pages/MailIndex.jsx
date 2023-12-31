@@ -30,10 +30,9 @@ export function MailIndex() {
     mailService.getFilterFromParams(searchParams)
   );
   const [isMenuVisible, setIsMenuVisible] = useState(false);
-
   useEffect(() => {
     loadMails();
-  }, [filterBy, params.folder, isAscending]);
+  }, [filterBy, params.folder, isAscending, handleSubmit]);
 
   useEffect(() => {
     async function initNewMail() {
@@ -56,10 +55,10 @@ export function MailIndex() {
     }
   }
 
-  const onSetFilter = newFilter => {
+  function onSetFilter(newFilter) {
     setFilterBy(newFilter);
     setSearchParams(newFilter);
-  };
+  }
 
   function onToggleSortByDate() {
     setIsAscending(prevSort => !prevSort);
@@ -83,6 +82,7 @@ export function MailIndex() {
     return emptyMailmessage;
   }
 
+  // This function handle the mail compose submit form
   async function handleSubmit(e) {
     e.preventDefault();
     let subjectValue = subject.value;
@@ -107,13 +107,14 @@ export function MailIndex() {
       ...newMail,
       subject: subjectValue,
       message: messageValue,
+      sentAt: Date.now(),
     };
     try {
       const mailData = await mailService.createMail(mailToCreate);
 
       setMails(prevMails => [...prevMails, mailData]);
       showSuccessMsg('Your message sent successfully');
-      navigate('/inbox/');
+      navigate(`/${params.folder}/`);
     } catch (err) {
       console.error('Error', err);
       showErrorMsg("Can't sending mail");
