@@ -8,6 +8,18 @@ export function MailComposeForm({
   setNewMail,
   userMail,
 }) {
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     // async function saveDraft() {
+  //     //   return await mailService.save(newMail);
+  //     // }
+  //     // // saveDraft();
+  //     console.log(newMail);
+  //   }, 5000);
+
+  //   return () => clearInterval(intervalId);
+  // }, [newMail]);
+
   const submit = e => {
     e.preventDefault();
     handleSubmit(e);

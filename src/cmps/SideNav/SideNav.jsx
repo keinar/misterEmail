@@ -12,7 +12,6 @@ import { ItemNav } from './ItemNav';
 
 export function SideNav({
   currentNav,
-  mails,
   isMenuVisible,
   setIsMenuVisible,
   inboxCount,
@@ -96,7 +95,6 @@ export function SideNav({
           icon={item.icon}
           label={item.label}
           isActive={currentNav === item.label.toLowerCase()}
-          mails={mails}
           inboxCount={inboxCount}
           setIsMenuVisible={setIsMenuVisible}
         />

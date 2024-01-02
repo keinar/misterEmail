@@ -14,26 +14,35 @@ import { Footer } from '../cmps/Layout/Footer.jsx';
 import { Header } from '../cmps/Layout/Header.jsx';
 import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js';
 import { MailSort } from '../cmps/MailFilter/MailSort.jsx';
+import { Pagination } from '../cmps/Layout/Pagination.jsx';
 
 export function MailIndex() {
   const [searchParams, setSearchParams] = useSearchParams();
   const params = useParams();
   const navigate = useNavigate();
 
-  //Used for getting filtered mails list
+  // Used for getting a filtered mails list
   const [mails, setMails] = useState(null);
-  //Used for creating a new mail
+  // Used for creating a new mail
   const [newMail, setNewMail] = useState(null);
+  // Used for sorting asc & desc
   const [isAscending, setIsAscending] = useState(true);
 
   const [filterBy, setFilterBy] = useState(
     mailService.getFilterFromParams(searchParams)
   );
+  // Used for mobile  visability
   const [isMenuVisible, setIsMenuVisible] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const mailsPerPage = 10;
+
+  // Used for rendering mails
   useEffect(() => {
     loadMails();
-  }, [filterBy, params.folder, isAscending, handleSubmit]);
+  }, [filterBy, params.folder, isAscending]);
 
+  // Used for initialization of mail fields
   useEffect(() => {
     async function initNewMail() {
       const defaultMail = await mailService.getDefaultMail();
@@ -41,6 +50,27 @@ export function MailIndex() {
     }
     initNewMail();
   }, []);
+
+  function getMailsForDisplay() {
+    const startIndex = (currentPage - 1) * mailsPerPage;
+    const endIndex = startIndex + mailsPerPage;
+    let mailsForDisplay = mails;
+    const loggedInUser = mailService.getLoggedInUser();
+    const { folder } = params;
+
+    if (folder === 'starred') {
+      mailsForDisplay = mailsForDisplay.filter(mail => {
+        return mail.isStarred;
+      });
+    }
+
+    if (folder === 'inbox') {
+      mailsForDisplay = mailsForDisplay.filter(mail => {
+        return !mail.removedAt && mail.from !== loggedInUser.mail;
+      });
+    }
+    return mailsForDisplay.slice(startIndex, endIndex);
+  }
 
   async function loadMails() {
     try {
@@ -242,11 +272,18 @@ export function MailIndex() {
     setIsMenuVisible(!isMenuVisible);
   };
 
+  function goToNextPage() {
+    setCurrentPage(currentPage + 1);
+  }
+
+  function goToPreviousPage() {
+    setCurrentPage(currentPage - 1);
+  }
+
   if (!mails) return <div className="loading">Loading...</div>;
 
-  // this is the correct way?
+  // Used for the outlet (mail details)
   const mail = mails.find(mail => mail.id === params.mailId);
-
   return (
     <section className="main-app">
       <Header
@@ -258,16 +295,17 @@ export function MailIndex() {
         <section className="mail-index">
           <SideNav
             currentNav={params.folder}
-            mails={mails}
             isMenuVisible={isMenuVisible}
             setIsMenuVisible={setIsMenuVisible}
-            inboxCount={mails.length}
+            inboxCount={getMailsForDisplay().length}
           />
           <section className="inbox-container">
             {mails.length > 1 && (
               <MailSort
                 onToggleSortByDate={onToggleSortByDate}
                 isAscending={isAscending}
+                mails={getMailsForDisplay()}
+                setMails={setMails}
               />
             )}
 
@@ -285,9 +323,7 @@ export function MailIndex() {
               />
             ) : (
               <MailList
-                mails={mails.filter(mail =>
-                  filterBy.status === 'starred' ? mail.isStarred : true
-                )}
+                mails={getMailsForDisplay()}
                 onToggleSortByDate={onToggleSortByDate}
                 isAscending={isAscending}
                 params={params}
@@ -297,6 +333,16 @@ export function MailIndex() {
                 toggleStar={toggleStar}
               />
             )}
+            {!params.mailId && mails.length > 10 && (
+              <Pagination
+                goToPreviousPage={goToPreviousPage}
+                currentPage={currentPage}
+                goToNextPage={goToNextPage}
+                mailsPerPage={mailsPerPage}
+                mails={mails}
+              />
+            )}
+
             {getEmptyMsg()}
           </section>
           <RightNav />

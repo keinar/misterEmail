@@ -32,3 +32,8 @@ section svg {
   top: 50%;
   left: 50%;
 }
+
+.pagination {
+  gap: 5px;
+  display: flex;
+}

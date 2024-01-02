@@ -60,7 +60,7 @@ function getFilterFromParams(searchParams) {
 
 async function query(filterBy, folder, isAscending) {
   const mails = await storageService.query(EMAIL_KEY);
-  const loggedInUser = await getLoggedInUser();
+  const loggedInUser = getLoggedInUser();
   let filteredMails = mails;
   switch (folder) {
     case 'inbox':
@@ -176,46 +176,124 @@ function getLoggedInUser() {
   return user;
 }
 
-function _createMails() {
+// function _createMails() {
+//   let mails = utilService.loadFromStorage(EMAIL_KEY);
+//   if (!mails || !mails.length) {
+
+//     mails = [
+//       {
+//         id: utilService.makeId(5),
+//         subject: 'Miss you!',
+//         message: 'Would love to catch up sometimes',
+//         isRead: false,
+//         isStarred: false,
+//         sentAt: null,
+//         removedAt: null,
+//         from: 'momo@momo.com',
+//         to: 'user@appsus.com',
+//       },
+
+//       {
+//         id: utilService.makeId(5),
+//         subject: 'How are you?',
+//         message: 'Your Wednesday morning update',
+//         isRead: false,
+//         isStarred: false,
+//         sentAt: null,
+//         removedAt: null,
+//         from: 'momo@momo.com',
+//         to: 'user@appsus.com',
+//       },
+
+//       {
+//         id: utilService.makeId(5),
+//         subject: 'Please you help me',
+//         message: `We've saved a copy of Mister Mail`,
+//         isRead: false,
+//         isStarred: false,
+//         sentAt: null,
+//         removedAt: null,
+//         from: 'momo@momo.com',
+//         to: 'user@appsus.com',
+//       },
+//       {
+//         id: utilService.makeId(5),
+//         subject: 'Please you help me',
+//         message: `We've saved a copy of Mister Mail`,
+//         isRead: false,
+//         isStarred: false,
+//         sentAt: null,
+//         removedAt: null,
+//         from: 'momo@momo.com',
+//         to: 'user@appsus.com',
+//       },
+//       {
+//         id: utilService.makeId(5),
+//         subject: 'Please you help me',
+//         message: `We've saved a copy of Mister Mail`,
+//         isRead: false,
+//         isStarred: false,
+//         sentAt: null,
+//         removedAt: null,
+//         from: 'momo@momo.com',
+//         to: 'user@appsus.com',
+//       },
+//       {
+//         id: utilService.makeId(5),
+//         subject: 'Please you help me',
+//         message: `We've saved a copy of Mister Mail`,
+//         isRead: false,
+//         isStarred: false,
+//         sentAt: null,
+//         removedAt: null,
+//         from: 'momo@momo.com',
+//         to: 'user@appsus.com',
+//       },
+//       {
+//         id: utilService.makeId(5),
+//         subject: 'Please you help me',
+//         message: `We've saved a copy of Mister Mail`,
+//         isRead: false,
+//         isStarred: false,
+//         sentAt: null,
+//         removedAt: null,
+//         from: 'momo@momo.com',
+//         to: 'user@appsus.com',
+//       },
+//       {
+//         id: utilService.makeId(5),
+//         subject: 'Please you help me',
+//         message: `We've saved a copy of Mister Mail`,
+//         isRead: false,
+//         isStarred: false,
+//         sentAt: null,
+//         removedAt: null,
+//         from: 'momo@momo.com',
+//         to: 'user@appsus.com',
+//       },
+//     ];
+//     utilService.saveToStorage(EMAIL_KEY, mails);
+//   }
+// }
+
+function _createMails(numMails = 50) {
   let mails = utilService.loadFromStorage(EMAIL_KEY);
   if (!mails || !mails.length) {
-    mails = [
-      {
+    mails = [];
+    for (let i = 0; i < numMails; i++) {
+      const mailData = {
         id: utilService.makeId(5),
-        subject: 'Miss you!',
-        message: 'Would love to catch up sometimes',
+        subject: `Subject ${i}`,
+        message: `Message content for mail ${i}`,
         isRead: false,
         isStarred: false,
         sentAt: null,
         removedAt: null,
-        from: 'momo@momo.com',
+        from: 'example@example.com',
         to: 'user@appsus.com',
-      },
-
-      {
-        id: utilService.makeId(5),
-        subject: 'How are you?',
-        message: 'Your Wednesday morning update',
-        isRead: false,
-        isStarred: false,
-        sentAt: null,
-        removedAt: null,
-        from: 'momo@momo.com',
-        to: 'user@appsus.com',
-      },
-
-      {
-        id: utilService.makeId(5),
-        subject: 'Please you help me',
-        message: `We've saved a copy of Mister Mail`,
-        isRead: false,
-        isStarred: false,
-        sentAt: null,
-        removedAt: null,
-        from: 'momo@momo.com',
-        to: 'user@appsus.com',
-      },
-    ];
+      };
+      mails.push(mailData);
+    }
     utilService.saveToStorage(EMAIL_KEY, mails);
   }
 }

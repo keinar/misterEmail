@@ -21,7 +21,10 @@
     align-items: center;
     position: fixed;
     left: 0;
-    bottom: 40px;
+    bottom: 0;
     justify-content: space-around;
+    padding: 20px;
+    background-color: white;
+    border-top: 1px black solid;
   }
 }
