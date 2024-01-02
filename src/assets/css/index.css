@@ -6,6 +6,8 @@
 
 /* Pages */
 @import './pages/mail-index.css';
+@import './pages/home-page.css';
+@import './pages/about-us.css';
 
 /* Components */
 @import './cmps/app-header.css';
