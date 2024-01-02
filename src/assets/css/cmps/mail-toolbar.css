@@ -1,0 +1,11 @@
+.mail-toolbar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.pagination-arrow.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}

@@ -13,8 +13,7 @@ import { RightNav } from '../cmps/SideNav/RightNav.jsx';
 import { Footer } from '../cmps/Layout/Footer.jsx';
 import { Header } from '../cmps/Layout/Header.jsx';
 import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js';
-import { MailSort } from '../cmps/MailFilter/MailSort.jsx';
-import { Pagination } from '../cmps/Layout/Pagination.jsx';
+import { MailToolBar } from '../cmps/MailFilter/MailToolBar.jsx';
 
 export function MailIndex() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -35,11 +34,12 @@ export function MailIndex() {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const mailsPerPage = 10;
+  const mailsPerPage = 20;
 
   // Used for rendering mails
   useEffect(() => {
     loadMails();
+    setCurrentPage(1);
   }, [filterBy, params.folder, isAscending]);
 
   // Used for initialization of mail fields
@@ -50,6 +50,19 @@ export function MailIndex() {
     }
     initNewMail();
   }, []);
+
+  async function loadMails() {
+    try {
+      const mails = await mailService.query(
+        filterBy,
+        params.folder,
+        isAscending
+      );
+      setMails(mails);
+    } catch (err) {
+      console.error('error: ', err);
+    }
+  }
 
   function getMailsForDisplay() {
     const startIndex = (currentPage - 1) * mailsPerPage;
@@ -72,19 +85,6 @@ export function MailIndex() {
     return mailsForDisplay.slice(startIndex, endIndex);
   }
 
-  async function loadMails() {
-    try {
-      const mails = await mailService.query(
-        filterBy,
-        params.folder,
-        isAscending
-      );
-      setMails(mails);
-    } catch (err) {
-      console.error('error: ', err);
-    }
-  }
-
   function onSetFilter(newFilter) {
     setFilterBy(newFilter);
     setSearchParams(newFilter);
@@ -96,19 +96,19 @@ export function MailIndex() {
 
   function getEmptyMsg() {
     let emptyMailmessage = '';
-    if (!mails || !mails.length) {
-      if (params.folder === 'inbox') {
-        emptyMailmessage = 'The mail inbox is empty :(';
-      } else if (params.folder === 'starred') {
-        emptyMailmessage = 'You have not starred any message yet :(';
-      } else if (params.folder === 'trash') {
-        emptyMailmessage = 'The trash is empty';
-      } else if (params.folder === 'drafts') {
-        emptyMailmessage = 'There are no draft mails here';
-      } else if (params.folder === 'sent') {
-        emptyMailmessage = 'You did not send any messages yet';
-      }
+
+    if (params.folder === 'inbox') {
+      emptyMailmessage = 'The mail inbox is empty :(';
+    } else if (params.folder === 'starred') {
+      emptyMailmessage = 'You have not starred any message yet :(';
+    } else if (params.folder === 'trash') {
+      emptyMailmessage = 'The trash is empty';
+    } else if (params.folder === 'drafts') {
+      emptyMailmessage = 'There are no draft mails here';
+    } else if (params.folder === 'sent') {
+      emptyMailmessage = 'You did not send any messages yet';
     }
+
     return emptyMailmessage;
   }
 
@@ -272,14 +272,6 @@ export function MailIndex() {
     setIsMenuVisible(!isMenuVisible);
   };
 
-  function goToNextPage() {
-    setCurrentPage(currentPage + 1);
-  }
-
-  function goToPreviousPage() {
-    setCurrentPage(currentPage - 1);
-  }
-
   if (!mails) return <div className="loading">Loading...</div>;
 
   // Used for the outlet (mail details)
@@ -300,15 +292,15 @@ export function MailIndex() {
             inboxCount={getMailsForDisplay().length}
           />
           <section className="inbox-container">
-            {mails.length > 1 && (
-              <MailSort
-                onToggleSortByDate={onToggleSortByDate}
-                isAscending={isAscending}
-                mails={getMailsForDisplay()}
-                setMails={setMails}
-              />
-            )}
-
+            <MailToolBar
+              onToggleSortByDate={onToggleSortByDate}
+              isAscending={isAscending}
+              mails={mails}
+              setMails={setMails}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              mailsPerPage={mailsPerPage}
+            />
             {params.mailId ? (
               <Outlet
                 context={{
@@ -333,20 +325,9 @@ export function MailIndex() {
                 toggleStar={toggleStar}
               />
             )}
-            {!params.mailId && mails.length > 10 && (
-              <Pagination
-                goToPreviousPage={goToPreviousPage}
-                currentPage={currentPage}
-                goToNextPage={goToNextPage}
-                mailsPerPage={mailsPerPage}
-                mails={mails}
-              />
-            )}
-
-            {getEmptyMsg()}
+            {!getMailsForDisplay().length && getEmptyMsg()}
           </section>
           <RightNav />
-
           {searchParams.get('compose') && (
             <MailCompose
               currentNav={params.folder}

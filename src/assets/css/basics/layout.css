@@ -7,8 +7,9 @@ section.inbox-container {
   background-color: white;
   border-radius: 16px;
   margin-bottom: 16px;
-  overflow: hidden;
-  padding: 20px;
+  overflow-y: auto;
+  padding: 10px;
+  height: 600px;
 }
 
 section.inbox-container thead tr {
@@ -36,4 +37,5 @@ section svg {
 .pagination {
   gap: 5px;
   display: flex;
+  padding: 10px;
 }

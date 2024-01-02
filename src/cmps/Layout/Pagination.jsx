@@ -1,20 +1,38 @@
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+
 export function Pagination({
-  goToPreviousPage,
   currentPage,
-  goToNextPage,
+  setCurrentPage,
   mailsPerPage,
   mails,
 }) {
   const totalPages = Math.ceil(mails.length / mailsPerPage);
+
+  function goToNextPage() {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  }
+
+  function goToPreviousPage() {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  }
+
   return (
     <div className="pagination">
-      <button onClick={goToPreviousPage} disabled={currentPage === 1}>
-        Previous
-      </button>
-      <span>Page {currentPage}</span>
-      <button onClick={goToNextPage} disabled={currentPage >= totalPages}>
-        Next
-      </button>
+      <div
+        className={`pagination-arrow ${currentPage === 1 ? 'disabled' : ''}`}
+        onClick={goToPreviousPage}
+      >
+        <ChevronLeft size={14} />
+      </div>
+
+      <div
+        className={`pagination-arrow ${
+          currentPage >= totalPages ? 'disabled' : ''
+        }`}
+        onClick={goToNextPage}
+      >
+        <ChevronRight size={14} />
+      </div>
     </div>
   );
 }
