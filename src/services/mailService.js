@@ -176,106 +176,6 @@ function getLoggedInUser() {
   return user;
 }
 
-// function _createMails() {
-//   let mails = utilService.loadFromStorage(EMAIL_KEY);
-//   if (!mails || !mails.length) {
-
-//     mails = [
-//       {
-//         id: utilService.makeId(5),
-//         subject: 'Miss you!',
-//         message: 'Would love to catch up sometimes',
-//         isRead: false,
-//         isStarred: false,
-//         sentAt: null,
-//         removedAt: null,
-//         from: 'momo@momo.com',
-//         to: 'user@appsus.com',
-//       },
-
-//       {
-//         id: utilService.makeId(5),
-//         subject: 'How are you?',
-//         message: 'Your Wednesday morning update',
-//         isRead: false,
-//         isStarred: false,
-//         sentAt: null,
-//         removedAt: null,
-//         from: 'momo@momo.com',
-//         to: 'user@appsus.com',
-//       },
-
-//       {
-//         id: utilService.makeId(5),
-//         subject: 'Please you help me',
-//         message: `We've saved a copy of Mister Mail`,
-//         isRead: false,
-//         isStarred: false,
-//         sentAt: null,
-//         removedAt: null,
-//         from: 'momo@momo.com',
-//         to: 'user@appsus.com',
-//       },
-//       {
-//         id: utilService.makeId(5),
-//         subject: 'Please you help me',
-//         message: `We've saved a copy of Mister Mail`,
-//         isRead: false,
-//         isStarred: false,
-//         sentAt: null,
-//         removedAt: null,
-//         from: 'momo@momo.com',
-//         to: 'user@appsus.com',
-//       },
-//       {
-//         id: utilService.makeId(5),
-//         subject: 'Please you help me',
-//         message: `We've saved a copy of Mister Mail`,
-//         isRead: false,
-//         isStarred: false,
-//         sentAt: null,
-//         removedAt: null,
-//         from: 'momo@momo.com',
-//         to: 'user@appsus.com',
-//       },
-//       {
-//         id: utilService.makeId(5),
-//         subject: 'Please you help me',
-//         message: `We've saved a copy of Mister Mail`,
-//         isRead: false,
-//         isStarred: false,
-//         sentAt: null,
-//         removedAt: null,
-//         from: 'momo@momo.com',
-//         to: 'user@appsus.com',
-//       },
-//       {
-//         id: utilService.makeId(5),
-//         subject: 'Please you help me',
-//         message: `We've saved a copy of Mister Mail`,
-//         isRead: false,
-//         isStarred: false,
-//         sentAt: null,
-//         removedAt: null,
-//         from: 'momo@momo.com',
-//         to: 'user@appsus.com',
-//       },
-//       {
-//         id: utilService.makeId(5),
-//         subject: 'Please you help me',
-//         message: `We've saved a copy of Mister Mail`,
-//         isRead: false,
-//         isStarred: false,
-//         sentAt: null,
-//         removedAt: null,
-//         from: 'momo@momo.com',
-//         to: 'user@appsus.com',
-//       },
-//     ];
-//     utilService.saveToStorage(EMAIL_KEY, mails);
-//   }
-// }
-
 function _createMails(numMails = 50) {
   let mails = utilService.loadFromStorage(EMAIL_KEY);
   if (!mails || !mails.length) {
@@ -284,7 +184,7 @@ function _createMails(numMails = 50) {
       const mailData = {
         id: utilService.makeId(5),
         subject: `Subject ${i}`,
-        message: `Message content for mail ${i}`,
+        message: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book ${i}`,
         isRead: false,
         isStarred: false,
         sentAt: null,

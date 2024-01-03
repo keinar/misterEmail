@@ -30,6 +30,7 @@
 .compose-modal form input {
   border: none;
   padding-left: 10px;
+  width: 80%;
 }
 
 input:focus {

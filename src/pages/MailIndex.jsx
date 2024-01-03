@@ -167,9 +167,7 @@ export function MailIndex() {
       }
       setMails(prevMails =>
         prevMails.map(mail =>
-          mail.id === mailToStar.id
-            ? { ...mail, isStarred: !mail.isStarred }
-            : mail
+          mail.id === mailId ? { ...mail, isStarred: !mail.isStarred } : mail
         )
       );
     } catch (error) {
@@ -289,7 +287,7 @@ export function MailIndex() {
             currentNav={params.folder}
             isMenuVisible={isMenuVisible}
             setIsMenuVisible={setIsMenuVisible}
-            inboxCount={getMailsForDisplay().length}
+            inboxCount={mails.length}
           />
           <section className="inbox-container">
             <MailToolBar
