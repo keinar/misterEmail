@@ -14,7 +14,7 @@ export function MailPreview({
 }) {
   const [onHover, setOnHover] = useState(false);
 
-  function MailMessageDisplay(message, length) {
+  function MailExtracts(message, length) {
     let mailMessage = message;
     let firstNCharacters = mailMessage.substring(0, length);
     return firstNCharacters + '...';
@@ -61,10 +61,8 @@ export function MailPreview({
         <td className="mail-send-label"> Incoming</td>
       )}
       <td>
-        <span style={{ fontWeight }}>
-          {MailMessageDisplay(mail.subject, 10)}
-        </span>
-        <span className="body">{MailMessageDisplay(mail.message, 80)}</span>
+        <span style={{ fontWeight }}>{MailExtracts(mail.subject, 10)}</span>
+        <span className="body">{MailExtracts(mail.message, 80)}</span>
       </td>
 
       {!onHover && (
