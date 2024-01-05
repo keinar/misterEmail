@@ -1,0 +1,23 @@
+/*  Basics */
+@import 'basics/base.scss';
+@import 'basics/helpers.scss';
+@import 'basics/layout.scss';
+@import 'basics/animations.scss';
+
+/* Pages */
+@import './pages/mail-index.scss';
+@import './pages/home-page.scss';
+@import './pages/about-us.scss';
+
+/* Components */
+@import './cmps/app-header.scss';
+@import './cmps/mail-list.scss';
+@import './cmps/mail-filter.scss';
+@import './cmps/mail-preview.scss';
+@import './cmps/side-nav.scss';
+@import './cmps/compose-modal.scss';
+@import './cmps/right-nav.scss';
+@import './cmps/app-footer.scss';
+@import './cmps/mail-details.scss';
+@import './cmps/user-msg.scss';
+@import './cmps/mail-toolbar.scss';

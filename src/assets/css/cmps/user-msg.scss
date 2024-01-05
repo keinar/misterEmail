@@ -10,18 +10,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.user-msg.success {
-  background-color: lightgreen;
-}
-
-.user-msg.error {
-  background-color: pink;
-}
-
-.user-msg button {
-  float: right;
-  margin: 1em;
-  width: fit-content;
+  &.success {
+    background-color: lightgreen;
+  }
+  &.error {
+    background-color: pink;
+  }
+  button {
+    float: right;
+    margin: 1em;
+    width: fit-content;
+  }
 }

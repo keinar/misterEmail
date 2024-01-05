@@ -1,0 +1,29 @@
+.right-nav {
+  background-color: #f6f8fc;
+  width: 56px;
+  padding: 10px;
+  nav {
+    display: grid;
+    gap: 10px;
+    align-items: center;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .right-nav {
+    width: 0;
+    padding: 0;
+    nav {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      justify-content: space-around;
+      padding: 10px;
+      background-color: white;
+      border-top: 1px black solid;
+    }
+  }
+}

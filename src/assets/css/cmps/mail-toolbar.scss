@@ -4,8 +4,9 @@
   align-items: center;
   padding: 10px 0;
 }
-
-.pagination-arrow.disabled {
-  pointer-events: none;
-  opacity: 0.5;
+.pagination-arrow {
+  &.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
 }

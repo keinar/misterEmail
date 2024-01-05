@@ -1,0 +1,80 @@
+.compose-modal {
+  width: 400px;
+  height: 400px;
+  position: fixed;
+  background-color: white;
+  bottom: 0px;
+  right: 50px;
+  border: 1px solid black;
+  border-radius: 10px 10px 0 0;
+  transition: 2s;
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: rgb(242, 246, 252);
+    border-radius: 10px 10px 0 0;
+    h1 {
+      font-weight: 600;
+    }
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    input {
+      border: none;
+      padding-left: 10px;
+      width: 80%;
+    }
+    label {
+      padding-left: 10px;
+    }
+  }
+  fieldset {
+    border: none;
+  }
+  textarea#message {
+    border: none;
+    padding: 10px;
+    width: 100%;
+    height: 100%;
+    resize: none;
+    box-sizing: border-box;
+  }
+  textarea {
+    &:focus {
+      outline: none;
+    }
+  }
+  button {
+    &.send-button {
+      border: none;
+      background-color: transparent;
+      position: absolute;
+      top: 8px;
+      right: 40px;
+      font-weight: 700;
+    }
+  }
+}
+input {
+  &:focus {
+    outline: none;
+  }
+}
+.compose-modal .from,
+.compose-modal .to,
+.compose-modal .subject {
+  border-bottom: 1px solid #dadada;
+}
+
+@media screen and (max-width: 600px) {
+  .compose-modal {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+  }
+}

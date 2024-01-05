@@ -2,16 +2,17 @@
   padding: 20px 0 20px 0;
   font-size: 16px;
 }
-
-.mail-details h1 {
-  font-size: 24px;
-  padding: 10px 0;
+.mail-details {
+  h1 {
+    font-size: 24px;
+    padding: 10px 0;
+  }
 }
-
-section.mail-details {
-  width: 100%;
+section {
+  &.mail-details {
+    width: 100%;
+  }
 }
-
 .mail-details-sent-at,
 .mail-sent-at,
 .mail-to,
@@ -19,27 +20,23 @@ section.mail-details {
   color: rgb(107, 107, 107);
   font-size: 15px;
 }
-
 .mail-details-toolbar {
   display: flex;
   align-items: center;
   gap: 5px;
+  p {
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
 }
-
-.mail-details-toolbar p {
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-
 .hover-wrapper {
   border-radius: 50%;
   display: flex;
   padding: 4px;
   transition: background-color 0.3s;
-}
-
-.hover-wrapper:hover {
-  background-color: #ececec;
+  &:hover {
+    background-color: #ececec;
+  }
 }
 
 @media screen and (max-width: 600px) {
