@@ -1,23 +1,35 @@
 import { Mail, MailOpen, Star, Trash2 } from 'lucide-react';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import { useState } from 'react';
 import { mailService } from '../../services/mailService';
-dayjs.extend(relativeTime);
+import { MailSentTime } from '../Common/MailSentTime.jsx';
+import { useNavigate, useParams } from 'react-router-dom';
 
-export function MailPreview({
-  mail,
-  onRemoveMail,
-  handleOpenState,
-  onSetIsUnread,
-  toggleStar,
-}) {
+export function MailPreview({ mail, onRemoveMail, onUpdateMail }) {
   const [onHover, setOnHover] = useState(false);
+  const params = useParams();
+  const navigate = useNavigate();
 
   function MailExtracts(message, length) {
     let mailMessage = message;
     let firstNCharacters = mailMessage.substring(0, length);
     return firstNCharacters + '...';
+  }
+
+  function onToggleStar() {
+    const newMail = { ...mail, isStarred: !mail.isStarred };
+    onUpdateMail(newMail);
+  }
+
+  function onSetRead(isRead) {
+    const newMail = { ...mail, isRead };
+    onUpdateMail(newMail);
+  }
+
+  function onOpenMail() {
+    onSetRead(true);
+    params.folder === 'drafts'
+      ? navigate(`/drafts?compose=${mail.id}`)
+      : navigate(`/${params.folder}/${mail.id}`);
   }
 
   const handleMouseEnter = mailId => {
@@ -31,16 +43,14 @@ export function MailPreview({
   const fontWeight = !mail.isRead ? 700 : 500;
   const backgroundColor = mail.isRead ? '#F2F6FC' : undefined;
   const star = !mail.isStarred ? 'none' : 'yellow';
-  // const isRemovedMail = !mail.removedAt
-  //   ? 'auto 1fr auto'
-  //   : 'auto auto 1fr auto';
+
   return (
     <tr
       className="subject"
       style={{ backgroundColor }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onClick={() => handleOpenState(mail.id)}
+      onClick={() => onOpenMail()}
     >
       {!mail.removedAt && (
         <td>
@@ -49,17 +59,21 @@ export function MailPreview({
               size={20}
               onClick={e => {
                 e.stopPropagation();
-                toggleStar(mail.id);
+                onToggleStar();
               }}
               fill={star}
             />
           </span>
         </td>
       )}
-      {mail.sentAt && <td className="mail-send-label"> Sent</td>}
-      {mail.from !== mailService.getLoggedInUser().mail && (
+      {mail.sentAt && !mail.isDrafts && (
+        <td className="mail-send-label"> Sent</td>
+      )}
+
+      {!mail.sentAt && !mail.isDraft && (
         <td className="mail-send-label"> Incoming</td>
       )}
+      {mail.isDraft && <td className="mail-send-label"> Drafts</td>}
       <td>
         <span style={{ fontWeight }}>{MailExtracts(mail.subject, 10)}</span>
         <span className="body">{MailExtracts(mail.message, 80)}</span>
@@ -67,11 +81,11 @@ export function MailPreview({
 
       {!onHover && (
         <td>
-          <span className="mail-sent-time">
-            {dayjs(mail.sentAt).isBefore(dayjs().subtract(1), 'day')
-              ? dayjs(mail.sentAt).format('MMM DD')
-              : dayjs(mail.sentAt).fromNow(true)}
-          </span>
+          {params.folder === 'drafts' ? (
+            ''
+          ) : (
+            <MailSentTime mailSentAt={mail.sentAt} />
+          )}
         </td>
       )}
       {onHover && (
@@ -92,7 +106,7 @@ export function MailPreview({
                   size={20}
                   onClick={e => {
                     e.stopPropagation();
-                    onSetIsUnread(mail.id);
+                    onSetRead(true);
                   }}
                 />
               ) : (
@@ -100,7 +114,7 @@ export function MailPreview({
                   size={20}
                   onClick={e => {
                     e.stopPropagation();
-                    onSetIsUnread(mail.id);
+                    onSetRead(false);
                   }}
                 />
               )}

@@ -15,6 +15,7 @@ export const mailService = {
   removeFromStarred,
   getDefaultFilter,
   getFilterFromParams,
+  createRandomId,
 };
 
 const EMAIL_KEY = 'mails';
@@ -23,16 +24,17 @@ const USER_KEY = 'loggedInUser';
 _createMails();
 _createDemoUser();
 
-async function getDefaultMail(
+function getDefaultMail(
   to = '',
   subject = '',
   message = '',
   isRead = false,
   isStarred = false,
   sentAt = null,
+  isDraft = true,
   removedAt = null
 ) {
-  const loggedInUser = await getLoggedInUser();
+  const loggedInUser = getLoggedInUser();
   return {
     to,
     subject,
@@ -41,6 +43,7 @@ async function getDefaultMail(
     isStarred,
     sentAt,
     removedAt,
+    isDraft,
     from: loggedInUser.mail,
   };
 }
@@ -78,7 +81,7 @@ async function query(filterBy, folder, isAscending) {
       filteredMails = mails.filter(mail => mail.sentAt && !mail.removedAt);
       break;
     case 'drafts':
-      filteredMails = mails.filter(mail => mail.sentAt === null);
+      filteredMails = mails.filter(mail => mail.isDraft);
       break;
     case 'trash':
       // get only the mails with removed time
@@ -121,6 +124,11 @@ function save(mailToSave) {
     mailToSave.id = utilService.makeId(5);
     return storageService.post(EMAIL_KEY, mailToSave);
   }
+}
+
+function createRandomId() {
+  const newId = utilService.makeId(5);
+  return newId;
 }
 
 async function saveToStarred(mailToUpdate) {

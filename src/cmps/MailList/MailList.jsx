@@ -1,13 +1,6 @@
 import { MailPreview } from '../MailPreview/MailPreview';
 
-export function MailList({
-  mails,
-  onRemoveMail,
-  params,
-  toggleStar,
-  handleOpenState,
-  onSetIsUnread,
-}) {
+export function MailList({ mails, onRemoveMail, params, onUpdateMail }) {
   return (
     <>
       <table className="mail-list">
@@ -19,9 +12,7 @@ export function MailList({
               className="mail-raw"
               onRemoveMail={onRemoveMail}
               currentFolder={params.folder}
-              handleOpenState={handleOpenState}
-              onSetIsUnread={onSetIsUnread}
-              toggleStar={toggleStar}
+              onUpdateMail={onUpdateMail}
             />
           ))}
         </tbody>

@@ -1,12 +1,29 @@
-import { useOutletContext, useParams } from 'react-router-dom';
+import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { ChevronLeft, Mail, MailOpen, Star, Trash2 } from 'lucide-react';
 import dayjs from 'dayjs';
 import { mailService } from '../../services/mailService';
 import { useEffect, useState } from 'react';
 
 export function MailDetails() {
-  const { mail, onRemoveMail, onBack, onNextMail, toggleStar, onSetIsUnread } =
+  const { onRemoveMail, onBack, onNextMail, toggleStar, onSetIsUnread } =
     useOutletContext();
+  const [mail, setMail] = useState({});
+  const params = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    loadMail();
+  }, [params.mailId]);
+
+  async function loadMail() {
+    try {
+      const mail = await mailService.getById(params.mailId);
+      setMail(mail);
+    } catch (err) {
+      console.log(err);
+      navigate('/mail');
+    }
+  }
 
   if (!mail) return <div className="loading">loading...</div>;
   const star = !mail.isStarred ? 'none' : 'yellow';
@@ -54,7 +71,9 @@ export function MailDetails() {
       <div className="flex space-between">
         <p className="mail-from">Author: {mail.from}</p>{' '}
         <p className="mail-details-sent-at">
-          {dayjs(mail.sentAt).format('MMMM DD, YYYY [@] H:mm A')}
+          {params.folder === 'drafts'
+            ? ''
+            : dayjs(mail.sentAt).format('MMMM DD, YYYY [@] H:mm A')}
         </p>
       </div>
       <p className="mail-to">To: {mail.to}</p>

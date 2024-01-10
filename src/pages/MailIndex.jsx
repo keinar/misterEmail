@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { MailList } from '../cmps/MailList/MailList.jsx';
 import { mailService } from '../services/mailService.js';
 import { SideNav } from '../cmps/SideNav/SideNav.jsx';
@@ -44,13 +44,12 @@ export function MailIndex() {
 
   // Used for initialization of mail fields
   useEffect(() => {
-    async function initNewMail() {
-      const defaultMail = await mailService.getDefaultMail();
-      setNewMail(defaultMail);
-    }
     initNewMail();
   }, []);
-
+  async function initNewMail() {
+    const defaultMail = await mailService.getDefaultMail();
+    setNewMail(defaultMail);
+  }
   async function loadMails() {
     try {
       const mails = await mailService.query(
@@ -112,70 +111,6 @@ export function MailIndex() {
     return emptyMailmessage;
   }
 
-  // This function handle the mail compose submit form
-  async function handleSubmit(e) {
-    e.preventDefault();
-    let subjectValue = subject.value;
-    const messageValue = message.value;
-
-    if (!subjectValue) {
-      subjectValue = '(No Subject)';
-    }
-
-    if (!messageValue && subjectValue === '(No Subject)') {
-      const userConfirmed = confirm(
-        'Send this mail without subject or body message?'
-      );
-      if (!userConfirmed) {
-        return;
-      } else {
-        subjectValue = '(No Subject)';
-      }
-    }
-
-    const mailToCreate = {
-      ...newMail,
-      subject: subjectValue,
-      message: messageValue,
-      sentAt: Date.now(),
-    };
-    try {
-      const mailData = await mailService.createMail(mailToCreate);
-
-      setMails(prevMails => [...prevMails, mailData]);
-      showSuccessMsg('Your message sent successfully');
-      navigate(`/${params.folder}/`);
-    } catch (err) {
-      console.error('Error', err);
-      showErrorMsg("Can't sending mail");
-    }
-  }
-
-  async function toggleStar(mailId) {
-    try {
-      const mailToStar = mails.find(mail => mail.id === mailId);
-      const prevIsStarred = mailToStar.isStarred;
-      !prevIsStarred;
-
-      if (prevIsStarred) {
-        await mailService.removeFromStarred(mailId);
-        showSuccessMsg('Mail star has been removed');
-      } else {
-        const updatedMail = { ...mailToStar, isStarred: true };
-        await mailService.saveToStarred(updatedMail);
-        showSuccessMsg('Mail starred');
-      }
-      setMails(prevMails =>
-        prevMails.map(mail =>
-          mail.id === mailId ? { ...mail, isStarred: !mail.isStarred } : mail
-        )
-      );
-    } catch (error) {
-      console.error('Failed to toggle star:', error);
-      showErrorMsg('Failed to toggle star mail');
-    }
-  }
-
   async function onRemoveMail(mailId) {
     try {
       let userConfirmed = '';
@@ -205,7 +140,6 @@ export function MailIndex() {
     }
   }
 
-  // update read / unread
   async function onUpdateMail(mailToUpdate) {
     try {
       const updatedMail = await mailService.save(mailToUpdate);
@@ -219,30 +153,13 @@ export function MailIndex() {
     }
   }
 
-  async function handleOpenState(mailId) {
+  async function onAddMail(mail) {
     try {
-      const mail = await mailService.getById(mailId);
-      const updatedMail = { ...mail, isRead: true };
-      onUpdateMail(updatedMail);
-      navigate(`/${params.folder}/${mailId}`);
-    } catch (error) {
-      console.error('Failed to open mail:', error);
-    }
-  }
-
-  async function onSetIsUnread(mailId) {
-    try {
-      const mail = mails.find(mail => mail.id === mailId);
-      const updatedMail = { ...mail, isRead: !mail.isRead };
-      onUpdateMail(updatedMail);
-      if (mail.isRead) {
-        showSuccessMsg('Marked as an unread mail');
-      } else {
-        showSuccessMsg('Marked as read mail');
-      }
+      const newMail = await mailService.save({ ...mail });
+      setMails(prevMails => [...prevMails, newMail]);
+      return newMail;
     } catch (error) {
       console.error('Failed to change read status:', error);
-      showErrorMsg('Error: Failed to change read status');
     }
   }
 
@@ -272,8 +189,6 @@ export function MailIndex() {
 
   if (!mails) return <div className="loading">Loading...</div>;
 
-  // Used for the outlet (mail details)
-  const mail = mails.find(mail => mail.id === params.mailId);
   return (
     <section className="main-app">
       <Header
@@ -306,9 +221,7 @@ export function MailIndex() {
                   loadMails,
                   onBack,
                   onNextMail,
-                  toggleStar,
-                  onSetIsUnread,
-                  mail,
+                  onAddMail,
                 }}
               />
             ) : (
@@ -318,9 +231,7 @@ export function MailIndex() {
                 isAscending={isAscending}
                 params={params}
                 onRemoveMail={onRemoveMail}
-                handleOpenState={handleOpenState}
-                onSetIsUnread={onSetIsUnread}
-                toggleStar={toggleStar}
+                onUpdateMail={onUpdateMail}
               />
             )}
             {!getMailsForDisplay().length && getEmptyMsg()}
@@ -329,9 +240,11 @@ export function MailIndex() {
           {searchParams.get('compose') && (
             <MailCompose
               currentNav={params.folder}
-              handleSubmit={handleSubmit}
               newMail={newMail}
               setNewMail={setNewMail}
+              initNewMail={initNewMail}
+              onAddMail={onAddMail}
+              onUpdateMail={onUpdateMail}
             />
           )}
         </section>

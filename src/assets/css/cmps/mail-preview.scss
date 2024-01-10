@@ -7,7 +7,7 @@ tr {
   &.subject {
     display: grid;
     border-bottom: #d6d6d6 2px solid;
-    grid-template-columns: auto auto 1fr auto;
+    grid-template-columns: auto auto auto 1fr auto;
     align-items: center;
     padding: 5px 10px;
     gap: 5px;
