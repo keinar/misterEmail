@@ -1,6 +1,5 @@
 import { Mail, MailOpen, Star, Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import { mailService } from '../../services/mailService';
 import { MailSentTime } from '../Common/MailSentTime.jsx';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -27,7 +26,7 @@ export function MailPreview({ mail, onRemoveMail, onUpdateMail }) {
 
   function onOpenMail() {
     onSetRead(true);
-    params.folder === 'drafts'
+    mail.isDraft
       ? navigate(`/drafts?compose=${mail.id}`)
       : navigate(`/${params.folder}/${mail.id}`);
   }

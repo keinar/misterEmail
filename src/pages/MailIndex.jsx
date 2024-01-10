@@ -47,7 +47,7 @@ export function MailIndex() {
     initNewMail();
   }, []);
   async function initNewMail() {
-    const defaultMail = await mailService.getDefaultMail();
+    const defaultMail = mailService.getDefaultMail();
     setNewMail(defaultMail);
   }
   async function loadMails() {
